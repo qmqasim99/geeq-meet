@@ -1,12 +1,13 @@
+import { NavigationContainer } from "@react-navigation/native";
 import { useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
 
-const Chat = () => {
+const Chat = ({ navigation }) => {
   const [chatMessage, setChatMessage] = useState("Write Your Message Here");
 
   return (
     <View>
-      <Text style={{ borderWidth: 1, height: 600 }}>Chat Page</Text>
+      <Text style={{ borderWidth: 1, height: 400 }}>Chat Page</Text>
       <TextInput
         value={chatMessage}
         style={{ borderWidth: 1, margin: 10 }}
@@ -20,7 +21,7 @@ const Chat = () => {
       <Button
         title="Group Home"
         onPress={() => {
-          console.log("Group Home Pressed");
+          navigation.navigate("Group");
         }}
       />
     </View>

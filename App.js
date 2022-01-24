@@ -1,7 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Chat from "./components/Chat";
+import SingleGroupPage from "./components/SingleGroupPage";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -13,6 +15,18 @@ export default function App() {
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
           <Text>EXAMPLE PAGE</Text>
+          <Button
+            title="Chat"
+            onPress={() => {
+              navigation.navigate("Chat");
+            }}
+          />
+          <Button
+            title="Group"
+            onPress={() => {
+              navigation.navigate("Group");
+            }}
+          />
         </View>
       );
     }
@@ -20,6 +34,9 @@ export default function App() {
     return (
       <Stack.Navigator>
         <Stack.Screen name="Example" component={ExampleScreen} />
+        <Stack.Screen name="Chat" component={Chat} />
+        <Stack.Screen name="Group" component={SingleGroupPage} />
+
         {/* e.g. ..... 
         <Stack.Screen name="Notifications" component={NotificationsScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />

@@ -1,3 +1,4 @@
+import { NavigationContainer } from "@react-navigation/native";
 import { View, Text, Image, FlatList, ScrollView, Button } from "react-native";
 
 const groupMembers = [
@@ -6,7 +7,7 @@ const groupMembers = [
   { user_id: 3, name: "Boney" },
   { user_id: 4, name: "Gusty" },
 ];
-const SingleGroupPage = () => {
+const SingleGroupPage = ({ navigation }) => {
   const renderName = ({ item }) => {
     return (
       <View>
@@ -42,7 +43,7 @@ const SingleGroupPage = () => {
         <Button
           title="Chat"
           onPress={() => {
-            console.log("Chat Pressed");
+            navigation.navigate("Chat");
           }}
         />
         <Button
