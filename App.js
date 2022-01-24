@@ -1,53 +1,49 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button } from "react-native";
+
+import React from "react";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useEffect, useState } from "react";
+import { db, auth } from "./firebase";
+import { Text, View } from "react-native";
+
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  serverTimestamp,
+} from "firebase/firestore";
+import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./screens/HomeScreen";
+import FirebaseTesting from "./Components/FirebaseTesting";
 import Chat from "./components/Chat";
 import SingleGroupPage from "./components/SingleGroupPage";
 
+const Stack = createNativeStackNavigator();
+
+
 export default function App() {
-  const Stack = createNativeStackNavigator();
-
-  function MyStack() {
-    function ExampleScreen({ navigation }) {
-      return (
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text>EXAMPLE PAGE</Text>
-          <Button
-            title="Chat"
-            onPress={() => {
-              navigation.navigate("Chat");
-            }}
-          />
-          <Button
-            title="Group"
-            onPress={() => {
-              navigation.navigate("Group");
-            }}
-          />
-        </View>
-      );
-    }
-
-    return (
-      <Stack.Navigator>
-        <Stack.Screen name="Example" component={ExampleScreen} />
-        <Stack.Screen name="Chat" component={Chat} />
-        <Stack.Screen name="Group" component={SingleGroupPage} />
-
-        {/* e.g. ..... 
-        <Stack.Screen name="Notifications" component={NotificationsScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} /> */}
-      </Stack.Navigator>
-    );
-  }
-
   return (
     <NavigationContainer>
-      <MyStack />
+      <Stack.Navigator>
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Login"
+          component={LoginScreen}
+        />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="FirebaseTesting" component={FirebaseTesting} />
+        <Stack.Screen name="Chat" component={Chat} />
+        <Stack.Screen name="Group" component={SingleGroupPage} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
