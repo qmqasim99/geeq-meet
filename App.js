@@ -1,4 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
+
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useEffect, useState } from 'react';
+import { db } from './firebase';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   addDoc,
@@ -13,11 +20,10 @@ import {
   orderBy,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from './firebase';
+import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./screens/HomeScreen";
 
-import { useEffect, useState } from 'react';
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+const Stack = createNativeStackNavigator();
 
 
 export default function App() {
@@ -58,21 +64,17 @@ export default function App() {
       );
     }
 
-    return (
-      <Stack.Navigator>
-        <Stack.Screen name="Example" component={ExampleScreen} />
-        {/* e.g. ..... 
-        <Stack.Screen name="Notifications" component={NotificationsScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} /> */}
-      </Stack.Navigator>
-    );
-  }
-
-
   return (
-    <NavigationContainer>
-      <MyStack />
+    <NavigationContainer>  
+    <Stack.Navigator>
+    <Stack.Screen name="Example" component={ExampleScreen} />
+      <Stack.Screen
+          options={{ headerShown: false }}
+          name="Login"
+          component={LoginScreen}
+        />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
