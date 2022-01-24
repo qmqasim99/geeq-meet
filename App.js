@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+
 import React from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -23,8 +24,11 @@ import {
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import FirebaseTesting from "./Components/FirebaseTesting";
+import Chat from "./components/Chat";
+import SingleGroupPage from "./components/SingleGroupPage";
 
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   return (
@@ -37,6 +41,12 @@ export default function App() {
           component={LoginScreen}
         />
         <Stack.Screen name="Home" component={HomeScreen} />
+
+
+        <Stack.Screen name="FirebaseTesting" component={FirebaseTesting} />
+        <Stack.Screen name="Chat" component={Chat} />
+        <Stack.Screen name="Group" component={SingleGroupPage} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
