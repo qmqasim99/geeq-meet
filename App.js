@@ -22,31 +22,11 @@ import {
 } from "firebase/firestore";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
+import FirebaseTesting from "./Components/FirebaseTesting";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  // const collRef = collection(db, "books");
-
-  // const gettingDocs = async () => {
-  //   try {
-  //     const fdocs = await getDocs(collRef);
-
-  //     let books = [];
-
-  //     fdocs.docs.map((doc) => {
-  //       books.push({ id: doc.id, ...doc.data() });
-  //     });
-  //     console.log("in gettingDocs", books);
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   gettingDocs();
-  // }, []);
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -56,6 +36,7 @@ export default function App() {
           component={LoginScreen}
         />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="FirebaseTesting" component={FirebaseTesting} />
       </Stack.Navigator>
     </NavigationContainer>
   );
