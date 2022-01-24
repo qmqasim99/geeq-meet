@@ -24,11 +24,11 @@ import {
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import FirebaseTesting from "./Components/FirebaseTesting";
-import Chat from "./components/Chat";
-import SingleGroupPage from "./components/SingleGroupPage";
+import Chat from "./Components/Chat";
+import SingleGroupPage from "./Components/SingleGroupPage";
+import UserAccount from "./Components/UserAccount";
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   return (
@@ -41,6 +41,7 @@ export default function App() {
         />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="FirebaseTesting" component={FirebaseTesting} />
+        <Stack.Screen name="UserAccount" component={UserAccount} />
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="Group" component={SingleGroupPage} />
       </Stack.Navigator>
