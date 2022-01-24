@@ -1,18 +1,74 @@
+
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useEffect, useState } from 'react';
+import { db } from './firebase';
+import { StyleSheet, Text, View } from 'react-native';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  serverTimestamp,
+} from 'firebase/firestore';
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 
 const Stack = createNativeStackNavigator();
 
+
 export default function App() {
+  const collRef = collection(db, 'books');
+
+  const gettingDocs = async () => {
+    try {
+      const fdocs = await getDocs(collRef);
+
+      let books = [];
+
+      fdocs.docs.map((doc) => {
+        books.push({ id: doc.id, ...doc.data() });
+      });
+      console.log('in gettingDocs', books);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    gettingDocs();
+  }, []);
+
+
+
+export default function App() {
+  const Stack = createNativeStackNavigator();
+
+  function MyStack() {
+    function ExampleScreen({ navigation }) {
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text>EXAMPLE PAGE</Text>
+        </View>
+      );
+    }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+    <NavigationContainer>  
+    <Stack.Navigator>
+    <Stack.Screen name="Example" component={ExampleScreen} />
+      <Stack.Screen
           options={{ headerShown: false }}
           name="Login"
           component={LoginScreen}
@@ -22,6 +78,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
