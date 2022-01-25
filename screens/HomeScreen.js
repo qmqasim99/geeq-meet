@@ -1,8 +1,15 @@
+
+import { useNavigation } from "@react-navigation/core";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
+import { auth } from "../firebase";
+
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CreateGroup from '../Components/CreateGroup';
 import { auth } from '../firebase';
+
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -25,7 +32,16 @@ const HomeScreen = () => {
           Sign out = need to discuss how to sign out from page. not in wireframe
         </Text>
       </TouchableOpacity>
+
+      <Button
+        title="My Account"
+        onPress={() => {
+          navigation.navigate("UserAccount");
+        }}
+      />
+
       <CreateGroup />
+
     </View>
   );
 };
