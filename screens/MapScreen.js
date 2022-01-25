@@ -7,7 +7,7 @@ import { StyleSheet } from "react-native-web";
 import { GOOGLE_API_KEY } from "@env";
 import MapRoute from "../Components/MapRoute";
 import CustomMarker from "../Components/CustomMarker";
-import { FindGeographicMidpoint } from "../Utils/utils";
+import { createPlaceSearchUrl, FindGeographicMidpoint } from "../Utils/utils";
 
 const MapScreen = ({ userArray, placeType }) => {
   //example props
@@ -43,40 +43,29 @@ const MapScreen = ({ userArray, placeType }) => {
   ];
   placeType = "restaurant";
 
-  const createPlaceSearchUrl = (
-    latitude = 51.507341,
-    longitude = -0.127758,
-    radius = 100,
-    type = "restaurant"
-  ) => {
-    const baseUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?`;
-    const location = `location=${latitude},${longitude}&radius=${radius}`;
-    const typeData = `&types=${type}`;
-    const apikey = `&key=${GOOGLE_API_KEY}`;
-    console.log(apikey);
-
-    return `${baseUrl}${location}${typeData}${apikey}`;
-  };
-
   const [destination, setDestination] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [gmMid, setGmMid] = useState({});
 
   useEffect(() => {
-    // FindGeographicMidpoint(userArray).then((centroid) => {
-    getPlacesFromApi();
-    // });
-  });
+    const gmMid = FindGeographicMidpoint(userArray);
+    setGmMid(gmMid);
+  }, []);
 
-  const getPlacesFromApi = (centroid) => {
-    const url = createPlaceSearchUrl(centroid);
+  const getPlacesFromApi = (gmMid) => {
+    const url = createPlaceSearchUrl(gmMid.lat, gmMid.lng);
     fetch(url).then((res) =>
       res
         .json()
         .then((res) => {
-          //   console.log(res);
-
-          setDestination(res.results[0].place_id);
-          console.log(destination);
+          console.log(res.results[0]);
+          setDestination({
+            place_id: res.results[0].place_id,
+            place_name: res.results[0].name,
+            lat: res.results[0].geometry.location.lat,
+            lng: res.results[0].geometry.location.lng,
+          });
+          console.log("destination", destination);
           setLoaded(true);
         })
         .catch((error) => console.log(error, "line42"))
@@ -91,7 +80,8 @@ const MapScreen = ({ userArray, placeType }) => {
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
         onMapReady={(event) => {
-          getPlacesFromApi();
+          console.log("MAP READY", gmMid);
+          getPlacesFromApi(gmMid);
         }}
       >
         {loaded &&
@@ -99,7 +89,30 @@ const MapScreen = ({ userArray, placeType }) => {
           userArray.map((user, i) => {
             return (
               <>
-                <MapRoute key={i} user={user} destination_id={destination} />
+                <Marker
+                  //   draggable
+                  key={destination.name}
+                  coordinate={{
+                    latitude: destination.lat,
+                    longitude: destination.lng,
+                  }}
+                  title={destination.place_name}
+                  //   onDragEnd={(e) =>
+                  //     setDestination((prev) => {
+                  //       return {
+                  //         place_id: prev.place_id,
+                  //         place_name: prev.place_name,
+                  //         lat: e.nativeEvent.coordinate.latitude,
+                  //         lng: e.nativeEvent.coordinate.longditude,
+                  //       };
+                  //     })
+                  //   }
+                />
+                <MapRoute
+                  key={i}
+                  user={user}
+                  destination_id={destination.place_id}
+                />
                 <CustomMarker key={user.name} user={user} />
               </>
             );
