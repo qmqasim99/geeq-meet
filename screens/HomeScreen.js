@@ -1,15 +1,8 @@
-
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import CreateGroup from "../Components/CreateGroup";
 import { auth } from "../firebase";
-
-import { useNavigation } from '@react-navigation/core';
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import CreateGroup from '../Components/CreateGroup';
-import { auth } from '../firebase';
-
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -18,7 +11,7 @@ const HomeScreen = () => {
     auth
       .signOut()
       .then(() => {
-        navigation.replace('Login');
+        navigation.replace("Login");
       })
       .catch((error) => alert(error.message));
   };
@@ -41,7 +34,6 @@ const HomeScreen = () => {
       />
 
       <CreateGroup />
-
     </View>
   );
 };
@@ -50,22 +42,22 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'lightblue',
+    backgroundColor: "lightblue",
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
-    backgroundColor: '#0782F9',
-    width: '60%',
+    backgroundColor: "#0782F9",
+    width: "60%",
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 40,
   },
   buttonText: {
-    color: 'white',
-    fontWeight: '700',
+    color: "white",
+    fontWeight: "700",
     fontSize: 16,
   },
 });

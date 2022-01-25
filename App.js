@@ -30,7 +30,6 @@ import SingleGroupPage from "./Components/SingleGroupPage";
 
 import UserAccount from "./Components/UserAccount";
 
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -38,7 +37,6 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Map" component={MapScreen} />
-        <Stack.Screen name="FirebaseTesting" component={FirebaseTesting} />
         <Stack.Screen
           options={{ headerShown: false }}
           name="Login"
