@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { db, auth } from "./firebase";
 import { Text, View } from "react-native";
+import MapScreen from "./screens/MapScreen.js";
 
 import {
   addDoc,
@@ -24,16 +25,16 @@ import {
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import FirebaseTesting from "./Components/FirebaseTesting";
-import Chat from "./components/Chat";
-import SingleGroupPage from "./components/SingleGroupPage";
+import Chat from "./Components/Chat";
+import SingleGroupPage from "./Components/SingleGroupPage";
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="FirebaseTesting" component={FirebaseTesting} />
         <Stack.Screen
           options={{ headerShown: false }}
@@ -42,11 +43,8 @@ export default function App() {
         />
         <Stack.Screen name="Home" component={HomeScreen} />
 
-
-        <Stack.Screen name="FirebaseTesting" component={FirebaseTesting} />
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="Group" component={SingleGroupPage} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
