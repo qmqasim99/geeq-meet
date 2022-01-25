@@ -13,7 +13,7 @@ import { doc, setDoc } from "firebase/firestore";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [bio, setBio] = useState("");
+  const [bio, setName] = useState("");
   const [loginPressed, setLoginPressed] = useState(false);
   const [registerPressed, setRegisterPressed] = useState(false);
 
@@ -34,10 +34,14 @@ const LoginScreen = () => {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
+        //can we make this add display name?
+        //would have to access auth object - perhaps go to next screen to set further user details
+        return setDoc(doc(db, "users", user.uid), {
+          email: user.email,
+        });
+      })
+      .then((user) => {
         console.log(user);
-        setDoc(doc(db, "users", user.uid), { bio, email: user.email });
-        // db.collection("users").doc(user.uid).set({ bio, email: user.email });
-
         alert("Registered with:", user.email);
       })
       .catch((error) => alert(error.message));
@@ -101,9 +105,9 @@ const LoginScreen = () => {
             secureTextEntry
           />
           <TextInput
-            placeholder="Bio"
+            placeholder="User Name"
             value={bio}
-            onChangeText={(text) => setBio(text)}
+            onChangeText={(text) => setName(text)}
             style={styles.loginInput}
             secureTextEntry
           />
