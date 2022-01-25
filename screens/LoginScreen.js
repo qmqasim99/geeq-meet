@@ -13,6 +13,8 @@ import { auth } from "../firebase";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginPressed, setLoginPressed] = useState(false);
+  const [registerPressed, setRegisterPressed] = useState(false);
 
   const navigation = useNavigation();
 
@@ -59,39 +61,70 @@ const LoginScreen = () => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        />
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
-
-        <View style={styles.buttonContainerReset}>
-          <TouchableOpacity onPress={resetPassword} style={styles.button}>
-            <Text style={styles.buttonText}>Forgotten Password?</Text>
+      {loginPressed ? (
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.loginInput}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.loginInput}
+            secureTextEntry
+          />
+          <TouchableOpacity onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      ) : registerPressed ? (
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.loginInput}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.loginInput}
+            secureTextEntry
+          />
+          <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setLoginPressed(true);
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setRegisterPressed(true);
+            }}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}>Register</Text>
+          </TouchableOpacity>
+
+          <View style={styles.buttonContainerReset}>
+            <TouchableOpacity onPress={resetPassword} style={styles.button}>
+              <Text style={styles.buttonText}>Forgotten Password?</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -108,7 +141,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "70%",
   },
-  input: {
+  loginInput: {
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
