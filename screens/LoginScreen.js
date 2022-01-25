@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { auth } from "../firebase";
-
+import { auth, db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [bio, setBio] = useState("");
   const [loginPressed, setLoginPressed] = useState(false);
   const [registerPressed, setRegisterPressed] = useState(false);
 
@@ -33,6 +34,10 @@ const LoginScreen = () => {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
+        console.log(user);
+        setDoc(doc(db, "users", user.uid), { bio, email: user.email });
+        // db.collection("users").doc(user.uid).set({ bio, email: user.email });
+
         alert("Registered with:", user.email);
       })
       .catch((error) => alert(error.message));
@@ -95,6 +100,13 @@ const LoginScreen = () => {
             style={styles.loginInput}
             secureTextEntry
           />
+          <TextInput
+            placeholder="Bio"
+            value={bio}
+            onChangeText={(text) => setBio(text)}
+            style={styles.loginInput}
+            secureTextEntry
+          />
           <TouchableOpacity onPress={handleSignUp} style={styles.button}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
@@ -115,10 +127,12 @@ const LoginScreen = () => {
             }}
             style={[styles.button, styles.buttonOutline]}
           >
+            {/* additional fields here but need to find out how to add them to user object, i.e. watch tutorial */}
             <Text style={styles.buttonOutlineText}>Register</Text>
           </TouchableOpacity>
 
           <View style={styles.buttonContainerReset}>
+            {/* maybe make this button only on the login option */}
             <TouchableOpacity onPress={resetPassword} style={styles.button}>
               <Text style={styles.buttonText}>Forgotten Password?</Text>
             </TouchableOpacity>
