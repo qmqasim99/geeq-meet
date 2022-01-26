@@ -41,13 +41,15 @@ const LoginScreen = () => {
         const user = userCredentials.user;
         //can we make this add display name?
         //would have to access auth object - perhaps go to next screen to set further user details
+        alert(`Registered with: ${user.email}`);
+
+        console.log("user", user);
         return setDoc(doc(db, "users", user.uid), {
           email: user.email,
         });
       })
       .then((user) => {
-        console.log(user);
-        alert("Registered with:", user.email);
+        // this isn't triggering correctly
       })
       .catch((error) => alert(error.message));
   };
@@ -57,7 +59,7 @@ const LoginScreen = () => {
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log("Logged in with:", user.email);
+        console.log(`Logged in with: ${user.email}`);
       })
       .catch(function () {
         return alert("Incorrect email and/or password. try again");
