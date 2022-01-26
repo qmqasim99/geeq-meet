@@ -105,6 +105,11 @@ const LoginScreen = () => {
           <TouchableOpacity onPress={back} style={styles.button}>
             <Text style={styles.buttonText}>back</Text>
           </TouchableOpacity>
+          <View style={styles.buttonContainerReset}>
+            <TouchableOpacity onPress={resetPassword} style={styles.button}>
+              <Text style={styles.buttonText}>Forgotten Password?</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       ) : registerPressed ? (
         <View style={styles.inputContainer}>
@@ -154,13 +159,6 @@ const LoginScreen = () => {
             {/* additional fields here but need to find out how to add them to user object, i.e. watch tutorial */}
             <Text style={styles.buttonOutlineText}>Register</Text>
           </TouchableOpacity>
-
-          <View style={styles.buttonContainerReset}>
-            {/* maybe make this button only on the login option */}
-            <TouchableOpacity onPress={resetPassword} style={styles.button}>
-              <Text style={styles.buttonText}>Forgotten Password?</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       )}
     </KeyboardAvoidingView>
