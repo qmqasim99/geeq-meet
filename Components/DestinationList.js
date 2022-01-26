@@ -1,18 +1,28 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { ListItem, Icon } from "react-native-elements";
-import { calcMapZoomDelta } from "../Utils/utils";
+import { calcMapZoomDelta, findDistanceInM } from "../Utils/utils";
 
 export default function DestinationList({
   destinationArray,
   setDestination,
   setDestinationSelected,
   setZoomDelta,
+  gmMid,
 }) {
-  //   useEffect(() => {}, [destinationArray]);
-  const [visible, setVisible] = useState(false);
-  const openMenu = () => setVisible(true);
-  const closeMenu = () => setVisible(false);
+  const [listLoaded, setListLoaded] = useState(false);
+  useEffect(() => {
+    destinationArray.forEach((des) => {
+      const distFromCentre = findDistanceInM(
+        des.geometry.location.lat,
+        des.geometry.location.lng,
+        gmMid.lat,
+        gmMid.lng
+      );
+      des.distFromCent = distFromCentre;
+      setListLoaded(true);
+    });
+  }, []);
 
   const handleSelect = (des) => {
     setDestination({
@@ -27,23 +37,32 @@ export default function DestinationList({
   };
 
   return (
-    <View>
-      {destinationArray.map((des, i) => {
-        return (
-          <ListItem key={i} title={des.name} onPress={(e) => handleSelect(des)}>
-            <ListItem.Content>
-              <ListItem.Title>{des.name}</ListItem.Title>
-              <View style={styles.subtitleView}>
-                <Text style={styles.ratingText}>
-                  {des.rating}/5 (reviewed {des.user_ratings_total} times)
-                </Text>
-                <Text> XXm from central point</Text>
-              </View>
-            </ListItem.Content>
-          </ListItem>
-        );
-      })}
-    </View>
+    listLoaded && (
+      <ScrollView>
+        {destinationArray.map((des, i) => {
+          return (
+            <ListItem
+              key={i}
+              title={des.name}
+              onPress={(e) => handleSelect(des)}
+            >
+              <ListItem.Content>
+                <ListItem.Title>{des.name}</ListItem.Title>
+                <View style={styles.subtitleView}>
+                  <Text style={styles.ratingText}>
+                    {des.rating}/5 (reviewed {des.user_ratings_total} times)
+                  </Text>
+                  <Text>
+                    {" "}
+                    {Math.round(des.distFromCent)}m from central point
+                  </Text>
+                </View>
+              </ListItem.Content>
+            </ListItem>
+          );
+        })}
+      </ScrollView>
+    )
   );
 }
 

@@ -49,7 +49,7 @@ const CustomMarker = ({ user, type, mapPress }) => {
         height: "230",
         vWidth: 220,
         vHeight: 160,
-        fontSize: "50",
+        fontSize: "15",
         textX: "70",
         textY: "50",
       });
@@ -128,7 +128,7 @@ const CustomMarker = ({ user, type, mapPress }) => {
               y={infoPanelDims.textY}
               textAnchor="middle"
               fontWeight="bold"
-              fontSize="20"
+              fontSize={infoPanelDims.fontSize}
               fill="white"
             >
               {toggleInfo ? `${user.place_name},\n ${user.vicinity}` : "Meet"}

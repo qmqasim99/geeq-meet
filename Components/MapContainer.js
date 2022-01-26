@@ -91,6 +91,7 @@ export default function MapContainer({ userArray, placeType }) {
               setDestination={setDestination}
               setDestinationSelected={setDestinationSelected}
               setZoomDelta={setZoomDelta}
+              gmMid={gmMid}
             />
           ) : (
             <MapScreen
