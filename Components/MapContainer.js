@@ -21,28 +21,28 @@ export default function MapContainer({ userArray, placeType }) {
       name: "alphie",
       lat: 53.43553,
       lng: -2.24406,
-      color: "blue",
+      color: "#A6D1A1",
       img_url: "https://picsum.photos/200",
     },
     {
       name: "betty",
       lat: 53.45407,
       lng: -2.19917,
-      color: "red",
+      color: "#F2BE2D",
       img_url: "https://picsum.photos/200",
     },
     {
       name: "cra",
       lat: 53.47598,
       lng: -2.28077,
-      color: "green",
+      color: "#009FE3",
       img_url: "https://picsum.photos/200",
     },
     {
       name: "dibby",
       lat: 53.43591,
       lng: -2.22983,
-      color: "purple",
+      color: "#2B4A9A",
       img_url: "https://picsum.photos/200",
     },
   ];
@@ -71,6 +71,7 @@ export default function MapContainer({ userArray, placeType }) {
       res
         .json()
         .then((res) => {
+          console.log(res.results[0].vicinity);
           setDestinationArray(res.results);
           setListLoaded(true);
         })

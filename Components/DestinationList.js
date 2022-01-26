@@ -18,6 +18,7 @@ export default function DestinationList({
     setDestination({
       place_id: des.place_id,
       place_name: des.name,
+      vicinity: des.vicinity,
       lat: des.geometry.location.lat,
       lng: des.geometry.location.lng,
     });

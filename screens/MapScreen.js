@@ -10,6 +10,7 @@ import CustomMarker from "../Components/CustomMarker";
 
 const MapScreen = ({ userArray, destination, zoomDelta }) => {
   const [loaded, setLoaded] = useState(false);
+  const [pressType, setPressType] = useState(false);
 
   useEffect(() => {}, [zoomDelta]);
 
@@ -32,10 +33,24 @@ const MapScreen = ({ userArray, destination, zoomDelta }) => {
           latitudeDelta: zoomDelta.lat,
           longitudeDelta: zoomDelta.lng,
         }}
+        onPress={(e) => {
+          console.log("press", e.nativeEvent.action);
+          if (e.nativeEvent.action === "marker-press") {
+            // pressed a marker
+            setPressType("marker");
+          } else {
+            // pressed the map
+            setPressType("map");
+          }
+        }}
       >
         {loaded && (
           <>
-            <CustomMarker user={destination} type={"destination"} />
+            <CustomMarker
+              user={destination}
+              type={"destination"}
+              mapPress={pressType}
+            />
             {userArray.map((user, i) => {
               //display routes to destination
               return (

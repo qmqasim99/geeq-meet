@@ -1,10 +1,60 @@
 import { View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Marker } from "react-native-maps";
 import { Image, Svg, G, Path, Rect, Text } from "react-native-svg";
 
-const CustomMarker = ({ user, type }) => {
-  const handleMarkerPress = () => {};
+const CustomMarker = ({ user, type, mapPress }) => {
+  const [toggleInfo, setToggleInfo] = useState(false);
+  const [infoPanelDims, setInfoPanelDims] = useState({
+    x: "-120",
+    y: "0",
+    width: 380,
+    height: 130,
+    vWidth: 220,
+    vHeight: 60,
+    fontSize: "100",
+    textX: "70",
+    textY: "100",
+  });
+
+  useEffect(() => {
+    if (mapPress === "map") {
+      setToggleInfo(false);
+      setInfoPanelDims({
+        x: "-120",
+        y: "0",
+        width: "380",
+        height: "130",
+        vWidth: 220,
+        vHeight: 60,
+        fontSize: "100",
+        textX: "70",
+        textY: "100",
+      });
+    }
+
+    console.log(mapPress, toggleInfo);
+  }, [mapPress]);
+
+  const handleMarkerPress = (ev) => {
+    setToggleInfo(true);
+    if (type === "user") {
+      // console.log(user.name);
+    } else if (type === "destination") {
+      // console.log(user.place_name);
+      setInfoPanelDims({
+        x: "-120",
+        y: "-50",
+        width: "380",
+        height: "230",
+        vWidth: 220,
+        vHeight: 160,
+        fontSize: "50",
+        textX: "70",
+        textY: "50",
+      });
+    }
+  };
 
   return (
     <Marker
@@ -13,7 +63,7 @@ const CustomMarker = ({ user, type }) => {
         longitude: user.lng,
       }}
       onPress={(e) => {
-        handleMarkerPress;
+        handleMarkerPress(e);
       }}
     >
       {type === "user" ? (
@@ -34,7 +84,14 @@ const CustomMarker = ({ user, type }) => {
                 data-name="Layer 1"
               />
             </G>
-            <Text textAnchor="middle" x="50">
+            <Text
+              x="43"
+              y="68"
+              textAnchor="middle"
+              fontWeight="bold"
+              fontSize="80"
+              fill={user.color}
+            >
               {user.name.substring(0, 1)}
             </Text>
           </Svg>
@@ -42,17 +99,17 @@ const CustomMarker = ({ user, type }) => {
       ) : (
         <View
           style={{
-            width: 220,
-            height: 60,
+            width: infoPanelDims.vWidth,
+            height: infoPanelDims.vHeight,
             justifyContent: "space-around",
           }}
         >
           <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 139.03 196.28">
             <Rect
-              x="-120"
-              y="0"
-              width="380"
-              height="130"
+              x={infoPanelDims.x}
+              y={infoPanelDims.y}
+              width={infoPanelDims.width}
+              height={infoPanelDims.height}
               fill="#e94e1b"
               rx="30"
             />
@@ -65,15 +122,16 @@ const CustomMarker = ({ user, type }) => {
                 data-name="Layer 1"
               />
             </G>
+
             <Text
-              x="70"
-              y="100"
+              x={infoPanelDims.textX}
+              y={infoPanelDims.textY}
               textAnchor="middle"
               fontWeight="bold"
-              fontSize="100"
+              fontSize="20"
               fill="white"
             >
-              Meet
+              {toggleInfo ? `${user.place_name},\n ${user.vicinity}` : "Meet"}
             </Text>
           </Svg>
         </View>
