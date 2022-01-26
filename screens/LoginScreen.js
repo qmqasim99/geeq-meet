@@ -1,4 +1,6 @@
 import { useNavigation } from "@react-navigation/core";
+
+import Icons from "react-native-vector-icons/MaterialIcons";
 import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -7,9 +9,12 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  BackHandler,
 } from "react-native";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { back } from "react-native/Libraries/Animated/Easing";
+import HomeScreen from "./HomeScreen";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -68,6 +73,15 @@ const LoginScreen = () => {
       .catch((error) => alert("Please enter Email."));
   };
 
+  const back = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Login");
+      })
+      .catch((error) => alert(error.message));
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       {loginPressed ? (
@@ -87,6 +101,9 @@ const LoginScreen = () => {
           />
           <TouchableOpacity onPress={handleLogin} style={styles.button}>
             <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={back} style={styles.button}>
+            <Text style={styles.buttonText}>back</Text>
           </TouchableOpacity>
         </View>
       ) : registerPressed ? (
@@ -113,6 +130,9 @@ const LoginScreen = () => {
           />
           <TouchableOpacity onPress={handleSignUp} style={styles.button}>
             <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={back} style={styles.button}>
+            <Text style={styles.buttonText}>back</Text>
           </TouchableOpacity>
         </View>
       ) : (

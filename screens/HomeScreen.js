@@ -1,4 +1,3 @@
-
 import { StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
