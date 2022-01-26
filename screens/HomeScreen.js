@@ -4,6 +4,7 @@ import React from "react";
 
 import CreateGroup from "../Components/CreateGroup";
 import { auth } from "../firebase";
+import NavBar from "../Components/NavBar";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -22,9 +23,7 @@ const HomeScreen = () => {
       <Text>Email: {auth.currentUser?.email}</Text>
       <Text>HomePage of groups and invites will go here</Text>
       <TouchableOpacity onPress={handleSignOut} style={styles.button}>
-        <Text style={styles.buttonText}>
-          Sign out = need to discuss how to sign out from page. not in wireframe
-        </Text>
+        <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
 
       <Button

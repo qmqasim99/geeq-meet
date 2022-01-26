@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
+import NavBar from "../Components/NavBar";
 
 import Icons from "react-native-vector-icons/MaterialIcons";
 import React, { useEffect, useState } from "react";
