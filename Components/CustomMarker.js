@@ -21,7 +21,7 @@ const CustomMarker = ({ user }) => {
           borderRadius: "100%",
         }}
       >
-        <Svg width={40} height={30}>
+        {/* <Svg width={40} height={30}>
           <Defs>
             <ClipPath id="clip">
               <Circle cx="20" cy="20" r="20" />
@@ -34,25 +34,10 @@ const CustomMarker = ({ user }) => {
             borderRadius="100%"
             clipPath="url(#clip)"
           />
-        </Svg>
+        </Svg> */}
       </View>
     </Marker>
   );
 };
 
 export default CustomMarker;
-
-// {
-//   /* <View>
-//         style=
-//         {{
-//           flexDirection: "row",
-//           width: 100,
-//           height: 30,
-//           backgroundColor: "orange",
-//         }}
-//       </View> */
-// }
-// {
-//   /* </Marker> */
-// }

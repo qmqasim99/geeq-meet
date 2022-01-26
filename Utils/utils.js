@@ -44,13 +44,57 @@ export const FindGeographicMidpoint = (users) => {
 export const createPlaceSearchUrl = (
   latitude,
   longitude,
-  radius = 10000,
-  type = "restaurant"
+  radius = 1000,
+  type = "cafe"
 ) => {
   const baseUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?`;
   const location = `location=${latitude},${longitude}&radius=${radius}`;
   const typeData = `&types=${type}`;
   const apikey = `&key=${GOOGLE_API_KEY}`;
-  console.log(`${baseUrl}${location}${typeData}${apikey}`);
   return `${baseUrl}${location}${typeData}${apikey}`;
+};
+
+export const findDistanceInM = (lat1, lon1, lat2, lon2) => {
+  //implementation of haversine formula copied from https://www.movable-type.co.uk/scripts/latlong.html
+
+  const R = 6371e3; // metres
+  const φ1 = (lat1 * Math.PI) / 180; // φ, λ in radians
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const d = R * c; // in metres
+
+  return d;
+};
+
+export const calcMapZoomDelta = (userArray, destination) => {
+  let furthestLat = 0;
+  let furthestLng = 0;
+  //find furthest user from destination
+  for (let i = 0; i < userArray.length; i++) {
+    if (furthestLat < Math.abs(destination.lat - userArray[i].latitude)) {
+      furthestLat = Math.abs(destination.lat - userArray[i].latitude);
+    }
+  }
+  for (let i = 0; i < userArray.length; i++) {
+    if (furthestLng < Math.abs(destination.lng - userArray[i].longitude)) {
+      furthestLng = Math.abs(destination.lng - userArray[i].longitude);
+    }
+  }
+
+  //double distance
+  furthestLat = furthestLat * 2;
+  furthestLng = furthestLng * 2;
+
+  //add buffer
+  furthestLat = furthestLat * 1.3;
+  furthestLng = furthestLng * 1.3;
+
+  return { lat: furthestLat, lng: furthestLng };
 };
