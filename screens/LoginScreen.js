@@ -16,7 +16,6 @@ import { doc, setDoc } from "firebase/firestore";
 import { back } from "react-native/Libraries/Animated/Easing";
 import HomeScreen from "./HomeScreen";
 import { updateProfile } from "firebase/auth";
-import { reportLogBoxError } from "react-native/Libraries/LogBox/Data/LogBoxData";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,8 +48,6 @@ const LoginScreen = () => {
   const randColourNum = () => Math.floor(Math.random() * 255);
 
   const handleSignUp = () => {
-    //need logic to ensure all fields complete
-    // if (!fields) {alert} else { }
     if (!userName || !firstName || !lastName) {
       alert("All fields must be complete for user registration.");
     } else {
@@ -59,8 +56,6 @@ const LoginScreen = () => {
         .then((userCredentials) => {
           const user = userCredentials.user;
           alert(`Registered with: ${user.email}`);
-          //add random avatar and location in UK, default transport
-          console.log("user", user);
           updateProfile(auth.currentUser, {
             displayName: userName,
             photoURL: avatar,

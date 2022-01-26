@@ -2,21 +2,26 @@ import { useEffect, useState } from "react";
 import { Text, TextInput, View, Image, StyleSheet, Button } from "react-native";
 import { auth, db } from "../firebase";
 import { updateEmail, updateProfile } from "firebase/auth";
-import { updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 //To be careful when contacting database, user object occurs twice, once in authentication (can this be updated?) and once in Firestore database
 
 const UserAccount = () => {
+  const [uid, setUid] = useState(auth.currentUser.uid);
   const [user, setUser] = useState({
     uid: auth.currentUser.uid,
     email: auth.currentUser.email,
     name: auth.currentUser.displayName,
     phoneNumber: auth.currentUser.phoneNumber,
     avatar: auth.currentUser.photoURL,
-    transport: "car", //would have to get transport method from database here
+    transport: "car",
   });
 
   useEffect(() => {
-    // console.log(auth.currentUser);
+    //something not working here with this function
+    const userRef = doc(db, "users", uid);
+    const userInfo = getDoc(userRef)
+      .then((res) => console.log("YA TING", res.data()))
+      .catch((err) => console.log("bad ting:", err));
   }, []);
 
   const handleSubmit = () => {
@@ -26,7 +31,7 @@ const UserAccount = () => {
       displayName: user.name,
       photoURL: user.avatar,
     });
-
+    //this needs to be change to actually amend db
     const dbUpdate = updateDoc(doc(db, "users", user.uid), { _UPDATE });
 
     return Promise.all([emailUpdate, profileUpdate, dbUpdate])
@@ -49,11 +54,11 @@ const UserAccount = () => {
         }}
       />
 
-      <Text style={styles.heading}>Name</Text>
+      <Text style={styles.heading}>User Name</Text>
       <TextInput
         value={user.name}
         placeholder={"Update Me!"}
-        styles={styles.input}
+        style={styles.input}
         onChangeText={(text) => {
           setUser((prevUser) => {
             return { ...prevUser, name: text };
@@ -78,6 +83,7 @@ const UserAccount = () => {
         style={styles.input}
       />
       <Text style={styles.heading}>Default Transport</Text>
+      {/* This will be a dropdown eventually */}
       <TextInput
         placeholder={"Update Me!"}
         value={user.transport}
