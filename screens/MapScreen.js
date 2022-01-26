@@ -35,14 +35,7 @@ const MapScreen = ({ userArray, destination, zoomDelta }) => {
       >
         {loaded && (
           <>
-            <Marker
-              key={destination.name}
-              coordinate={{
-                latitude: destination.lat,
-                longitude: destination.lng,
-              }}
-              title={destination.place_name}
-            />
+            <CustomMarker user={destination} type={"destination"} />
             {userArray.map((user, i) => {
               //display routes to destination
               return (
@@ -52,7 +45,7 @@ const MapScreen = ({ userArray, destination, zoomDelta }) => {
                     user={user}
                     destination_id={destination.place_id}
                   />
-                  <CustomMarker key={user.name} user={user} />
+                  <CustomMarker key={user.name} user={user} type={"user"} />
                 </React.Fragment>
               );
             })}

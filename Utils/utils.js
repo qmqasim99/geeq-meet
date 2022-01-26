@@ -5,10 +5,10 @@ export const FindGeographicMidpoint = (users) => {
 
   const coordArray = users.map((user) => {
     return {
-      lat: user.latitude,
-      lng: user.longitude,
-      radLat: (user.latitude * Math.PI) / 180,
-      radLng: (user.longitude * Math.PI) / 180,
+      lat: user.lat,
+      lng: user.lng,
+      radLat: (user.lat * Math.PI) / 180,
+      radLng: (user.lng * Math.PI) / 180,
     };
   });
 
@@ -78,13 +78,13 @@ export const calcMapZoomDelta = (userArray, destination) => {
   let furthestLng = 0;
   //find furthest user from destination
   for (let i = 0; i < userArray.length; i++) {
-    if (furthestLat < Math.abs(destination.lat - userArray[i].latitude)) {
-      furthestLat = Math.abs(destination.lat - userArray[i].latitude);
+    if (furthestLat < Math.abs(destination.lat - userArray[i].lat)) {
+      furthestLat = Math.abs(destination.lat - userArray[i].lat);
     }
   }
   for (let i = 0; i < userArray.length; i++) {
-    if (furthestLng < Math.abs(destination.lng - userArray[i].longitude)) {
-      furthestLng = Math.abs(destination.lng - userArray[i].longitude);
+    if (furthestLng < Math.abs(destination.lng - userArray[i].lng)) {
+      furthestLng = Math.abs(destination.lng - userArray[i].lng);
     }
   }
 
