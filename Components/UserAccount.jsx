@@ -1,21 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, TextInput, View, Image, StyleSheet, Button } from "react-native";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { updateEmail, updateProfile } from "firebase/auth";
+import { updateDoc } from "firebase/firestore";
 //To be careful when contacting database, user object occurs twice, once in authentication (can this be updated?) and once in Firestore database
 
 const UserAccount = () => {
   const [user, setUser] = useState({
+    uid: auth.currentUser.uid,
     email: auth.currentUser.email,
     name: auth.currentUser.displayName,
     phoneNumber: auth.currentUser.phoneNumber,
     avatar: auth.currentUser.photoURL,
     transport: "car", //would have to get transport method from database here
   });
-  const [email, setEmail] = useState(user.email);
-  const [name, setName] = useState(user.name);
-  const [avatar, setAvatar] = useState(user.avatar);
-  const [transport, setTransport] = useState(user.transport);
+
+  useEffect(() => {
+    // console.log(auth.currentUser);
+  }, []);
+
+  const handleSubmit = () => {
+    const emailUpdate = updateEmail(auth.currentUser, user.email);
+
+    const profileUpdate = updateProfile(auth.currentUser, {
+      displayName: user.name,
+      photoURL: user.avatar,
+    });
+
+    const dbUpdate = updateDoc(doc(db, "users", user.uid), { _UPDATE });
+
+    return Promise.all([emailUpdate, profileUpdate, dbUpdate])
+      .then(() => {
+        alert("Details Successfully Updated");
+      })
+      .catch((err) => alert(err.message));
+  };
 
   return (
     <View style={styles.container}>
@@ -69,23 +88,8 @@ const UserAccount = () => {
         }}
         style={styles.input}
       />
-      <Button
-        title="Submit"
-        onPress={() => {
-          updateProfile(auth.currentUser, {
-            displayName: user.name,
-            photoURL: user.avatar,
-          })
-            .then(
-              updateEmail(auth.currentUser, user.email)
-                .then(() => alert("Details updated")) //display alert saying details updated?
-                .catch((error) => {
-                  alert(error.message);
-                })
-            )
-            .catch((error) => alert(error.message));
-        }}
-      />
+
+      <Button title="Submit" onPress={handleSubmit} />
     </View>
   );
 };
