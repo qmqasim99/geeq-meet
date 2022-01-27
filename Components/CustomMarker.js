@@ -3,56 +3,26 @@ import React, { useEffect, useState } from "react";
 import { Marker } from "react-native-maps";
 import { Image, Svg, G, Path, Rect, Text } from "react-native-svg";
 
+/*
+//MVP COMPLETE
+to-do:
+destination info panel on press
+user info on press
+*/
 const CustomMarker = ({ user, type, mapPress }) => {
   const [toggleInfo, setToggleInfo] = useState(false);
-  const [infoPanelDims, setInfoPanelDims] = useState({
-    x: "-120",
-    y: "0",
-    width: 380,
-    height: 130,
-    vWidth: 220,
-    vHeight: 60,
-    fontSize: "100",
-    textX: "70",
-    textY: "100",
-  });
 
   useEffect(() => {
     if (mapPress === "map") {
       setToggleInfo(false);
-      setInfoPanelDims({
-        x: "-120",
-        y: "0",
-        width: "380",
-        height: "130",
-        vWidth: 220,
-        vHeight: 60,
-        fontSize: "100",
-        textX: "70",
-        textY: "100",
-      });
     }
-
-    console.log(mapPress, toggleInfo);
   }, [mapPress]);
 
   const handleMarkerPress = (ev) => {
+    //currently does nothing - set up to detect type of marker when pressed
     setToggleInfo(true);
     if (type === "user") {
-      // console.log(user.name);
     } else if (type === "destination") {
-      // console.log(user.place_name);
-      setInfoPanelDims({
-        x: "-120",
-        y: "-50",
-        width: "380",
-        height: "230",
-        vWidth: 220,
-        vHeight: 160,
-        fontSize: "15",
-        textX: "70",
-        textY: "50",
-      });
     }
   };
 
@@ -99,17 +69,17 @@ const CustomMarker = ({ user, type, mapPress }) => {
       ) : (
         <View
           style={{
-            width: infoPanelDims.vWidth,
-            height: infoPanelDims.vHeight,
+            width: 150,
+            height: 80,
             justifyContent: "space-around",
           }}
         >
           <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 139.03 196.28">
             <Rect
-              x={infoPanelDims.x}
-              y={infoPanelDims.y}
-              width={infoPanelDims.width}
-              height={infoPanelDims.height}
+              x={"-120"}
+              y={0}
+              width={380}
+              height={130}
               fill="#e94e1b"
               rx="30"
             />
@@ -124,14 +94,14 @@ const CustomMarker = ({ user, type, mapPress }) => {
             </G>
 
             <Text
-              x={infoPanelDims.textX}
-              y={infoPanelDims.textY}
+              x={"70"}
+              y={"100"}
               textAnchor="middle"
               fontWeight="bold"
-              fontSize={infoPanelDims.fontSize}
+              fontSize={"100"}
               fill="white"
             >
-              {toggleInfo ? `${user.place_name},\n ${user.vicinity}` : "Meet"}
+              Meet
             </Text>
           </Svg>
         </View>

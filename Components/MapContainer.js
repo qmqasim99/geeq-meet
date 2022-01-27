@@ -13,6 +13,7 @@ import {
   FindGeographicMidpoint,
 } from "../Utils/utils";
 import DestinationList from "../Components/DestinationList";
+// import { useLoading } from "../hooks/CustomHooks";
 
 export default function MapContainer({ userArray, placeType }) {
   //example props
@@ -48,13 +49,13 @@ export default function MapContainer({ userArray, placeType }) {
   ];
   placeType = "restaurant";
 
+  //   const { loadComponent, isLoading, setIsLoading } = useLoading();
   const [gmMid, setGmMid] = useState({});
   const [destinationArray, setDestinationArray] = useState(null);
   const [destination, setDestination] = useState(null);
-  const [destinationSelected, setDestinationSelected] = useState(null);
   const [listLoaded, setListLoaded] = useState(false);
   const [zoomDelta, setZoomDelta] = useState({ lat: 0.0, lng: 0.0 });
-
+  const [destinationSelected, setDestinationSelected] = useState(null);
   useEffect(() => {
     const gmMid = FindGeographicMidpoint(userArray);
     setGmMid(gmMid);
@@ -63,7 +64,8 @@ export default function MapContainer({ userArray, placeType }) {
       const test = calcMapZoomDelta(userArray, destination);
       setZoomDelta(test);
     }
-  }, [destination]);
+    console.log("mapcontainer reload");
+  }, [destination, destinationSelected]);
 
   const getPlacesFromApi = (gmMid) => {
     const url = createPlaceSearchUrl(gmMid.lat, gmMid.lng);
@@ -71,7 +73,6 @@ export default function MapContainer({ userArray, placeType }) {
       res
         .json()
         .then((res) => {
-          console.log(res.results[0].vicinity);
           setDestinationArray(res.results);
           setListLoaded(true);
         })
@@ -98,6 +99,8 @@ export default function MapContainer({ userArray, placeType }) {
               userArray={userArray}
               destination={destination}
               zoomDelta={zoomDelta}
+              destinationSelected={destinationSelected}
+              setDestinationSelected={setDestinationSelected}
             />
           )}
         </>

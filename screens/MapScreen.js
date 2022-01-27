@@ -7,12 +7,19 @@ import { StyleSheet } from "react-native-web";
 import { GOOGLE_API_KEY } from "@env";
 import MapRoute from "../Components/MapRoute";
 import CustomMarker from "../Components/CustomMarker";
+import MapMenu from "../Components/MapMenu";
 
-const MapScreen = ({ userArray, destination, zoomDelta }) => {
+const MapScreen = ({
+  userArray,
+  destination,
+  zoomDelta,
+  destinationSelected,
+  setDestinationSelected,
+}) => {
   const [loaded, setLoaded] = useState(false);
   const [pressType, setPressType] = useState(false);
 
-  useEffect(() => {}, [zoomDelta]);
+  useEffect(() => {}, [zoomDelta, destinationSelected]);
 
   const handleMapLoad = (e) => {
     setLoaded(true);
@@ -34,7 +41,7 @@ const MapScreen = ({ userArray, destination, zoomDelta }) => {
           longitudeDelta: zoomDelta.lng,
         }}
         onPress={(e) => {
-          console.log("press", e.nativeEvent.action);
+          //   console.log("press", e.nativeEvent.action);
           if (e.nativeEvent.action === "marker-press") {
             // pressed a marker
             setPressType("marker");
@@ -64,6 +71,7 @@ const MapScreen = ({ userArray, destination, zoomDelta }) => {
                 </React.Fragment>
               );
             })}
+            <MapMenu setDestinationSelected={setDestinationSelected} />
           </>
         )}
       </MapView>
