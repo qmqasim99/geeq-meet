@@ -1,21 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, TextInput, View, Image, StyleSheet, Button } from "react-native";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { updateEmail, updateProfile } from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 //To be careful when contacting database, user object occurs twice, once in authentication (can this be updated?) and once in Firestore database
 
 const UserAccount = () => {
-  const [user, setUser] = useState({
-    email: auth.currentUser.email,
-    name: auth.currentUser.displayName,
-    phoneNumber: auth.currentUser.phoneNumber,
-    avatar: auth.currentUser.photoURL,
-    transport: "car", //would have to get transport method from database here
-  });
-  const [email, setEmail] = useState(user.email);
-  const [name, setName] = useState(user.name);
-  const [avatar, setAvatar] = useState(user.avatar);
-  const [transport, setTransport] = useState(user.transport);
+  const [uid, setUid] = useState(auth.currentUser.uid);
+  const [user, setUser] = useState({});
+
+  //need to make logic so it only editable if you are on your own page
+  //pass in uid for user and if uid matches then edit fields appear & submit button enabled
+
+  const fetchUser = async () => {
+    const userRef = doc(db, "users", uid);
+    const userInfo = await getDoc(userRef);
+    return userInfo.data();
+  };
+
+  useEffect(() => {
+    const data = fetchUser();
+    data
+      .then((res) => {
+        setUser({
+          email: res.email,
+          name: res.name,
+          userName: res.userName,
+          avatar: res.avatar,
+          transport: res.transport,
+        });
+      })
+      .catch((err) => alert(err));
+  }, []);
+
+  const handleSubmit = () => {
+    const emailUpdate = updateEmail(auth.currentUser, user.email);
+
+    const profileUpdate = updateProfile(auth.currentUser, {
+      displayName: user.name,
+      photoURL: user.avatar,
+    });
+
+    const dbUpdate = updateDoc(doc(db, "users", uid), {
+      email: user.email,
+      userName: user.userName,
+      avatar: user.avatar,
+      transport: user.transport,
+    });
+
+    return Promise.all([emailUpdate, profileUpdate, dbUpdate])
+      .then(() => {
+        alert("Details Successfully Updated");
+      })
+      .catch((err) => alert(err.message));
+  };
 
   return (
     <View style={styles.container}>
@@ -30,14 +68,14 @@ const UserAccount = () => {
         }}
       />
 
-      <Text style={styles.heading}>Name</Text>
+      <Text style={styles.heading}>User Name</Text>
       <TextInput
-        value={user.name}
+        value={user.userName}
         placeholder={"Update Me!"}
-        styles={styles.input}
+        style={styles.input}
         onChangeText={(text) => {
           setUser((prevUser) => {
-            return { ...prevUser, name: text };
+            return { ...prevUser, userName: text };
           });
         }}
       />
@@ -59,6 +97,7 @@ const UserAccount = () => {
         style={styles.input}
       />
       <Text style={styles.heading}>Default Transport</Text>
+      {/* This will be a dropdown eventually */}
       <TextInput
         placeholder={"Update Me!"}
         value={user.transport}
@@ -69,23 +108,8 @@ const UserAccount = () => {
         }}
         style={styles.input}
       />
-      <Button
-        title="Submit"
-        onPress={() => {
-          updateProfile(auth.currentUser, {
-            displayName: user.name,
-            photoURL: user.avatar,
-          })
-            .then(
-              updateEmail(auth.currentUser, user.email)
-                .then(() => alert("Details updated")) //display alert saying details updated?
-                .catch((error) => {
-                  alert(error.message);
-                })
-            )
-            .catch((error) => alert(error.message));
-        }}
-      />
+
+      <Button title="Submit" onPress={handleSubmit} />
     </View>
   );
 };
