@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
-import { auth } from '../firebase';
-
 import { StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
 import CreateGroup from '../Components/CreateGroup';
+import { auth } from '../firebase';
+// import NavBar from "../Components/NavBar";
+import Nav from '../Components/Nav';
 import ViewGroups from '../Components/ViewGroups';
 
 const HomeScreen = () => {
@@ -23,9 +24,7 @@ const HomeScreen = () => {
       <Text>Email: {auth.currentUser?.email}</Text>
       <Text>HomePage of groups and invites will go here</Text>
       <TouchableOpacity onPress={handleSignOut} style={styles.button}>
-        <Text style={styles.buttonText}>
-          Sign out = need to discuss how to sign out from page. not in wireframe
-        </Text>
+        <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
 
       <Button
@@ -34,8 +33,6 @@ const HomeScreen = () => {
           navigation.navigate('UserAccount');
         }}
       />
-
-      <CreateGroup />
     </View>
   );
 };
