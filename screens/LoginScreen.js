@@ -12,17 +12,29 @@ import {
 } from "react-native";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
-
+import { back } from "react-native/Libraries/Animated/Easing";
+import HomeScreen from "./HomeScreen";
+import { updateProfile } from "firebase/auth";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [bio, setName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
   const [loginPressed, setLoginPressed] = useState(false);
   const [registerPressed, setRegisterPressed] = useState(false);
+  const [coords, setCoords] = useState({ lat: 0, lng: 0 });
+  const [avatar, setAvatar] = useState("https://picsum.photos/200");
 
   const navigation = useNavigation();
 
   useEffect(() => {
+    fetch("https://api.3geonames.org/?randomland=UK&json=1")
+      .then((res) => res.json())
+      .then((res) =>
+        setCoords({ lat: res.nearest.latt, lng: res.nearest.longt })
+      );
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         navigation.replace("Home");
@@ -32,22 +44,33 @@ const LoginScreen = () => {
     return unsubscribe;
   }, []);
 
+  const randColourNum = () => Math.floor(Math.random() * 255);
+
   const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        //can we make this add display name?
-        //would have to access auth object - perhaps go to next screen to set further user details
-        return setDoc(doc(db, "users", user.uid), {
-          email: user.email,
-        });
-      })
-      .then((user) => {
-        console.log(user);
-        alert("Registered with:", user.email);
-      })
-      .catch((error) => alert(error.message));
+    if (!userName || !firstName || !lastName) {
+      alert("All fields must be complete for user registration.");
+    } else {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredentials) => {
+          const user = userCredentials.user;
+          alert(`Registered with: ${user.email}`);
+          updateProfile(auth.currentUser, {
+            displayName: userName,
+            photoURL: avatar,
+          });
+          return setDoc(doc(db, "users", user.uid), {
+            email: user.email,
+            avatar,
+            name: `${firstName} ${lastName}`,
+            userName,
+            transport: "car",
+            coords,
+            colour: `rgba(${randColourNum()},${randColourNum()},${randColourNum()})`,
+          });
+        })
+        .catch((error) => alert(error.message));
+    }
   };
 
   const handleLogin = () => {
@@ -55,7 +78,7 @@ const LoginScreen = () => {
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log("Logged in with:", user.email);
+        console.log(`Logged in with: ${user.email}`);
       })
       .catch(function () {
         return alert("Incorrect email and/or password. try again");
@@ -79,6 +102,79 @@ const LoginScreen = () => {
       })
       .catch((error) => alert(error.message));
   };
+  const LoginFields = (
+    <View style={styles.inputContainer}>
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
+        style={styles.loginInput}
+      />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+        style={styles.loginInput}
+        secureTextEntry
+      />
+      <TouchableOpacity onPress={handleLogin} style={styles.button}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={back} style={styles.button}>
+        <Text style={styles.buttonText}>back</Text>
+      </TouchableOpacity>
+      <View style={styles.buttonContainerReset}>
+        <TouchableOpacity onPress={resetPassword} style={styles.button}>
+          <Text style={styles.buttonText}>Forgotten Password?</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  const RegisterFields = (
+    <View style={styles.inputContainer}>
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
+        style={styles.loginInput}
+      />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+        style={styles.loginInput}
+        secureTextEntry
+      />
+      <TextInput
+        placeholder="First Name"
+        value={firstName}
+        onChangeText={(text) => setFirstName(text)}
+        style={styles.loginInput}
+        secureTextEntry
+      />
+      <TextInput
+        placeholder="Last Name"
+        value={lastName}
+        onChangeText={(text) => setLastName(text)}
+        style={styles.loginInput}
+        secureTextEntry
+      />
+      <TextInput
+        placeholder="User Name"
+        value={userName}
+        onChangeText={(text) => setUserName(text)}
+        style={styles.loginInput}
+        secureTextEntry
+      />
+      <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={back} style={styles.button}>
+        <Text style={styles.buttonText}>back</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <>

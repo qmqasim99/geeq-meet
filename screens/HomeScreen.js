@@ -1,10 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
+import { auth } from "../firebase";
 
+import { StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
 import CreateGroup from "../Components/CreateGroup";
 import { auth } from "../firebase";
 import NavBar from "../Components/NavBar";
+import ViewGroups from "../Components/ViewGroups";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -34,6 +36,7 @@ const HomeScreen = () => {
       />
 
       <CreateGroup />
+      <ViewGroups />
     </View>
   );
 };
