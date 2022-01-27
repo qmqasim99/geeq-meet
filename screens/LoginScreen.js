@@ -62,6 +62,7 @@ const LoginScreen = () => {
           });
           return setDoc(doc(db, "users", user.uid), {
             email: user.email,
+            avatar,
             name: `${firstName} ${lastName}`,
             userName,
             transport: "car",

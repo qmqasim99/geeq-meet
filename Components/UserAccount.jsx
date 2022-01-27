@@ -7,21 +7,30 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const UserAccount = () => {
   const [uid, setUid] = useState(auth.currentUser.uid);
-  const [user, setUser] = useState({
-    uid: auth.currentUser.uid,
-    email: auth.currentUser.email,
-    name: auth.currentUser.displayName,
-    phoneNumber: auth.currentUser.phoneNumber,
-    avatar: auth.currentUser.photoURL,
-    transport: "car",
-  });
+  const [user, setUser] = useState({});
+
+  //need to make logic so it only editable if you are on your own page
+  //pass in uid for user and if uid matches then edit fields appear & submit button enabled
+
+  const fetchUser = async () => {
+    const userRef = doc(db, "users", uid);
+    const userInfo = await getDoc(userRef);
+    return userInfo.data();
+  };
 
   useEffect(() => {
-    //something not working here with this function
-    const userRef = doc(db, "users", uid);
-    const userInfo = getDoc(userRef)
-      .then((res) => console.log("YA TING", res.data()))
-      .catch((err) => console.log("bad ting:", err));
+    const data = fetchUser();
+    data
+      .then((res) => {
+        setUser({
+          email: res.email,
+          name: res.name,
+          userName: res.userName,
+          avatar: res.avatar,
+          transport: res.transport,
+        });
+      })
+      .catch((err) => alert(err));
   }, []);
 
   const handleSubmit = () => {
@@ -31,8 +40,13 @@ const UserAccount = () => {
       displayName: user.name,
       photoURL: user.avatar,
     });
-    //this needs to be change to actually amend db
-    const dbUpdate = updateDoc(doc(db, "users", user.uid), { _UPDATE });
+
+    const dbUpdate = updateDoc(doc(db, "users", uid), {
+      email: user.email,
+      userName: user.userName,
+      avatar: user.avatar,
+      transport: user.transport,
+    });
 
     return Promise.all([emailUpdate, profileUpdate, dbUpdate])
       .then(() => {
@@ -56,12 +70,12 @@ const UserAccount = () => {
 
       <Text style={styles.heading}>User Name</Text>
       <TextInput
-        value={user.name}
+        value={user.userName}
         placeholder={"Update Me!"}
         style={styles.input}
         onChangeText={(text) => {
           setUser((prevUser) => {
-            return { ...prevUser, name: text };
+            return { ...prevUser, userName: text };
           });
         }}
       />
