@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationParam } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import { Link } from '@react-navigation/native';
@@ -37,17 +37,21 @@ const groupMembers = [
   { user_id: 3, name: 'Boney' },
   { user_id: 4, name: 'Gusty' },
 ];
-const SingleGroupPage = ({ navigation }) => {
+const SingleGroupPage = ({ route, navigation }) => {
+  const { group_id } = route.params;
   const [group, setGroup] = useState({});
   const [newFriend, setNewFriend] = useState('');
   const [searchedFriends, setSearchedFriends] = useState({});
   const usersRef = collection(db, 'users');
-  const docRef = doc(db, 'groups', '4cXw12VSrQoKHmKsL1Di');
+  const docRef = doc(db, 'groups', group_id); //'4cXw12VSrQoKHmKsL1Di'
 
   //console.log(navigation);
-  // const { group_id } = navigation.getParams('group_id');
-  // const group_id = navigation.useNavigationParam('group_id');
-  // console.log('group_id ', group_id);
+  // const navigation = useNavigation();
+  //console.log('navigation params ', navigation.getParams());
+  //  const group_id = navigation.getParams('group_id');
+  //const group_id = useNavigationParam('group_id');
+  //const { group_id, otherParam } = this.props.route.params;
+  console.log('group_id ', group_id);
 
   // const group_id = 4cXw12VSrQoKHmKsL1Di;
 
