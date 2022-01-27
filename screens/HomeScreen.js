@@ -33,6 +33,8 @@ const HomeScreen = () => {
           navigation.navigate('UserAccount');
         }}
       />
+
+      <CreateGroup />
     </View>
   );
 };
