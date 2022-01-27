@@ -8,13 +8,11 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  BackHandler,
 } from "react-native";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { back } from "react-native/Libraries/Animated/Easing";
-import HomeScreen from "./HomeScreen";
 import { updateProfile } from "firebase/auth";
+
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
