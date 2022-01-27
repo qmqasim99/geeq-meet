@@ -1,5 +1,7 @@
+import { useNavigation, useNavigationParam } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
+import { Link } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -21,6 +23,11 @@ import {
   collectionGroup,
   document,
   serverTimestamp,
+  updateDoc,
+  arrayUnion,
+  orderBy,
+  startAt,
+  endAt,
 } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
@@ -30,26 +37,28 @@ const groupMembers = [
   { user_id: 3, name: 'Boney' },
   { user_id: 4, name: 'Gusty' },
 ];
-const SingleGroupPage = ({ navigation }) => {
+const SingleGroupPage = ({ route, navigation }) => {
+  const { group_id } = route.params;
   const [group, setGroup] = useState({});
   const [newFriend, setNewFriend] = useState('');
   const [searchedFriends, setSearchedFriends] = useState({});
   const usersRef = collection(db, 'users');
+  const docRef = doc(db, 'groups', group_id); //'4cXw12VSrQoKHmKsL1Di'
 
   //console.log(navigation);
-  //const { group_id } = navigation.route.params;
-  // console.log('group_id ', group_id);
+  // const navigation = useNavigation();
+  //console.log('navigation params ', navigation.getParams());
+  //  const group_id = navigation.getParams('group_id');
+  //const group_id = useNavigationParam('group_id');
+  //const { group_id, otherParam } = this.props.route.params;
+  console.log('group_id ', group_id);
 
   // const group_id = 4cXw12VSrQoKHmKsL1Di;
 
   // get a single doc
   const getSingleDoc = async () => {
-    const docRef = doc(db, 'groups', '4cXw12VSrQoKHmKsL1Di');
-
     const gdocs = await getDoc(docRef);
     setGroup({ id: gdocs.id, ...gdocs.data() });
-
-    console.log(' getSingleDoc ', gdocs.id, gdocs.data());
   };
 
   useEffect(() => {
@@ -64,7 +73,10 @@ const SingleGroupPage = ({ navigation }) => {
     try {
       const q = query(
         usersRef,
-        where('name', '==', newFriend)
+        orderBy('name'),
+        startAt(newFriend),
+        endAt(newFriend + '\uf8ff')
+        // where('name', '==', newFriend)
         //,
         //orderBy('name')
       );
@@ -74,7 +86,16 @@ const SingleGroupPage = ({ navigation }) => {
       let users = [];
 
       udocs.docs.map((doc) => {
-        users.push({ uid: doc.id, ...doc.data() });
+        let invited = false;
+        const currentInvites = doc.data().invites;
+        console.log(' invitessss', doc.data());
+        if (currentInvites) {
+          currentInvites.map((invite) => {
+            invite.group_id === group.id ? (invited = true) : (invited = false);
+            console.log('already invited ', invited);
+          });
+        }
+        users.push({ uid: doc.id, invited, ...doc.data() });
       });
       console.log('in gettingDocs', users);
       setSearchedFriends(users);
@@ -84,9 +105,33 @@ const SingleGroupPage = ({ navigation }) => {
   };
 
   // searches for friends by name
-  const handleSubmitInvite = async (e) => {
+  const handleSubmitInvite = async (inviteeName, inviteeUid) => {
     try {
-      console.log('Friend invited with uid', e);
+      const newInvite = {
+        invited_by: 'qname',
+        invited_by_uid: auth.currentUser.uid,
+        invitee: inviteeName,
+        invitee_uid: inviteeUid,
+        accepted: false,
+      };
+
+      // update group invite array with new invite
+      updateDoc(docRef, { invites: arrayUnion(newInvite) });
+      // add a new invite in users colleciton
+      const newInviteForUsersCollection = {
+        invited_by: 'qname',
+        invited_by_uid: auth.currentUser.uid,
+        group_name: group.group_name,
+        group_id: group.id,
+        accepted: false,
+      };
+
+      const usersDocRef = doc(db, 'users', inviteeUid);
+      updateDoc(usersDocRef, {
+        invites: arrayUnion(newInviteForUsersCollection),
+      });
+
+      console.log('Friend invited with uid', newInvite);
     } catch (err) {
       console.log(err.message);
     }
@@ -104,29 +149,48 @@ const SingleGroupPage = ({ navigation }) => {
     return (
       <View>
         <Text>{item.name}</Text>
-        <Button title="Invite" onPress={() => handleSubmitInvite(item.uid)} />
+        <Button
+          disabled={item.invited}
+          title="Invite"
+          onPress={() => handleSubmitInvite(item.name, item.uid)}
+        />
+      </View>
+    );
+  };
+
+  // display current invitee list
+  const renderInviteList = ({ item }) => {
+    return (
+      <View>
+        <Text>{item.invitee}</Text>
       </View>
     );
   };
 
   return (
-    <View
-      style={{
-        padding: 50,
-        flex: 1,
-        justifyContent: 'center',
-        marginHorizontal: 16,
-      }}
-    >
-      <Text>Group Name Here: {group.group_name}</Text>{' '}
-      <Text>Group ID: {group.id}</Text>
-      <Image
-        source={{
-          uri: 'https://www.clipartkey.com/mpngs/m/9-93815_daisy-flower-petals-yellow-cartoon-flower-png.png',
+    <ScrollView>
+      <Link
+        to={{ screen: 'InviteTest', params: { uid: 'K5XmEen38Qx4LcTbY3nS' } }}
+      >
+        Test User Invite
+      </Link>
+      <View
+        style={{
+          padding: 50,
+          flex: 1,
+          justifyContent: 'center',
+          marginHorizontal: 16,
         }}
-        style={{ width: 200, height: 200 }}
-      />
-      <Text>Group Members</Text>
+      >
+        <Text>Group Name Here: {group.group_name}</Text>{' '}
+        <Text>Group ID: {group.id}</Text>
+        <Image
+          source={{
+            uri: 'https://www.clipartkey.com/mpngs/m/9-93815_daisy-flower-petals-yellow-cartoon-flower-png.png',
+          }}
+          style={{ width: 200, height: 200 }}
+        />
+      </View>
       <View style={{ padding: 10 }}>
         <TextInput
           style={{ height: 40 }}
@@ -137,22 +201,30 @@ const SingleGroupPage = ({ navigation }) => {
 
         <Button title="Search" onPress={handleSubmitFriend} />
       </View>
-      <Text>Users found:</Text>
-      <FlatList
-        data={searchedFriends}
-        renderItem={renderFriendName}
-        keyExtractor={(item) => item.uid}
-      />
-      <FlatList
-        data={group.users}
-        renderItem={renderName}
-        keyExtractor={(item) => item.uid}
-      />
-      <FlatList
-        data={groupMembers}
-        renderItem={renderName}
-        keyExtractor={(item) => item.user_id}
-      />
+      <View>
+        <Text>Users found:</Text>
+        <FlatList
+          data={searchedFriends}
+          renderItem={renderFriendName}
+          keyExtractor={(item) => item.uid}
+        />
+      </View>
+      <View>
+        <Text>Friends invited:</Text>
+        <FlatList
+          data={group.invites}
+          renderItem={renderInviteList}
+          keyExtractor={(item) => item.invitee_uid}
+        />
+      </View>
+      <View>
+        <Text>Current friends:</Text>
+        <FlatList
+          data={group.users}
+          renderItem={renderName}
+          keyExtractor={(item) => item.uid}
+        />
+      </View>
       <View styles={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Button
           title="Chat"
@@ -167,7 +239,7 @@ const SingleGroupPage = ({ navigation }) => {
           }}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
