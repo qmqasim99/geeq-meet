@@ -1,4 +1,6 @@
 import { useNavigation } from "@react-navigation/core";
+
+import Icons from "react-native-vector-icons/MaterialIcons";
 import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -7,12 +9,18 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  BackHandler,
 } from "react-native";
-import { auth } from "../firebase";
-
+import { auth, db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { back } from "react-native/Libraries/Animated/Easing";
+import HomeScreen from "./HomeScreen";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [bio, setName] = useState("");
+  const [loginPressed, setLoginPressed] = useState(false);
+  const [registerPressed, setRegisterPressed] = useState(false);
 
   const navigation = useNavigation();
 
@@ -31,7 +39,17 @@ const LoginScreen = () => {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        alert("Registered with:", user.email);
+        //can we make this add display name?
+        //would have to access auth object - perhaps go to next screen to set further user details
+        alert(`Registered with: ${user.email}`);
+
+        console.log("user", user);
+        return setDoc(doc(db, "users", user.uid), {
+          email: user.email,
+        });
+      })
+      .then((user) => {
+        // this isn't triggering correctly
       })
       .catch((error) => alert(error.message));
   };
@@ -41,7 +59,7 @@ const LoginScreen = () => {
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log("Logged in with:", user.email);
+        console.log(`Logged in with: ${user.email}`);
       })
       .catch(function () {
         return alert("Incorrect email and/or password. try again");
@@ -57,41 +75,94 @@ const LoginScreen = () => {
       .catch((error) => alert("Please enter Email."));
   };
 
+  const back = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Login");
+      })
+      .catch((error) => alert(error.message));
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        />
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
-
-        <View style={styles.buttonContainerReset}>
-          <TouchableOpacity onPress={resetPassword} style={styles.button}>
-            <Text style={styles.buttonText}>Forgotten Password?</Text>
+      {loginPressed ? (
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.loginInput}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.loginInput}
+            secureTextEntry
+          />
+          <TouchableOpacity onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={back} style={styles.button}>
+            <Text style={styles.buttonText}>back</Text>
+          </TouchableOpacity>
+          <View style={styles.buttonContainerReset}>
+            <TouchableOpacity onPress={resetPassword} style={styles.button}>
+              <Text style={styles.buttonText}>Forgotten Password?</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) : registerPressed ? (
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.loginInput}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.loginInput}
+            secureTextEntry
+          />
+          <TextInput
+            placeholder="User Name"
+            value={bio}
+            onChangeText={(text) => setName(text)}
+            style={styles.loginInput}
+            secureTextEntry
+          />
+          <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={back} style={styles.button}>
+            <Text style={styles.buttonText}>back</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      ) : (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setLoginPressed(true);
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setRegisterPressed(true);
+            }}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            {/* additional fields here but need to find out how to add them to user object, i.e. watch tutorial */}
+            <Text style={styles.buttonOutlineText}>Register</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -108,7 +179,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "70%",
   },
-  input: {
+  loginInput: {
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,

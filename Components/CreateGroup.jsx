@@ -1,5 +1,7 @@
+import { useNavigation } from '@react-navigation/core';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { Link } from '@react-navigation/native';
 import {
   collection,
   doc,
@@ -12,11 +14,12 @@ import {
   document,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { auth, db } from '../firebase';
 
 import { useState, useEffect } from 'react';
 
 export default function CreateGroup() {
+  const navigation = useNavigation();
   const collRef = collection(db, 'groups');
 
   const [groupName, setGroupName] = useState('');
@@ -34,11 +37,18 @@ export default function CreateGroup() {
       users: [{ name: 'group creator', uid: 11 }],
     });
     console.log('form sumitted');
+    // navigation.replace('Group');
   };
 
   return (
     <View style={styles.container}>
-      <Text>Books</Text>
+      <Link
+        to={{ screen: 'Group', params: { group_id: '4cXw12VSrQoKHmKsL1Di' } }}
+      >
+        Go to a group
+      </Link>
+
+      <Text>Create a new group</Text>
       <StatusBar style="auto" />
 
       <View style={{ padding: 10 }}>
