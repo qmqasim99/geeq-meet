@@ -34,8 +34,9 @@ const HomeScreen = () => {
         }}
       />
 
-      <CreateGroup />
-      <ViewGroups />
+      <Nav />
+      {/* <CreateGroup /> */}
+      {/* <ViewGroups /> */}
     </View>
   );
 };
