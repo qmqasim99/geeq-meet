@@ -29,6 +29,7 @@ import Chat from "./Components/Chat";
 import SingleGroupPage from "./Components/SingleGroupPage";
 
 import UserAccount from "./Components/UserAccount";
+import MapContainer from "./Components/MapContainer";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="MapContainer" component={MapContainer} />
+        <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen
           options={{ headerShown: false }}
           name="Login"
