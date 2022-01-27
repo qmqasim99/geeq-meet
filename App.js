@@ -39,6 +39,8 @@ export default function App() {
     <UserProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen name="MapContainer" component={MapContainer} />
+          <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen
             options={{ headerShown: false }}
             name="Login"
@@ -48,8 +50,6 @@ export default function App() {
           <Stack.Screen name="UserAccount" component={UserAccount} />
           <Stack.Screen name="Chat" component={Chat} />
           <Stack.Screen name="Group" component={SingleGroupPage} />
-          <Stack.Screen name="MapContainer" component={MapContainer} />
-          <Stack.Screen name="Map" component={MapScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
