@@ -30,28 +30,29 @@ import SingleGroupPage from "./Components/SingleGroupPage";
 
 import UserAccount from "./Components/UserAccount";
 import MapContainer from "./Components/MapContainer";
+import { UserProvider } from "./Context/Context";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="MapContainer" component={MapContainer} />
-        <Stack.Screen name="Map" component={MapScreen} />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={LoginScreen}
-        />
-        <Stack.Screen name="Home" component={HomeScreen} />
-
-        <Stack.Screen name="UserAccount" component={UserAccount} />
-
-        <Stack.Screen name="Chat" component={Chat} />
-        <Stack.Screen name="Group" component={SingleGroupPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login"
+            component={LoginScreen}
+          />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="UserAccount" component={UserAccount} />
+          <Stack.Screen name="Chat" component={Chat} />
+          <Stack.Screen name="Group" component={SingleGroupPage} />
+          <Stack.Screen name="MapContainer" component={MapContainer} />
+          <Stack.Screen name="Map" component={MapScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserProvider>
   );
 }
 
