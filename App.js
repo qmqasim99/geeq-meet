@@ -31,6 +31,9 @@ import SingleGroupPage from "./Components/SingleGroupPage";
 
 import UserAccount from "./Components/UserAccount";
 import MapContainer from "./Components/MapContainer";
+import { UserProvider } from "./Context/Context";
+import contextTest1 from "./Components/contextTest1";
+import contextTest2 from "./Components/contextTest2";
 
 const Stack = createNativeStackNavigator();
 

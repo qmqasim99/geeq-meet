@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { ButtonGroup } from "react-native-elements";
 import { Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
 const Nav = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigation = useNavigation();
 
   const handleNavigate = (value) => {
-    console.log(value);
+    import { useRoute } from "@react-navigation/native";
+
+    const route = useRoute();
+    console.log(route);
+
     if (value === 1) {
       navigation.navigate("Home");
     }
