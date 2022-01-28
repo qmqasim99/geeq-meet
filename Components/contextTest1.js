@@ -1,17 +1,17 @@
 import { View, Text, Button } from "react-native";
 import React, { useContext } from "react";
-import { Link } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/core";
 import { UserContext } from "../Context/Context";
 
-const contextTest1 = () => {
+const ContextTest1 = () => {
   const navigation = useNavigation();
-  const { setUser } = useContext(UserContext);
+  const { user, setUser, groups } = useContext(UserContext);
 
   const handlePress = () => {
-    setUser({ name: "info passed through context" });
-    // console.log(UserContext);
-    navigation.navigate("test2");
+    // setUser({ name: "info passed through context" });
+    console.log("user", user);
+    console.log("groups", groups);
+    navigation.navigate("2");
   };
   return (
     <View>
@@ -25,4 +25,4 @@ const contextTest1 = () => {
   );
 };
 
-export default contextTest1;
+export default ContextTest1;
