@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 // import NavBar from "../Components/NavBar";
 import Nav from "../Components/Nav";
 import ViewGroups from "../Components/ViewGroups";
+import InviteTest from "../Components/InviteTest";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -34,8 +35,9 @@ const HomeScreen = () => {
         }}
       />
 
+      <InviteTest />
       <CreateGroup />
-      <ViewGroups />
+      <Nav />
     </View>
   );
 };

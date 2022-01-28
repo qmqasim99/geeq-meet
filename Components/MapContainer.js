@@ -13,6 +13,7 @@ import {
   FindGeographicMidpoint,
 } from "../Utils/utils";
 import DestinationList from "../Components/DestinationList";
+import Nav from "./Nav";
 // import { useLoading } from "../hooks/CustomHooks";
 
 export default function MapContainer({ userArray, placeType }) {

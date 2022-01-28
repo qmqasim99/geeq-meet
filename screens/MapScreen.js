@@ -8,6 +8,7 @@ import { GOOGLE_API_KEY } from "@env";
 import MapRoute from "../Components/MapRoute";
 import CustomMarker from "../Components/CustomMarker";
 import MapMenu from "../Components/MapMenu";
+import Nav from "../Components/Nav";
 
 const MapScreen = ({
   userArray,
@@ -28,7 +29,7 @@ const MapScreen = ({
   return (
     <View style={styles.container}>
       <MapView
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: "90%", width: "100%" }}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
         onMapReady={(event) => {
@@ -75,6 +76,7 @@ const MapScreen = ({
           </>
         )}
       </MapView>
+      <Nav />
     </View>
   );
 };
