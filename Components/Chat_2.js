@@ -20,33 +20,43 @@ import {
   orderBy,
   startAt,
   endAt,
+  onSnapshot,
 } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 //useState
 const Chat_2 = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
 
-  //This shows which user is chatting (with image) with user.
-  //how to add history and connect properly with firestore db?
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "i am now alive!",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/200/200/tech",
-        },
-      },
-    ]);
-  }, []);
+    const collectionRef = collection(db, "chats");
+    const q = query(collectionRef, orderBy("createdAt", "desc"));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      setMessages(
+        querySnapshot.docs.map((doc) => ({
+          _id: doc.data()._id,
+          createdAt: doc.data().createdAt.toDate(),
+          text: doc.data().text,
+          user: doc.data().user,
+        }))
+      );
+    });
+
+    return unsubscribe;
+  });
 
   const onSend = useCallback((messages = []) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
+    const { _id, createdAt, text, user } = messages[0];
+    addDoc(collection(db, "chats"), {
+      _id,
+      createdAt,
+      text,
+      user,
+    });
   }, []);
 
   return (
@@ -54,7 +64,7 @@ const Chat_2 = ({ navigation }) => {
       messages={messages}
       onSend={(messages) => onSend(messages)}
       user={{
-        _id: 1,
+        _id: auth?.currentUser?.email,
       }}
     />
   );
