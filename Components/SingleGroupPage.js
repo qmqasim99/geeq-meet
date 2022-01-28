@@ -41,7 +41,7 @@ const SingleGroupPage = ({ route, navigation }) => {
   const { group_id } = route.params;
   const [group, setGroup] = useState({});
   const [newFriend, setNewFriend] = useState('');
-  const [searchedFriends, setSearchedFriends] = useState({});
+  const [searchedFriends, setSearchedFriends] = useState([]);
   const usersRef = collection(db, 'users');
   const docRef = doc(db, 'groups', group_id); //'4cXw12VSrQoKHmKsL1Di'
 
@@ -71,6 +71,10 @@ const SingleGroupPage = ({ route, navigation }) => {
     e.preventDefault();
 
     try {
+      if (newFriend.trim() === '') {
+        alert('Please enter a name to search');
+        return;
+      }
       const q = query(
         usersRef,
         orderBy('name'),
@@ -182,7 +186,7 @@ const SingleGroupPage = ({ route, navigation }) => {
           marginHorizontal: 16,
         }}
       >
-        <Text>Group Name Here: {group.group_name}</Text>{' '}
+        <Text>Group Name Here: {group.group_name}</Text>
         <Text>Group ID: {group.id}</Text>
         <Image
           source={{
@@ -201,30 +205,36 @@ const SingleGroupPage = ({ route, navigation }) => {
 
         <Button title="Search" onPress={handleSubmitFriend} />
       </View>
-      <View>
-        <Text>Users found:</Text>
-        <FlatList
-          data={searchedFriends}
-          renderItem={renderFriendName}
-          keyExtractor={(item) => item.uid}
-        />
-      </View>
-      <View>
-        <Text>Friends invited:</Text>
-        <FlatList
-          data={group.invites}
-          renderItem={renderInviteList}
-          keyExtractor={(item) => item.invitee_uid}
-        />
-      </View>
-      <View>
-        <Text>Current friends:</Text>
-        <FlatList
-          data={group.users}
-          renderItem={renderName}
-          keyExtractor={(item) => item.uid}
-        />
-      </View>
+      {searchedFriends && (
+        <View>
+          <Text>Users found:</Text>
+          <FlatList
+            data={searchedFriends}
+            renderItem={renderFriendName}
+            keyExtractor={(item) => item.uid}
+          />
+        </View>
+      )}
+      {group.invites && (
+        <View>
+          <Text>Friends invited:</Text>
+          <FlatList
+            data={group.invites}
+            renderItem={renderInviteList}
+            keyExtractor={(item) => item.invitee_uid}
+          />
+        </View>
+      )}
+      {group.users && (
+        <View>
+          <Text>Current friends:</Text>
+          <FlatList
+            data={group.users}
+            renderItem={renderName}
+            keyExtractor={(item) => item.uid}
+          />
+        </View>
+      )}
       <View styles={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Button
           title="Chat"
