@@ -24,6 +24,7 @@ import {
 } from "firebase/firestore";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
+import ConfigureMeet from "./screens/ConfigureMeet";
 import FirebaseTesting from "./Components/FirebaseTesting";
 import Chat from "./Components/Chat";
 import SingleGroupPage from "./Components/SingleGroupPage";
@@ -43,11 +44,10 @@ export default function App() {
           component={LoginScreen}
         />
         <Stack.Screen name="Home" component={HomeScreen} />
-
         <Stack.Screen name="UserAccount" component={UserAccount} />
-
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="Group" component={SingleGroupPage} />
+        <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
         <Stack.Screen name="MapContainer" component={MapContainer} />
         <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>

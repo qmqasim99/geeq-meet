@@ -1,5 +1,5 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,8 @@ import {
   ScrollView,
   Button,
   TextInput,
-} from 'react-native';
+  TouchableOpacity,
+} from "react-native";
 import {
   collection,
   doc,
@@ -28,15 +29,20 @@ import {
   endAt,
   arrayRemove,
   Timestamp,
-} from 'firebase/firestore';
-import { auth, db } from '../firebase';
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
 
-const InviteTest = ({ navigation }) => {
+const InviteTest = () => {
   const [user, setUser] = useState({});
-  const usersRef = collection(db, 'users');
+  const usersRef = collection(db, "users");
+  const navigation = useNavigation();
+
   //const user_id = 'K5XmEen38Qx4LcTbY3nS';
-  const user_id = 'ef83N7qN5beB5oJtm9CgCnW7Ydv1';
-  const docRef = doc(db, 'users', user_id);
+
+  //hard coded user id
+  // const user_id = 'ef83N7qN5beB5oJtm9CgCnW7Ydv1';
+  const user_id = auth.currentUser.uid;
+  const docRef = doc(db, "users", user_id);
 
   // get a single user
   const getSingleDoc = async () => {
@@ -48,7 +54,7 @@ const InviteTest = ({ navigation }) => {
 
   useEffect(() => {
     getSingleDoc();
-    console.log('single group : ', user);
+    console.log("single group : ", user);
     //getInviteObject();
   }, []);
 
@@ -59,9 +65,9 @@ const InviteTest = ({ navigation }) => {
     try {
       const q = query(
         usersRef,
-        orderBy('name'),
+        orderBy("name"),
         startAt(newFriend),
-        endAt(newFriend + '\uf8ff')
+        endAt(newFriend + "\uf8ff")
         // where('name', '==', newFriend)
         //,
         //orderBy('name')
@@ -71,19 +77,21 @@ const InviteTest = ({ navigation }) => {
 
       let users = [];
 
+      //gets current invites
       udocs.docs.map((doc) => {
         let invited = false;
         const currentInvites = doc.data().invites;
-        console.log(' invitessss', doc.data());
+        console.log(" invitessss", doc.data());
         if (currentInvites) {
           currentInvites.map((invite) => {
             invite.group_id === group.id ? (invited = true) : (invited = false);
-            console.log('already invited ', invited);
+            console.log("already invited ", invited);
           });
         }
+        //puts current invites in state
         users.push({ uid: doc.id, invited, ...doc.data() });
       });
-      console.log('in gettingDocs', users);
+      console.log("in gettingDocs", users);
       setSearchedFriends(users);
     } catch (err) {
       console.log(err.message);
@@ -92,7 +100,7 @@ const InviteTest = ({ navigation }) => {
 
   const handleSubmitInvite = async (item) => {
     try {
-      console.log('item ', item);
+      console.log("item ", item);
 
       let timestamp = Timestamp.now();
 
@@ -103,7 +111,7 @@ const InviteTest = ({ navigation }) => {
         created_at: timestamp,
       };
 
-      const docRef = doc(db, 'users', user_id);
+      const docRef = doc(db, "users", user_id);
       updateDoc(docRef, { groups: arrayUnion(newGroup) });
 
       // remove from invites
@@ -116,14 +124,14 @@ const InviteTest = ({ navigation }) => {
         created_at: timestamp,
       };
 
-      const docGroupRef = doc(db, 'groups', item.group_id);
+      const docGroupRef = doc(db, "groups", item.group_id);
       updateDoc(docGroupRef, { users: arrayUnion(newGroupUser) });
 
       // remove from invites
 
       //first we need to get an invite object from groups >invites > {where invitee_uid === this user id}
       const inviteObject = await getInviteObject(item.group_id);
-      console.log('getInviteObject ', inviteObject);
+      console.log("getInviteObject ", inviteObject);
 
       updateDoc(docGroupRef, { invites: arrayRemove(inviteObject) });
     } catch (err) {
@@ -132,13 +140,13 @@ const InviteTest = ({ navigation }) => {
   };
 
   const getInviteObject = async (group_id) => {
-    console.log('in test group ', group_id);
-    const docGroupRef = doc(db, 'groups', group_id);
+    console.log("in test group ", group_id);
+    const docGroupRef = doc(db, "groups", group_id);
 
     const udocs = await getDoc(docGroupRef);
     const group = { id: udocs.id, ...udocs.data() };
 
-    console.log('docGroupRef id', group);
+    console.log("docGroupRef id", group);
 
     const getInviteObject = group.invites.filter(
       (invite) => invite.invitee_uid === user_id
@@ -161,9 +169,15 @@ const InviteTest = ({ navigation }) => {
   // display current group list
   const renderGroupList = ({ item }) => {
     return (
-      <View>
-        <Text>Group name: {item.group_name}</Text>
-      </View>
+      <TouchableOpacity
+        onPress={(ev) => {
+          navigation.navigate("Group", { group_id: item.group_id });
+        }}
+      >
+        <View>
+          <Text>Group name: {item.group_name}</Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -187,20 +201,9 @@ const InviteTest = ({ navigation }) => {
         />
       </View>
 
-      <View styles={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Button
-          title="Chat"
-          onPress={() => {
-            navigation.navigate('Chat');
-          }}
-        />
-        <Button
-          title="Meet"
-          onPress={() => {
-            console.log('Meet Pressed');
-          }}
-        />
-      </View>
+      <View
+        styles={{ flexDirection: "row", justifyContent: "space-between" }}
+      ></View>
     </ScrollView>
   );
 };
