@@ -22,11 +22,14 @@ import GlobalCSS from '../GlobalCSS';
 import { ScrollView } from 'react-native-web';
 import ViewGroups from './ViewGroups';
 
-export default function CreateGroup() {
-  const navigation = useNavigation();
+export default function CreateGroup({ navigation }) {
+  //const navigation = useNavigation();
   const collRef = collection(db, 'groups');
   const [user, setUser] = useState({});
-  const docRef = doc(db, 'users', auth.currentUser.uid);
+  const uid = 'ef83N7qN5beB5oJtm9CgCnW7Ydv1'; // auth.currentUser.uid;
+  console.log('auth ', uid);
+
+  const docRef = doc(db, 'users', uid);
 
   const [groupName, setGroupName] = useState('');
   const [groupAvatar, setGroupAvatar] = useState('');
@@ -36,7 +39,7 @@ export default function CreateGroup() {
     const udocs = await getDoc(docRef);
     setUser({ uid: udocs.id, ...udocs.data() });
 
-    // console.log(' getSingleDoc ', gdocs.id, gdocs.data());
+    console.log(' getSingleDoc ', udocs.id, udocs.data());
   };
 
   useEffect(() => {
@@ -45,22 +48,23 @@ export default function CreateGroup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    if (groupName.trim() === '') {
+      alert('Please enter new group name');
+      return;
+    }
     addDoc(collRef, {
       group_name: groupName,
       avatar: groupAvatar,
       created_at: serverTimestamp(),
-      users: [{ name: user.name, uid: auth.currentUser.uid }],
+      users: [{ name: user.name, uid }],
     });
     console.log('form sumitted');
-    // navigation.replace('Group');
   };
 
   return (
-    <ScrollView>
+    <>
       <View style={GlobalCSS.container}>
         <Text>Create a new group</Text>
-        <StatusBar style="auto" />
 
         <View style={{ padding: 10 }}>
           <TextInput
@@ -95,6 +99,6 @@ export default function CreateGroup() {
       >
         Go to a group
       </Link>
-    </ScrollView>
+    </>
   );
 }

@@ -49,7 +49,7 @@ const InviteTest = ({ navigation }) => {
   useEffect(() => {
     getSingleDoc();
     console.log('single group : ', user);
-    getInviteObject();
+    //getInviteObject();
   }, []);
 
   // searches for friends by name
@@ -125,14 +125,14 @@ const InviteTest = ({ navigation }) => {
       const inviteObject = await getInviteObject(item.group_id);
       console.log('getInviteObject ', inviteObject);
 
-      updateDoc(docGroupRef, { invites: arrayRemove(inviteObject[0]) });
+      updateDoc(docGroupRef, { invites: arrayRemove(inviteObject) });
     } catch (err) {
       console.log(err.message);
     }
   };
 
   const getInviteObject = async (group_id) => {
-    console.log('in test group ');
+    console.log('in test group ', group_id);
     const docGroupRef = doc(db, 'groups', group_id);
 
     const udocs = await getDoc(docGroupRef);
@@ -144,7 +144,7 @@ const InviteTest = ({ navigation }) => {
       (invite) => invite.invitee_uid === user_id
     );
 
-    return getInviteObject;
+    return getInviteObject[0];
   };
 
   // display current invitee list
@@ -169,14 +169,7 @@ const InviteTest = ({ navigation }) => {
 
   return (
     <ScrollView>
-      <View
-        style={{
-          padding: 50,
-          flex: 1,
-          justifyContent: 'center',
-          marginHorizontal: 16,
-        }}
-      >
+      <View>
         <Text>Current invites:</Text>
         <FlatList
           data={user.invites}
@@ -185,14 +178,7 @@ const InviteTest = ({ navigation }) => {
         />
       </View>
 
-      <View
-        style={{
-          padding: 50,
-          flex: 1,
-          justifyContent: 'center',
-          marginHorizontal: 16,
-        }}
-      >
+      <View>
         <Text>Current groups:</Text>
         <FlatList
           data={user.groups}
