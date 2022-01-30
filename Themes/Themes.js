@@ -50,7 +50,11 @@ export const defaultTheme = {
   },
   fListText2: { fontSize: 18, color: palette.grey, textAlign: "right" },
   fListCard: { fontSize: 15, color: palette.grey, textAlign: "left" },
-  fListArea: { backgroundColor: palette.midBlue, margin: 1, borderRadius: 5 },
+  fListArea: {
+    backgroundColor: palette.midBlue,
+    margin: 1,
+    borderRadius: 5,
+  },
   fListCard: {
     padding: 5,
     flexDirection: "row",
@@ -81,13 +85,14 @@ export const defaultTheme = {
     backgroundColor: palette.darkBlue,
     flexDirection: "column",
     justifyContent: "space_between",
+    padding: 5,
   },
   homeContainer: {
     backgroundColor: palette.darkBlue,
     flex: 1,
     justifyContent: "center",
-    padding: 30,
     flexDirection: "column",
+    padding: 5,
   },
   inputContainer: {
     width: "70%",
@@ -114,6 +119,7 @@ export const defaultTheme = {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    padding: 5,
   },
   horizontalButtonContainer: {
     flexDirection: "row",

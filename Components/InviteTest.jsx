@@ -213,7 +213,7 @@ const InviteTest = () => {
           data={user.invites}
           renderItem={renderInviteList}
           keyExtractor={(item) => item.group_id}
-          style={theme.fList}
+          style={theme.fListArea}
         />
       </View>
 

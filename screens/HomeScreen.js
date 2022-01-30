@@ -32,8 +32,8 @@ const HomeScreen = () => {
 
   return (
     <View style={theme.homeContainer}>
+      <UserMenu style={{ position: "absolute" }} />
       <Text style={theme.header}>Welcome {auth.currentUser?.email}</Text>
-      <UserMenu />
 
       <ScrollView>
         <Text style={theme.header2}>My Groups</Text>
