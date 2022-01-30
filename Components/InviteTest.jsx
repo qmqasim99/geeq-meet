@@ -1,5 +1,5 @@
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -31,8 +31,12 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { ThemeContext } from "../Context/Context";
+import { Icon } from "react-native-elements";
 
 const InviteTest = () => {
+  const theme = useContext(ThemeContext);
+
   const [user, setUser] = useState({});
   const usersRef = collection(db, "users");
   const navigation = useNavigation();
@@ -55,6 +59,7 @@ const InviteTest = () => {
   useEffect(() => {
     getSingleDoc();
     console.log("single group : ", user);
+
     //getInviteObject();
   }, []);
 
@@ -158,10 +163,29 @@ const InviteTest = () => {
   // display current invitee list
   const renderInviteList = ({ item }) => {
     return (
-      <View>
-        <Text>Group name: {item.group_name}</Text>
-        <Text>Invited by: {item.invited_by}</Text>
-        <Button title="Accept" onPress={() => handleSubmitInvite(item)} />
+      <View style={[theme.fListArea, theme.inviteCard]}>
+        <View>
+          <Text style={theme.header4}>Join {item.group_name} group?</Text>
+          <Text style={theme.header5}>Invited by: {item.invited_by}</Text>
+        </View>
+        <TouchableOpacity onPress={() => handleSubmitInvite(item)}>
+          <Icon
+            reverse
+            name="checkmark-circle-outline"
+            type="ionicon"
+            color={theme.icon.acceptColor}
+            size="30"
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSubmitInvite(item)}>
+          <Icon
+            reverse
+            name="close-circle-outline"
+            type="ionicon"
+            color={theme.icon.declineColor}
+            size="30"
+          />
+        </TouchableOpacity>
       </View>
     );
   };
@@ -174,26 +198,27 @@ const InviteTest = () => {
           navigation.navigate("Group", { group_id: item.group_id });
         }}
       >
-        <View>
-          <Text>Group name: {item.group_name}</Text>
+        <View style={theme.fListCard}>
+          <Text style={theme.fListText}> {item.group_name}</Text>
+          <Text style={theme.fListText2}>({item.users} members)</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <ScrollView>
+    <View>
       <View>
-        <Text>Current invites:</Text>
         <FlatList
           data={user.invites}
           renderItem={renderInviteList}
           keyExtractor={(item) => item.group_id}
+          style={theme.fList}
         />
       </View>
 
-      <View>
-        <Text>Current groups:</Text>
+      <Text style={theme.header2}>All Groups:</Text>
+      <View style={theme.fListArea}>
         <FlatList
           data={user.groups}
           renderItem={renderGroupList}
@@ -204,7 +229,7 @@ const InviteTest = () => {
       <View
         styles={{ flexDirection: "row", justifyContent: "space-between" }}
       ></View>
-    </ScrollView>
+    </View>
   );
 };
 

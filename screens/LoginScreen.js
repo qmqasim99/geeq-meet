@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/core";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -8,12 +8,17 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
+  r,
 } from "react-native";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
+import { ThemeContext } from "../Context/Context";
 
 const LoginScreen = () => {
+  const theme = useContext(ThemeContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -101,103 +106,107 @@ const LoginScreen = () => {
       .catch((error) => alert(error.message));
   };
   const LoginFields = (
-    <View style={styles.inputContainer}>
+    <View style={theme.inputContainer}>
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
-        style={styles.loginInput}
+        style={theme.loginInput}
       />
       <TextInput
         placeholder="Password"
         value={password}
         onChangeText={(text) => setPassword(text)}
-        style={styles.loginInput}
+        style={theme.loginInput}
         secureTextEntry
       />
-      <TouchableOpacity onPress={handleLogin} style={styles.button}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity
+        onPress={handleLogin}
+        style={[theme.button, theme.buttonOutline]}
+      >
+        <Text style={theme.buttonText}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={back} style={styles.button}>
-        <Text style={styles.buttonText}>back</Text>
+      <TouchableOpacity onPress={back} style={theme.button}>
+        <Text style={theme.buttonText}>back</Text>
       </TouchableOpacity>
-      <View style={styles.buttonContainerReset}>
-        <TouchableOpacity onPress={resetPassword} style={styles.button}>
-          <Text style={styles.buttonText}>Forgotten Password?</Text>
+      <View style={theme.buttonContainerReset}>
+        <TouchableOpacity onPress={resetPassword} style={theme.button}>
+          <Text style={theme.buttonText}>Forgotten Password?</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 
   const RegisterFields = (
-    <View style={styles.inputContainer}>
+    <View style={theme.inputContainer}>
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
-        style={styles.loginInput}
+        style={theme.loginInput}
       />
       <TextInput
         placeholder="Password"
         value={password}
         onChangeText={(text) => setPassword(text)}
-        style={styles.loginInput}
+        style={theme.loginInput}
         secureTextEntry
       />
       <TextInput
         placeholder="First Name"
         value={firstName}
         onChangeText={(text) => setFirstName(text)}
-        style={styles.loginInput}
+        style={theme.loginInput}
         secureTextEntry
       />
       <TextInput
         placeholder="Last Name"
         value={lastName}
         onChangeText={(text) => setLastName(text)}
-        style={styles.loginInput}
+        style={theme.loginInput}
         secureTextEntry
       />
       <TextInput
         placeholder="User Name"
         value={userName}
         onChangeText={(text) => setUserName(text)}
-        style={styles.loginInput}
+        style={theme.loginInput}
         secureTextEntry
       />
-      <TouchableOpacity onPress={handleSignUp} style={styles.button}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      <TouchableOpacity onPress={handleSignUp} style={theme.button}>
+        <Text style={theme.buttonText}>Sign Up</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={back} style={styles.button}>
-        <Text style={styles.buttonText}>back</Text>
+      <TouchableOpacity onPress={back} style={theme.button}>
+        <Text style={theme.buttonText}>back</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
     <>
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={theme.container} behavior="padding">
+        <Image source={require("../assets/gmlogo.png")} style={theme.logo} />
         {loginPressed ? (
           LoginFields
         ) : registerPressed ? (
           RegisterFields
         ) : (
-          <View style={styles.buttonContainer}>
+          <View style={theme.buttonContainer}>
             <TouchableOpacity
               onPress={() => {
                 setLoginPressed(true);
               }}
-              style={styles.button}
+              style={[theme.button, theme.buttonOutline]}
             >
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={theme.buttonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 setRegisterPressed(true);
               }}
-              style={[styles.button, styles.buttonOutline]}
+              style={[theme.button, theme.buttonOutline]}
             >
-              <Text style={styles.buttonOutlineText}>Register</Text>
+              <Text style={theme.buttonText}>Register</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -207,57 +216,3 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "lightblue",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  inputContainer: {
-    width: "70%",
-  },
-  loginInput: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  buttonContainer: {
-    width: "50%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-  },
-  buttonContainerReset: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 100,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-});

@@ -1,7 +1,9 @@
 import { useNavigation, useNavigationParam } from "@react-navigation/native";
 import { NavigationContainer } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "@react-navigation/native";
+import { ThemeContext } from "../Context/Context";
+
 import {
   View,
   Text,
@@ -10,6 +12,7 @@ import {
   ScrollView,
   Button,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import {
   collection,
@@ -39,6 +42,8 @@ const groupMembers = [
   { user_id: 4, name: "Gusty" },
 ];
 const SingleGroupPage = ({ route, navigation }) => {
+  const theme = useContext(ThemeContext);
+
   const { group_id } = route.params;
   const [group, setGroup] = useState({});
   const [newFriend, setNewFriend] = useState("");
@@ -144,21 +149,24 @@ const SingleGroupPage = ({ route, navigation }) => {
 
   const renderName = ({ item }) => {
     return (
-      <View>
-        <Text>{item.name}</Text>
+      <View style={theme.fListCard}>
+        <Text style={theme.fListText}>{item.name}</Text>
       </View>
     );
   };
 
   const renderFriendName = ({ item }) => {
     return (
-      <View>
-        <Text>{item.name}</Text>
-        <Button
+      <View style={theme.horizontalButtonContainer}>
+        <Text style={theme.header4}>{item.name}</Text>
+        <TouchableOpacity
           disabled={item.invited}
           title="Invite"
           onPress={() => handleSubmitInvite(item.name, item.uid)}
-        />
+          style={[theme.button, theme.buttonOutline]}
+        >
+          <Text style={theme.buttonText}>Invite</Text>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -166,49 +174,53 @@ const SingleGroupPage = ({ route, navigation }) => {
   // display current invitee list
   const renderInviteList = ({ item }) => {
     return (
-      <View>
-        <Text>{item.invitee}</Text>
+      <View style={theme.fListCard}>
+        <Text style={theme.fListText}>{item.invitee}</Text>
       </View>
     );
   };
 
   return (
-    <ScrollView>
-      <Link
-        to={{ screen: "InviteTest", params: { uid: "K5XmEen38Qx4LcTbY3nS" } }}
-      >
-        Test User Invite
-      </Link>
-      <View
-        style={{
-          padding: 50,
-          flex: 1,
-          justifyContent: "center",
-          marginHorizontal: 16,
-        }}
-      >
-        <Text>Group Name Here: {group.group_name}</Text>
-        <Text>Group ID: {group.id}</Text>
+    <View style={[theme.scrollContainer, { flex: 7 }]}>
+      {/* <Link
+          to={{ screen: "InviteTest", params: { uid: "K5XmEen38Qx4LcTbY3nS" } }}
+        >
+          Test User Invite
+        </Link> */}
+
+      {/* //this view contains group name and image */}
+      <View style={{ flexGrow: 1, alignItems: "center" }}>
+        <Text style={theme.header}>{group.group_name}</Text>
+        {/* <Text>Group ID: {group.id}</Text> */}
         <Image
           source={{
             uri: "https://www.clipartkey.com/mpngs/m/9-93815_daisy-flower-petals-yellow-cartoon-flower-png.png",
           }}
-          style={{ width: 200, height: 200 }}
+          style={{ width: 200, height: 200, justifyContent: "center" }}
         />
       </View>
-      <View style={{ padding: 10 }}>
+      {/* //this view contains search people functionality */}
+
+      <View style={[{ flexGrow: 1 }, theme.horizontalButtonContainer]}>
         <TextInput
-          style={{ height: 40 }}
+          style={theme.loginInput}
           placeholder="Add new friend!"
           onChangeText={(newText) => setNewFriend(newText)}
           defaultValue={newFriend}
         />
 
-        <Button title="Search" onPress={handleSubmitFriend} />
+        <TouchableOpacity
+          style={[theme.button, theme.buttonOutline]}
+          onPress={handleSubmitFriend}
+        >
+          <Text style={theme.buttonText}>Search</Text>
+        </TouchableOpacity>
       </View>
+
+      {/* //this view contains searched friends */}
       {searchedFriends && (
-        <View>
-          <Text>Users found:</Text>
+        <View style={[theme.fListArea, { flexGrow: 2 }]}>
+          <Text style={theme.header2}>Users found:</Text>
           <FlatList
             data={searchedFriends}
             renderItem={renderFriendName}
@@ -216,9 +228,11 @@ const SingleGroupPage = ({ route, navigation }) => {
           />
         </View>
       )}
+      {/* //this view contains group invites */}
+
       {group.invites && (
-        <View>
-          <Text>Friends invited:</Text>
+        <View style={theme.fListArea}>
+          <Text style={theme.header2}>Friends invited:</Text>
           <FlatList
             data={group.invites}
             renderItem={renderInviteList}
@@ -226,9 +240,11 @@ const SingleGroupPage = ({ route, navigation }) => {
           />
         </View>
       )}
+      {/* //this view contains group members */}
+
       {group.users && (
-        <View>
-          <Text>Current friends:</Text>
+        <View style={(theme.fListArea, { flexGrow: 2 })}>
+          <Text style={theme.header2}>Current friends:</Text>
           <FlatList
             data={group.users}
             renderItem={renderName}
@@ -236,10 +252,10 @@ const SingleGroupPage = ({ route, navigation }) => {
           />
         </View>
       )}
-      <View styles={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View>
         <Nav />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
