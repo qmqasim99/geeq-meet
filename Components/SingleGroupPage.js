@@ -1,8 +1,8 @@
-import { useNavigation, useNavigationParam } from "@react-navigation/native";
-import { NavigationContainer } from "@react-navigation/native";
-import React, { useState, useEffect, useContext } from "react";
-import { Link } from "@react-navigation/native";
-import { ThemeContext } from "../Context/Context";
+import { useNavigation, useNavigationParam } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link } from '@react-navigation/native';
+import { ThemeContext } from '../Context/Context';
 
 import {
   View,
@@ -13,7 +13,7 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 import {
   collection,
   doc,
@@ -31,25 +31,25 @@ import {
   orderBy,
   startAt,
   endAt,
-} from "firebase/firestore";
-import { auth, db } from "../firebase";
-import Nav from "../Components/Nav";
+} from 'firebase/firestore';
+import { auth, db } from '../firebase';
+import Nav from '../Components/Nav';
 
 const groupMembers = [
-  { user_id: 1, name: "Frosty" },
-  { user_id: 2, name: "Toasty" },
-  { user_id: 3, name: "Boney" },
-  { user_id: 4, name: "Gusty" },
+  { user_id: 1, name: 'Frosty' },
+  { user_id: 2, name: 'Toasty' },
+  { user_id: 3, name: 'Boney' },
+  { user_id: 4, name: 'Gusty' },
 ];
 const SingleGroupPage = ({ route, navigation }) => {
   const theme = useContext(ThemeContext);
 
   const { group_id } = route.params;
   const [group, setGroup] = useState({});
-  const [newFriend, setNewFriend] = useState("");
+  const [newFriend, setNewFriend] = useState('');
   const [searchedFriends, setSearchedFriends] = useState([]);
-  const usersRef = collection(db, "users");
-  const docRef = doc(db, "groups", group_id); //'4cXw12VSrQoKHmKsL1Di'
+  const usersRef = collection(db, 'users');
+  const docRef = doc(db, 'groups', group_id); //'4cXw12VSrQoKHmKsL1Di'
 
   //console.log(navigation);
   // const navigation = useNavigation();
@@ -57,7 +57,7 @@ const SingleGroupPage = ({ route, navigation }) => {
   //  const group_id = navigation.getParams('group_id');
   //const group_id = useNavigationParam('group_id');
   //const { group_id, otherParam } = this.props.route.params;
-  console.log("group_id ", group_id);
+  console.log('group_id ', group_id);
 
   // const group_id = 4cXw12VSrQoKHmKsL1Di;
 
@@ -69,7 +69,7 @@ const SingleGroupPage = ({ route, navigation }) => {
 
   useEffect(() => {
     getSingleDoc();
-    console.log("single group : ", group);
+    console.log('single group : ', group);
   }, []);
 
   // searches for friends by name
@@ -77,15 +77,15 @@ const SingleGroupPage = ({ route, navigation }) => {
     e.preventDefault();
 
     try {
-      if (newFriend.trim() === "") {
-        alert("Please enter a name to search");
+      if (newFriend.trim() === '') {
+        alert('Please enter a name to search');
         return;
       }
       const q = query(
         usersRef,
-        orderBy("name"),
+        orderBy('name'),
         startAt(newFriend),
-        endAt(newFriend + "\uf8ff")
+        endAt(newFriend + '\uf8ff')
         // where('name', '==', newFriend)
         //,
         //orderBy('name')
@@ -98,16 +98,16 @@ const SingleGroupPage = ({ route, navigation }) => {
       udocs.docs.map((doc) => {
         let invited = false;
         const currentInvites = doc.data().invites;
-        console.log(" invitessss", doc.data());
+        console.log(' invitessss', doc.data());
         if (currentInvites) {
           currentInvites.map((invite) => {
             invite.group_id === group.id ? (invited = true) : (invited = false);
-            console.log("already invited ", invited);
+            console.log('already invited ', invited);
           });
         }
         users.push({ uid: doc.id, invited, ...doc.data() });
       });
-      console.log("in gettingDocs", users);
+      console.log('in gettingDocs', users);
       setSearchedFriends(users);
     } catch (err) {
       console.log(err.message);
@@ -118,7 +118,7 @@ const SingleGroupPage = ({ route, navigation }) => {
   const handleSubmitInvite = async (inviteeName, inviteeUid) => {
     try {
       const newInvite = {
-        invited_by: "qname",
+        invited_by: 'qname',
         invited_by_uid: auth.currentUser.uid,
         invitee: inviteeName,
         invitee_uid: inviteeUid,
@@ -129,19 +129,19 @@ const SingleGroupPage = ({ route, navigation }) => {
       updateDoc(docRef, { invites: arrayUnion(newInvite) });
       // add a new invite in users colleciton
       const newInviteForUsersCollection = {
-        invited_by: "qname",
+        invited_by: 'qname',
         invited_by_uid: auth.currentUser.uid,
         group_name: group.group_name,
         group_id: group.id,
         accepted: false,
       };
 
-      const usersDocRef = doc(db, "users", inviteeUid);
+      const usersDocRef = doc(db, 'users', inviteeUid);
       updateDoc(usersDocRef, {
         invites: arrayUnion(newInviteForUsersCollection),
       });
 
-      console.log("Friend invited with uid", newInvite);
+      console.log('Friend invited with uid', newInvite);
     } catch (err) {
       console.log(err.message);
     }
@@ -189,15 +189,22 @@ const SingleGroupPage = ({ route, navigation }) => {
         </Link> */}
 
       {/* //this view contains group name and image */}
-      <View style={{ flexGrow: 1, alignItems: "center" }}>
+      <View style={{ flexGrow: 1, alignItems: 'center' }}>
         <Text style={theme.header}>{group.group_name}</Text>
         {/* <Text>Group ID: {group.id}</Text> */}
-        <Image
-          source={{
-            uri: "https://www.clipartkey.com/mpngs/m/9-93815_daisy-flower-petals-yellow-cartoon-flower-png.png",
-          }}
-          style={{ width: 200, height: 200, justifyContent: "center" }}
-        />
+        {group.avatar ? (
+          <Image
+            source={{
+              uri: group.avatar,
+            }}
+            style={{ width: 200, height: 200, justifyContent: 'center' }}
+          />
+        ) : (
+          <Image
+            source={require('../assets/group_avatar.png')}
+            style={{ width: 200, height: 200, justifyContent: 'center' }}
+          />
+        )}
       </View>
       {/* //this view contains search people functionality */}
 

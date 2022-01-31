@@ -8,11 +8,12 @@ const Nav = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigation = useNavigation();
 
+  const route = useRoute();
+
   const handleNavigate = (value) => {
-    const route = useRoute();
     console.log(route);
 
-    if (value === 1) {
+    if (value === 0) {
       navigation.navigate("Home");
     }
     if (value === 1) {
