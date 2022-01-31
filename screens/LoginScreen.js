@@ -14,13 +14,14 @@ import {
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
-import { ThemeContext } from "../Context/Context";
+import { ThemeContext, UserContext } from "../Context/Context";
 
 const LoginScreen = () => {
   const theme = useContext(ThemeContext);
+  const { setIsSignedIn } = useContext(UserContext);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("1@example.com");
+  const [password, setPassword] = useState("password");
   const [userName, setUserName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -56,6 +57,8 @@ const LoginScreen = () => {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((userCredentials) => {
+          console.log("here1");
+          setIsSignedIn(true);
           const user = userCredentials.user;
           alert(`Registered with: ${user.email}`);
           updateProfile(auth.currentUser, {
@@ -79,6 +82,8 @@ const LoginScreen = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
+        console.log("here2");
+        setIsSignedIn(true);
         const user = userCredentials.user;
         console.log(`Logged in with: ${user.email}`);
       })

@@ -25,15 +25,22 @@ export const UserProvider = ({ children }) => {
 
   const getUser = async () => {
     setUid(auth.currentUser.uid);
-    const docRef = doc(db, "users", uid);
+    console.log("UID:>>>>>>>>>>", auth.currentUser.uid);
+    const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
+    console.log("DATA>>>>>>>>>>", docSnap.data());
     setUser(docSnap.data());
   };
 
   const getGroups = async () => {
     const q = query(
       collection(db, "groups"),
-      where("users", "array-contains", `{name:${user.name},uid:${uid}}`)
+      where(
+        "users",
+        "array-contains",
+        `{name:${user.name},uid:${auth.currentUser.uid}}`
+        //this bit isnt working. maybe its user.name
+      )
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {

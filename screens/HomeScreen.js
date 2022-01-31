@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,12 +14,16 @@ import { auth } from "../firebase";
 import Nav from "../Components/Nav";
 import ViewGroups from "../Components/ViewGroups";
 import InviteTest from "../Components/InviteTest";
-import { ThemeContext } from "../Context/Context";
+import { ThemeContext, UserContext } from "../Context/Context";
 import UserMenu from "../Components/UserMenu";
+import ViewMyGroups from "../Components/ViewMyGroups";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const theme = useContext(ThemeContext);
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {}, [user]);
 
   // const handleSignOut = () => {
   //   auth
@@ -36,25 +40,17 @@ const HomeScreen = () => {
       <Text style={theme.header}>Welcome {auth.currentUser?.email}</Text>
 
       <ScrollView>
-        <Text style={theme.header2}>My Groups</Text>
-        {/* MOVED INTO USER MENU
-      <View style={theme.buttonContainer}>
-        <Button
-          title="My Account"
-          onPress={() => {
-            navigation.navigate("UserAccount");
-          }}
-        />
-        <TouchableOpacity
-          onPress={handleSignOut}
-          style={(theme.button, theme.buttonOutline)}
-        >
-          <Text style={theme.buttonText}>Sign out</Text>
-        </TouchableOpacity>
-      </View> */}
         <Text style={theme.header2}>Invites</Text>
         <InviteTest />
-        <CreateGroup />
+        <Text style={theme.header2}>My Groups</Text>
+        <ViewMyGroups />
+        {/* <CreateGroup /> */}
+        {/* <TouchableOpacity>
+          <Text>Create new group</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text>Create new group</Text>
+        </TouchableOpacity> */}
       </ScrollView>
       <Nav />
     </View>
