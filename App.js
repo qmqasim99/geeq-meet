@@ -32,16 +32,19 @@ import SingleGroupPage from "./Components/SingleGroupPage";
 
 import UserAccount from "./Components/UserAccount";
 import MapContainer from "./Components/MapContainer";
-import { UserProvider } from "./Context/Context";
+import { ThemeProvider, UserProvider } from "./Context/Context";
 import contextTest1 from "./Components/contextTest1";
 import contextTest2 from "./Components/contextTest2";
+import { testTheme } from "./Themes/Themes";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <ThemeProvider>
+
       <NavigationContainer>
+
         <Stack.Navigator>
           <Stack.Screen
             options={{ headerShown: false }}
@@ -51,7 +54,9 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="UserAccount" component={UserAccount} />
           {/* <Stack.Screen name="Chat" component={Chat} /> */}
+
           <Stack.Screen name="Chat_2" component={Chat_2} />
+
           <Stack.Screen name="Group" component={SingleGroupPage} />
           <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
           <Stack.Screen name="MapContainer" component={MapContainer} />
@@ -61,12 +66,3 @@ export default function App() {
     </ThemeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
