@@ -17,9 +17,7 @@ const ViewMyGroups = () => {
   const { user, groups, setCurrentGroup } = useContext(UserContext);
   const theme = useContext(ThemeContext);
 
-  useEffect(() => {
-    console.log("VIEWWWWWWWW", groups);
-  }, [user, groups]);
+  useEffect(() => {}, [user, groups]);
 
   const renderGroupList = ({ item }) => {
     return (

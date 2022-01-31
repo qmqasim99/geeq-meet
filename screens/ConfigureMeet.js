@@ -49,5 +49,3 @@ export default function ConfigureMeet() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({});
