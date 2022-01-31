@@ -1,7 +1,14 @@
-import { StyleSheet, Text, Picker, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  CheckBox,
+  Text,
+  Picker,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
+
 import { useNavigation } from "@react-navigation/native";
-import CheckboxList from "rn-checkbox-list";
 import { UserContext, ThemeContext } from "../Context/Context";
 
 export default function ConfigureMeet() {
@@ -37,15 +44,18 @@ export default function ConfigureMeet() {
           return <Picker.Item key={i} label={type} value={type} />;
         })}
       </Picker>
-      {/* <CheckboxList
-        headerName="Movies"
-        theme="red"
-        listItems={data}
-        onChange={({ ids, items }) => console.log("My updated list :: ", ids)}
-        listItemStyle={{ borderBottomColor: "#eee", borderBottomWidth: 1 }}
-        checkboxProp={{ boxType: "square" }} // iOS (supported from v0.3.0)
-        onLoading={() => <LoaderComponent />}
-      /> */}
+      <View style={theme.container}>
+        <View style={theme.checkboxContainer}>
+          <CheckBox
+            value={isSelected}
+            onValueChange={setSelection}
+            style={theme.checkbox}
+          />
+          <Text style={theme.label}>Do you like React Native?</Text>
+        </View>
+        <Text>Is CheckBox selected: {isSelected ? "👍" : "👎"}</Text>
+      </View>
+
       <TouchableOpacity
         onPress={(e) => {
           handleConfigureMeet;
