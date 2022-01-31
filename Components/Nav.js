@@ -9,8 +9,6 @@ const Nav = () => {
   const navigation = useNavigation();
 
   const handleNavigate = (value) => {
-    // import { useRoute } from "@react-navigation/native";
-
     const route = useRoute();
     console.log(route);
 
