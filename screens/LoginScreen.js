@@ -51,7 +51,7 @@ const LoginScreen = () => {
   const randColourNum = () => Math.floor(Math.random() * 255);
 
   const handleSignUp = () => {
-    if (!userName || !firstName || !lastName) {
+    if (!firstName || !lastName) {
       alert("All fields must be complete for user registration.");
     } else {
       auth
@@ -62,14 +62,13 @@ const LoginScreen = () => {
           const user = userCredentials.user;
           alert(`Registered with: ${user.email}`);
           updateProfile(auth.currentUser, {
-            displayName: userName,
+            displayName: `${firstName} ${lastName}`,
             photoURL: avatar,
           });
           return setDoc(doc(db, "users", user.uid), {
             email: user.email,
             avatar,
             name: `${firstName} ${lastName}`,
-            userName,
             transport: "car",
             coords,
             colour: `rgba(${randColourNum()},${randColourNum()},${randColourNum()})`,
@@ -115,12 +114,14 @@ const LoginScreen = () => {
       <TextInput
         placeholder="Email"
         value={email}
+        defaultValue="1@example.com"
         onChangeText={(text) => setEmail(text)}
         style={theme.loginInput}
       />
       <TextInput
         placeholder="Password"
         value={password}
+        defaultValue="password"
         onChangeText={(text) => setPassword(text)}
         style={theme.loginInput}
         secureTextEntry
@@ -168,13 +169,6 @@ const LoginScreen = () => {
         placeholder="Last Name"
         value={lastName}
         onChangeText={(text) => setLastName(text)}
-        style={theme.loginInput}
-        secureTextEntry
-      />
-      <TextInput
-        placeholder="User Name"
-        value={userName}
-        onChangeText={(text) => setUserName(text)}
         style={theme.loginInput}
         secureTextEntry
       />

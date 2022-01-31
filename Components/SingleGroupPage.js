@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 import { useNavigation, useNavigationParam } from "@react-navigation/native";
 import { NavigationContainer } from "@react-navigation/native";
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "@react-navigation/native";
 import { UserContext, ThemeContext } from "../Context/Context";
+=======
+import { useNavigation, useNavigationParam } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link } from '@react-navigation/native';
+import { ThemeContext } from '../Context/Context';
+>>>>>>> main
 
 import {
   View,
@@ -13,7 +21,7 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 import {
   collection,
   doc,
@@ -31,24 +39,45 @@ import {
   orderBy,
   startAt,
   endAt,
-} from "firebase/firestore";
-import { auth, db } from "../firebase";
-import Nav from "../Components/Nav";
+} from 'firebase/firestore';
+import { auth, db } from '../firebase';
+import Nav from '../Components/Nav';
 
+<<<<<<< HEAD
+=======
+const groupMembers = [
+  { user_id: 1, name: 'Frosty' },
+  { user_id: 2, name: 'Toasty' },
+  { user_id: 3, name: 'Boney' },
+  { user_id: 4, name: 'Gusty' },
+];
+>>>>>>> main
 const SingleGroupPage = ({ route, navigation }) => {
   const theme = useContext(ThemeContext);
   const { user, groups, setCurrentGroup } = useContext(UserContext);
 
   const { group_id } = route.params;
   const [group, setGroup] = useState({});
-  const [newFriend, setNewFriend] = useState("");
+  const [newFriend, setNewFriend] = useState('');
   const [searchedFriends, setSearchedFriends] = useState([]);
-  const usersRef = collection(db, "users");
-  const docRef = doc(db, "groups", group_id); //'4cXw12VSrQoKHmKsL1Di'
+  const usersRef = collection(db, 'users');
+  const docRef = doc(db, 'groups', group_id); //'4cXw12VSrQoKHmKsL1Di'
 
+<<<<<<< HEAD
   useEffect(() => {
     getSingleDoc();
   }, []);
+=======
+  //console.log(navigation);
+  // const navigation = useNavigation();
+  //console.log('navigation params ', navigation.getParams());
+  //  const group_id = navigation.getParams('group_id');
+  //const group_id = useNavigationParam('group_id');
+  //const { group_id, otherParam } = this.props.route.params;
+  console.log('group_id ', group_id);
+
+  // const group_id = 4cXw12VSrQoKHmKsL1Di;
+>>>>>>> main
 
   // get a single doc
   const getSingleDoc = async () => {
@@ -57,20 +86,28 @@ const SingleGroupPage = ({ route, navigation }) => {
     setCurrentGroup({ id: gdocs.id, ...gdocs.data() });
   };
 
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    getSingleDoc();
+    console.log('single group : ', group);
+  }, []);
+
+>>>>>>> main
   // searches for friends by name
   const handleSubmitFriend = async (e) => {
     e.preventDefault();
 
     try {
-      if (newFriend.trim() === "") {
-        alert("Please enter a name to search");
+      if (newFriend.trim() === '') {
+        alert('Please enter a name to search');
         return;
       }
       const q = query(
         usersRef,
-        orderBy("name"),
+        orderBy('name'),
         startAt(newFriend),
-        endAt(newFriend + "\uf8ff")
+        endAt(newFriend + '\uf8ff')
         // where('name', '==', newFriend)
         //,
         //orderBy('name')
@@ -83,16 +120,20 @@ const SingleGroupPage = ({ route, navigation }) => {
       udocs.docs.map((doc) => {
         let invited = false;
         const currentInvites = doc.data().invites;
-        console.log(" invitessss", doc.data());
+        console.log(' invitessss', doc.data());
         if (currentInvites) {
           currentInvites.map((invite) => {
             invite.group_id === group.id ? (invited = true) : (invited = false);
-            console.log("already invited ", invited);
+            console.log('already invited ', invited);
           });
         }
         users.push({ uid: doc.id, invited, ...doc.data() });
       });
+<<<<<<< HEAD
       // console.log("in gettingDocs", users);
+=======
+      console.log('in gettingDocs', users);
+>>>>>>> main
       setSearchedFriends(users);
     } catch (err) {
       console.log(err.message);
@@ -103,7 +144,7 @@ const SingleGroupPage = ({ route, navigation }) => {
   const handleSubmitInvite = async (inviteeName, inviteeUid) => {
     try {
       const newInvite = {
-        invited_by: "qname",
+        invited_by: 'qname',
         invited_by_uid: auth.currentUser.uid,
         invitee: inviteeName,
         invitee_uid: inviteeUid,
@@ -114,19 +155,19 @@ const SingleGroupPage = ({ route, navigation }) => {
       updateDoc(docRef, { invites: arrayUnion(newInvite) });
       // add a new invite in users colleciton
       const newInviteForUsersCollection = {
-        invited_by: "qname",
+        invited_by: 'qname',
         invited_by_uid: auth.currentUser.uid,
         group_name: group.group_name,
         group_id: group.id,
         accepted: false,
       };
 
-      const usersDocRef = doc(db, "users", inviteeUid);
+      const usersDocRef = doc(db, 'users', inviteeUid);
       updateDoc(usersDocRef, {
         invites: arrayUnion(newInviteForUsersCollection),
       });
 
-      console.log("Friend invited with uid", newInvite);
+      console.log('Friend invited with uid', newInvite);
     } catch (err) {
       console.log(err.message);
     }
@@ -174,10 +215,19 @@ const SingleGroupPage = ({ route, navigation }) => {
         </Link> */}
 
       {/* //this view contains group name and image */}
-      <View style={{ flexGrow: 1, alignItems: "center" }}>
+      <View style={{ flexGrow: 1, alignItems: 'center' }}>
         <Text style={theme.header}>{group.group_name}</Text>
         {/* <Text>Group ID: {group.id}</Text> */}
-        <Image
+
+        {group.avatar ? (
+          <Image
+            source={{
+              uri: group.avatar,
+            }}
+            style={{ width: 200, height: 200, justifyContent: 'center' }}
+          />
+        ) : (
+          <Image
           source={{
             uri: "https://picsum.photos/200",
           }}
@@ -188,6 +238,8 @@ const SingleGroupPage = ({ route, navigation }) => {
             borderRadius: "100%",
           }}
         />
+        )}
+
       </View>
       {/* //this view contains search people functionality */}
 
