@@ -9,8 +9,8 @@ const ContextTest1 = () => {
 
   const handlePress = () => {
     // setUser({ name: "info passed through context" });
-    console.log("user", user);
-    console.log("groups", groups);
+    // console.log("user", user);
+    // console.log("groups", groups);
     navigation.navigate("2");
   };
   return (

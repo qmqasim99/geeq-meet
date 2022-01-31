@@ -12,18 +12,19 @@ import {
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState({});
   const [currentGroup, setCurrentGroup] = useState({});
-  const [uid, setUid] = useState("ef83N7qN5beB5oJtm9CgCnW7Ydv1");
+  const [uid, setUid] = useState("");
   const [groups, setGroups] = useState([]);
+  // ef83N7qN5beB5oJtm9CgCnW7Ydv1
+
+  //extract these to separate API calls, use try catch with async await
 
   const getUser = async () => {
-    console.log("I start happening");
-    console.log("uid set to", uid);
-    // setUid(auth.currentUser.uid)
+    setUid(auth.currentUser.uid);
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
-    console.log("inside getUser", docSnap);
     setUser(docSnap.data());
   };
 
@@ -34,7 +35,6 @@ export const UserProvider = ({ children }) => {
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      console.log("setting Group and last set to:", groups);
       setGroups((prevGroups) => {
         return [...prevGroups, doc.data()];
       });
@@ -42,10 +42,16 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // ApiCallToUpdateUser();
-    getUser();
-    getGroups();
-  }, []);
+    if (auth.currentUser) {
+      console.log("I'm getting the bits");
+      getUser();
+      getGroups();
+      console.log("incontext", user);
+      console.log("incontext", groups);
+    } else {
+      console.log("not logged in");
+    }
+  }, [isSignedIn]);
 
   return (
     <UserContext.Provider
@@ -56,6 +62,8 @@ export const UserProvider = ({ children }) => {
         setCurrentGroup,
         groups,
         setGroups,
+        isSignedIn,
+        setIsSignedIn,
       }}
     >
       {children}
