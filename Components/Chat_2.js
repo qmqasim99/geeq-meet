@@ -41,10 +41,11 @@ const Chat_2 = ({ navigation }) => {
           user: doc.data().user,
         }))
       );
+      console.log("unsubscribe");
     });
 
-    return unsubscribe;
-  });
+    return () => unsubscribe();
+  }, []);
 
   const onSend = useCallback((messages = []) => {
     setMessages((previousMessages) =>
@@ -57,6 +58,7 @@ const Chat_2 = ({ navigation }) => {
       text,
       user,
     });
+    console.log("message has been sent!");
   }, []);
 
   return (
