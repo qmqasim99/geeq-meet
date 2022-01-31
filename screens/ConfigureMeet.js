@@ -23,13 +23,11 @@ export default function ConfigureMeet() {
   let memberAr = [];
 
   useEffect(() => {
-    console.log("group loaded", currentGroup.users);
     setUsersToMeet(currentGroup.users);
   }, [currentGroup]);
   useEffect(() => {}, [usersToMeet]);
 
   const handleExcludeUser = (user) => {
-    console.log(currentGroup);
     const newUsersToMeet = usersToMeet.filter((obj) => {
       return obj.name !== user.name;
     });
@@ -46,7 +44,8 @@ export default function ConfigureMeet() {
     //update group database
 
     //store meet Obj in group Context
-    const groupDeepCopy = { meet: meetObj, ...currentGroup };
+    const groupDeepCopy = JSON.parse(JSON.stringify(currentGroup));
+    groupDeepCopy.meet = meetObj;
     setCurrentGroup(groupDeepCopy);
     //nav to map
     navigation.navigate("MapContainer");
@@ -69,7 +68,6 @@ export default function ConfigureMeet() {
         <Picker
           selectedValue={selectedValue}
           onValueChange={(itemValue, itemIndex) => {
-            console.log(selectedValue);
             setSelectedValue(itemValue);
           }}
           itemStyle={theme.picker}

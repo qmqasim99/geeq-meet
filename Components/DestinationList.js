@@ -15,7 +15,6 @@ export default function DestinationList({
   const [listLoaded, setListLoaded] = useState(false);
   const theme = useContext(ThemeContext);
   useEffect(() => {
-    console.log("reload destination array");
     destinationArray.forEach((des) => {
       const distFromCentre = findDistanceInM(
         des.geometry.location.lat,

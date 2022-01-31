@@ -20,9 +20,7 @@ const MapScreen = ({
   const [loaded, setLoaded] = useState(false);
   const [pressType, setPressType] = useState(false);
 
-  useEffect(() => {
-    console.log(destination);
-  }, [zoomDelta, destinationSelected]);
+  useEffect(() => {}, [zoomDelta, destinationSelected]);
 
   const handleMapLoad = (e) => {
     setLoaded(true);
