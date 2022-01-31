@@ -2,7 +2,6 @@ import { StatusBar } from "expo-status-bar";
 
 import React from "react";
 import { StyleSheet } from "react-native";
-import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { db, auth } from "./firebase";
@@ -36,15 +35,14 @@ import { ThemeProvider, UserProvider } from "./Context/Context";
 import contextTest1 from "./Components/contextTest1";
 import contextTest2 from "./Components/contextTest2";
 import { testTheme } from "./Themes/Themes";
+import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <ThemeProvider>
-
       <NavigationContainer>
-
         <Stack.Navigator>
           <Stack.Screen
             options={{ headerShown: false }}
