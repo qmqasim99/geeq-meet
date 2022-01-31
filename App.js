@@ -2,7 +2,6 @@ import { StatusBar } from "expo-status-bar";
 
 import React from "react";
 import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { db, auth } from "./firebase";
@@ -26,45 +25,41 @@ import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ConfigureMeet from "./screens/ConfigureMeet";
 import FirebaseTesting from "./Components/FirebaseTesting";
-import Chat from "./Components/Chat";
+import Chat_2 from "./Components/Chat_2";
+// import Chat from "./Components/Chat";
 import SingleGroupPage from "./Components/SingleGroupPage";
 
 import UserAccount from "./Components/UserAccount";
 import MapContainer from "./Components/MapContainer";
-import { UserProvider } from "./Context/Context";
+import { ThemeProvider, UserProvider } from "./Context/Context";
 import contextTest1 from "./Components/contextTest1";
 import contextTest2 from "./Components/contextTest2";
+import { testTheme } from "./Themes/Themes";
+import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <UserProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name="Login"
-            component={LoginScreen}
-          />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="UserAccount" component={UserAccount} />
-          <Stack.Screen name="Chat" component={Chat} />
-          <Stack.Screen name="Group" component={SingleGroupPage} />
-          <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
-          <Stack.Screen name="MapContainer" component={MapContainer} />
-          <Stack.Screen name="Map" component={MapScreen} />
-        </Stack.Navigator>
-      </UserProvider>
-    </NavigationContainer>
+    <UserProvider>
+      <ThemeProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Login"
+              component={LoginScreen}
+            />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="UserAccount" component={UserAccount} />
+            <Stack.Screen name="Chat_2" component={Chat_2} />
+            <Stack.Screen name="Group" component={SingleGroupPage} />
+            <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
+            <Stack.Screen name="MapContainer" component={MapContainer} />
+            <Stack.Screen name="Map" component={MapScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
+    </UserProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

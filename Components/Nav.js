@@ -16,7 +16,7 @@ const Nav = () => {
       navigation.navigate("Home");
     }
     if (value === 1) {
-      navigation.navigate("Chat");
+      navigation.navigate("Chat_2");
     }
     if (value === 2) {
       navigation.navigate("ConfigureMeet");
