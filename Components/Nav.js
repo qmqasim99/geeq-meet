@@ -7,9 +7,9 @@ import { useRoute } from "@react-navigation/native";
 const Nav = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigation = useNavigation();
+  const route = useRoute();
 
   const handleNavigate = (value) => {
-    const route = useRoute();
     console.log(route);
 
     if (value === 1) {

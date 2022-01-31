@@ -52,11 +52,11 @@ export default function App() {
             />
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="UserAccount" component={UserAccount} />
-            <Stack.Screen name="Chat_2" component={Chat_2} />
+            {/* <Stack.Screen name="Chat_2" component={Chat_2} /> */}
             <Stack.Screen name="Group" component={SingleGroupPage} />
-            <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
             <Stack.Screen name="MapContainer" component={MapContainer} />
             <Stack.Screen name="Map" component={MapScreen} />
+            <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>

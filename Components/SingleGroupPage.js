@@ -59,6 +59,10 @@ const SingleGroupPage = ({ route, navigation }) => {
   //const { group_id, otherParam } = this.props.route.params;
   console.log("group_id ", group_id);
 
+  useEffect(() => {
+    getSingleDoc();
+    // console.log("single group : ", group);
+  }, []);
   // const group_id = 4cXw12VSrQoKHmKsL1Di;
 
   // get a single doc
@@ -66,11 +70,6 @@ const SingleGroupPage = ({ route, navigation }) => {
     const gdocs = await getDoc(docRef);
     setGroup({ id: gdocs.id, ...gdocs.data() });
   };
-
-  useEffect(() => {
-    getSingleDoc();
-    console.log("single group : ", group);
-  }, []);
 
   // searches for friends by name
   const handleSubmitFriend = async (e) => {
@@ -107,7 +106,7 @@ const SingleGroupPage = ({ route, navigation }) => {
         }
         users.push({ uid: doc.id, invited, ...doc.data() });
       });
-      console.log("in gettingDocs", users);
+      // console.log("in gettingDocs", users);
       setSearchedFriends(users);
     } catch (err) {
       console.log(err.message);

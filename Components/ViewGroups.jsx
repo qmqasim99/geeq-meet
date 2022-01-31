@@ -1,6 +1,6 @@
-import { useNavigation, useNavigationParam } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { useNavigation, useNavigationParam } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import {
   collection,
   doc,
@@ -14,23 +14,23 @@ import {
   serverTimestamp,
   orderBy,
   onSnapshot,
-} from 'firebase/firestore';
-import { auth, db } from '../firebase';
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
 
-import { useState, useEffect } from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native-web';
-import GlobalCSS from '../GlobalCSS';
-import { Link } from '@react-navigation/native';
-import CreateGroup from './CreateGroup';
+import { useState, useEffect } from "react";
+import { ScrollView, TouchableOpacity } from "react-native-web";
+import GlobalCSS from "../GlobalCSS";
+import { Link } from "@react-navigation/native";
+import CreateGroup from "./CreateGroup";
 
 export default function ViewGroups({ navigation }) {
   //const navigation = useNavigation();
   const [groups, setGroups] = useState([]);
-  const collRef = collection(db, 'groups');
+  const collRef = collection(db, "groups");
 
   const gettingDocs = async () => {
     try {
-      const q = query(collRef, orderBy('group_name', 'desc'));
+      const q = query(collRef, orderBy("group_name", "desc"));
 
       const fdocs = await getDocs(q);
 
@@ -39,7 +39,7 @@ export default function ViewGroups({ navigation }) {
       fdocs.docs.map((doc) => {
         groups.push({ id: doc.id, ...doc.data() });
       });
-      console.log('in gettingDocs', groups);
+      // console.log('in gettingDocs', groups);
       setGroups(groups);
     } catch (err) {
       console.log(err.message);
@@ -90,7 +90,7 @@ export default function ViewGroups({ navigation }) {
                 key={group.id}
                 style={GlobalCSS.groupViewBorder}
                 onPress={() => {
-                  navigation.navigate('Group', { group_id: group.id });
+                  navigation.navigate("Group", { group_id: group.id });
                 }}
               >
                 {/* <Link
@@ -119,8 +119,8 @@ export default function ViewGroups({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

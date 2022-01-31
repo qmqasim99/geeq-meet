@@ -58,7 +58,7 @@ const InviteTest = () => {
 
   useEffect(() => {
     getSingleDoc();
-    console.log("single group : ", user);
+    // console.log("single group : ", user);
 
     //getInviteObject();
   }, []);
@@ -96,7 +96,7 @@ const InviteTest = () => {
         //puts current invites in state
         users.push({ uid: doc.id, invited, ...doc.data() });
       });
-      console.log("in gettingDocs", users);
+      // console.log("in gettingDocs", users);
       setSearchedFriends(users);
     } catch (err) {
       console.log(err.message);
@@ -151,7 +151,7 @@ const InviteTest = () => {
     const udocs = await getDoc(docGroupRef);
     const group = { id: udocs.id, ...udocs.data() };
 
-    console.log("docGroupRef id", group);
+    // console.log("docGroupRef id", group);
 
     const getInviteObject = group.invites.filter(
       (invite) => invite.invitee_uid === user_id
@@ -196,6 +196,7 @@ const InviteTest = () => {
       <TouchableOpacity
         onPress={(ev) => {
           navigation.navigate("Group", { group_id: item.group_id });
+          //set current group
         }}
       >
         <View style={theme.fListCard}>
