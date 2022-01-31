@@ -41,26 +41,25 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name="Login"
-            component={LoginScreen}
-          />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="UserAccount" component={UserAccount} />
-          {/* <Stack.Screen name="Chat" component={Chat} /> */}
-
-          <Stack.Screen name="Chat_2" component={Chat_2} />
-
-          <Stack.Screen name="Group" component={SingleGroupPage} />
-          <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
-          <Stack.Screen name="MapContainer" component={MapContainer} />
-          <Stack.Screen name="Map" component={MapScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Login"
+              component={LoginScreen}
+            />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="UserAccount" component={UserAccount} />
+            <Stack.Screen name="Chat_2" component={Chat_2} />
+            <Stack.Screen name="Group" component={SingleGroupPage} />
+            <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
+            <Stack.Screen name="MapContainer" component={MapContainer} />
+            <Stack.Screen name="Map" component={MapScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
+    </UserProvider>
   );
 }
