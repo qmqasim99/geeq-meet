@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  CheckBox,
-  Text,
-  Picker,
-  View,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, Picker, View, TouchableOpacity } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
@@ -17,23 +10,24 @@ export default function ConfigureMeet() {
   const { currentGroup, user } = useContext(UserContext);
 
   const [selectedValue, setSelectedValue] = useState("java");
-  const meetTypeList = ["cafe", "restaurant", "cinema", "park", "pub"];
+  const meetTypeList = ["Cafe", "Restaurant", "Cinema", "Park", "Pub"];
   let memberAr = [];
-  // useEffect(() => {
-  //   //onload create array for checkbox list
-  //   memberAr = currentGroup.user.map((user, i) => {
-  //     const member = { ...user };
-  //     member.id = i;
-  //     return member;
-  //   });
-  // }, [currentGroup]);
+  useEffect(() => {
+    console.log(currentGroup.users);
+    //onload create array for checkbox list
+    // memberAr = currentGroup.user.map((user, i) => {
+    //   const member = { ...user };
+    //   member.id = i;
+    //   return member;
+    // });
+  }, [currentGroup]);
 
   const handleConfigureMeet = (e) => {
     navigation.navigate("MapContainer");
   };
 
   return (
-    <View>
+    <View style={theme.container}>
       <Text>Configure Meetup</Text>
       <Picker
         selectedValue={selectedValue}
@@ -44,17 +38,6 @@ export default function ConfigureMeet() {
           return <Picker.Item key={i} label={type} value={type} />;
         })}
       </Picker>
-      <View style={theme.container}>
-        <View style={theme.checkboxContainer}>
-          <CheckBox
-            value={isSelected}
-            onValueChange={setSelection}
-            style={theme.checkbox}
-          />
-          <Text style={theme.label}>Do you like React Native?</Text>
-        </View>
-        <Text>Is CheckBox selected: {isSelected ? "👍" : "👎"}</Text>
-      </View>
 
       <TouchableOpacity
         onPress={(e) => {

@@ -10,9 +10,11 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const ViewMyGroups = () => {
-  const { user, groups } = useContext(UserContext);
+  const navigation = useNavigation();
+  const { user, groups, setCurrentGroup } = useContext(UserContext);
   const theme = useContext(ThemeContext);
 
   useEffect(() => {

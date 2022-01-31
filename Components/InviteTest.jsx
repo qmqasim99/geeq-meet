@@ -218,14 +218,14 @@ const InviteTest = () => {
         />
       </View>
 
-      <Text style={theme.header2}>All Groups:</Text>
+      {/* <Text style={theme.header2}>All Groups:</Text>
       <View style={theme.fListArea}>
         <FlatList
           data={user.groups}
           renderItem={renderGroupList}
           keyExtractor={(item) => item.group_id}
         />
-      </View>
+      </View> */}
 
       <View
         styles={{ flexDirection: "row", justifyContent: "space-between" }}

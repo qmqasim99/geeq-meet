@@ -2,7 +2,7 @@ import { useNavigation, useNavigationParam } from "@react-navigation/native";
 import { NavigationContainer } from "@react-navigation/native";
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "@react-navigation/native";
-import { ThemeContext } from "../Context/Context";
+import { UserContext, ThemeContext } from "../Context/Context";
 
 import {
   View,
@@ -35,14 +35,9 @@ import {
 import { auth, db } from "../firebase";
 import Nav from "../Components/Nav";
 
-const groupMembers = [
-  { user_id: 1, name: "Frosty" },
-  { user_id: 2, name: "Toasty" },
-  { user_id: 3, name: "Boney" },
-  { user_id: 4, name: "Gusty" },
-];
 const SingleGroupPage = ({ route, navigation }) => {
   const theme = useContext(ThemeContext);
+  const { user, groups, setCurrentGroup } = useContext(UserContext);
 
   const { group_id } = route.params;
   const [group, setGroup] = useState({});
@@ -51,24 +46,15 @@ const SingleGroupPage = ({ route, navigation }) => {
   const usersRef = collection(db, "users");
   const docRef = doc(db, "groups", group_id); //'4cXw12VSrQoKHmKsL1Di'
 
-  //console.log(navigation);
-  // const navigation = useNavigation();
-  //console.log('navigation params ', navigation.getParams());
-  //  const group_id = navigation.getParams('group_id');
-  //const group_id = useNavigationParam('group_id');
-  //const { group_id, otherParam } = this.props.route.params;
-  console.log("group_id ", group_id);
-
   useEffect(() => {
     getSingleDoc();
-    // console.log("single group : ", group);
   }, []);
-  // const group_id = 4cXw12VSrQoKHmKsL1Di;
 
   // get a single doc
   const getSingleDoc = async () => {
     const gdocs = await getDoc(docRef);
     setGroup({ id: gdocs.id, ...gdocs.data() });
+    setCurrentGroup({ id: gdocs.id, ...gdocs.data() });
   };
 
   // searches for friends by name
@@ -193,23 +179,28 @@ const SingleGroupPage = ({ route, navigation }) => {
         {/* <Text>Group ID: {group.id}</Text> */}
         <Image
           source={{
-            uri: "https://www.clipartkey.com/mpngs/m/9-93815_daisy-flower-petals-yellow-cartoon-flower-png.png",
+            uri: "https://picsum.photos/200",
           }}
-          style={{ width: 200, height: 200, justifyContent: "center" }}
+          style={{
+            width: 200,
+            height: 200,
+            justifyContent: "center",
+            borderRadius: "100%",
+          }}
         />
       </View>
       {/* //this view contains search people functionality */}
 
       <View style={[{ flexGrow: 1 }, theme.horizontalButtonContainer]}>
         <TextInput
-          style={theme.loginInput}
+          style={[theme.loginInput, { width: "40%", flex: 3 }]}
           placeholder="Add new friend!"
           onChangeText={(newText) => setNewFriend(newText)}
           defaultValue={newFriend}
         />
 
         <TouchableOpacity
-          style={[theme.button, theme.buttonOutline]}
+          style={[theme.button, theme.buttonOutline, { flex: 1 }]}
           onPress={handleSubmitFriend}
         >
           <Text style={theme.buttonText}>Search</Text>

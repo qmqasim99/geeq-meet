@@ -21,6 +21,9 @@ import ViewMyGroups from "../Components/ViewMyGroups";
 const HomeScreen = () => {
   const navigation = useNavigation();
   const theme = useContext(ThemeContext);
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {}, [user]);
 
   // const handleSignOut = () => {
   //   auth
@@ -37,11 +40,17 @@ const HomeScreen = () => {
       <Text style={theme.header}>Welcome {auth.currentUser?.email}</Text>
 
       <ScrollView>
-        <Text style={theme.header2}>My Groups</Text>
-        <ViewMyGroups />
         <Text style={theme.header2}>Invites</Text>
         <InviteTest />
-        <CreateGroup />
+        <Text style={theme.header2}>My Groups</Text>
+        <ViewMyGroups />
+        {/* <CreateGroup /> */}
+        {/* <TouchableOpacity>
+          <Text>Create new group</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text>Create new group</Text>
+        </TouchableOpacity> */}
       </ScrollView>
       <Nav />
     </View>
