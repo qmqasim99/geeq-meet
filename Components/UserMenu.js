@@ -4,6 +4,7 @@ import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { ThemeContext } from "../Context/Context";
+import { auth } from "../firebase";
 
 export default function UserMenu({}) {
   const theme = useContext(ThemeContext);
@@ -16,7 +17,12 @@ export default function UserMenu({}) {
   };
 
   const handleSignOut = () => {
-    navigation.navigate("UserAccount");
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Login");
+      })
+      .catch((error) => alert(error.message));
   };
   const showMenu = () => setVisible(true);
   /*
