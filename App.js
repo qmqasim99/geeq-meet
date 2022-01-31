@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 
 import React from "react";
 import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { db, auth } from "./firebase";
@@ -26,7 +26,8 @@ import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ConfigureMeet from "./screens/ConfigureMeet";
 import FirebaseTesting from "./Components/FirebaseTesting";
-import Chat from "./Components/Chat";
+import Chat_2 from "./Components/Chat_2";
+// import Chat from "./Components/Chat";
 import SingleGroupPage from "./Components/SingleGroupPage";
 
 import UserAccount from "./Components/UserAccount";
@@ -41,7 +42,9 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <ThemeProvider>
-      <NavigationContainer theme={testTheme}>
+
+      <NavigationContainer>
+
         <Stack.Navigator>
           <Stack.Screen
             options={{ headerShown: false }}
@@ -51,6 +54,9 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="UserAccount" component={UserAccount} />
           {/* <Stack.Screen name="Chat" component={Chat} /> */}
+
+          <Stack.Screen name="Chat_2" component={Chat_2} />
+
           <Stack.Screen name="Group" component={SingleGroupPage} />
           <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
           <Stack.Screen name="MapContainer" component={MapContainer} />
