@@ -185,7 +185,7 @@ const SingleGroupPage = ({ route, navigation }) => {
             width: 200,
             height: 200,
             justifyContent: "center",
-            borderRadius: "100%",
+            borderRadius: 100,
           }}
         />
       </View>

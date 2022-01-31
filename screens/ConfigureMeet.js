@@ -1,5 +1,13 @@
-import { StyleSheet, Text, Picker, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Picker,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
+import { ListItem, Icon, Button } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
 import { UserContext, ThemeContext } from "../Context/Context";
@@ -7,45 +15,120 @@ import { UserContext, ThemeContext } from "../Context/Context";
 export default function ConfigureMeet() {
   const navigation = useNavigation();
   const theme = useContext(ThemeContext);
-  const { currentGroup, user } = useContext(UserContext);
+  const { currentGroup, setCurrentGroup } = useContext(UserContext);
+  const [usersToMeet, setUsersToMeet] = useState(currentGroup.users);
 
-  const [selectedValue, setSelectedValue] = useState("java");
+  const [selectedValue, setSelectedValue] = useState("Cafe");
   const meetTypeList = ["Cafe", "Restaurant", "Cinema", "Park", "Pub"];
   let memberAr = [];
+
   useEffect(() => {
-    console.log(currentGroup.users);
-    //onload create array for checkbox list
-    // memberAr = currentGroup.user.map((user, i) => {
-    //   const member = { ...user };
-    //   member.id = i;
-    //   return member;
-    // });
+    console.log("group loaded", currentGroup.users);
+    setUsersToMeet(currentGroup.users);
   }, [currentGroup]);
+  useEffect(() => {}, [usersToMeet]);
+
+  const handleExcludeUser = (user) => {
+    console.log(currentGroup);
+    const newUsersToMeet = usersToMeet.filter((obj) => {
+      return obj.name !== user.name;
+    });
+    setUsersToMeet(newUsersToMeet);
+  };
 
   const handleConfigureMeet = (e) => {
+    //create meet obj
+    const meetObj = {
+      users: usersToMeet,
+      placeType: selectedValue,
+    };
+
+    //update group database
+
+    //store meet Obj in group Context
+    const groupDeepCopy = { meet: meetObj, ...currentGroup };
+    setCurrentGroup(groupDeepCopy);
+    //nav to map
     navigation.navigate("MapContainer");
   };
 
   return (
-    <View style={theme.container}>
-      <Text>Configure Meetup</Text>
-      <Picker
-        selectedValue={selectedValue}
-        style={{ height: 20, width: 150 }}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-      >
-        {meetTypeList.map((type, i) => {
-          return <Picker.Item key={i} label={type} value={type} />;
-        })}
-      </Picker>
-
-      <TouchableOpacity
-        onPress={(e) => {
-          handleConfigureMeet;
-        }}
-      >
-        <Text>Let's Meet!</Text>
-      </TouchableOpacity>
+    <View
+      style={[
+        theme.homeContainer,
+        {
+          flexDirection: "column",
+          justifyContent: "space-between",
+          alignItems: "center",
+        },
+      ]}
+    >
+      <Text style={theme.header}>Configure Meetup</Text>
+      <View>
+        <Text style={theme.header2}>What kind of Meet?</Text>
+        <Picker
+          selectedValue={selectedValue}
+          onValueChange={(itemValue, itemIndex) => {
+            console.log(selectedValue);
+            setSelectedValue(itemValue);
+          }}
+          itemStyle={theme.picker}
+        >
+          {meetTypeList.map((type, i) => {
+            return <Picker.Item key={i} label={type} value={type} />;
+          })}
+        </Picker>
+      </View>
+      <View>
+        <Text style={theme.header2}>
+          Meeting Members <Text style={theme.header4}>(swipe to exclude)</Text>
+        </Text>
+        <ScrollView>
+          {usersToMeet &&
+            usersToMeet.map((user, i) => {
+              return (
+                <ListItem.Swipeable
+                  containerStyle={theme.listItemContainer}
+                  key={i}
+                  title={user.name}
+                  rightContent={
+                    <Button
+                      title="Exclude"
+                      icon={{ name: "delete", color: "white" }}
+                      buttonStyle={{
+                        minHeight: "97%",
+                        backgroundColor: "red",
+                        top: 10,
+                        right: 2,
+                      }}
+                      onPress={(e) => {
+                        handleExcludeUser(user);
+                      }}
+                    />
+                  }
+                >
+                  <ListItem.Content>
+                    <ListItem.Title>
+                      <Text style={[theme.header4, { textAlign: "center" }]}>
+                        {user.name}
+                      </Text>
+                    </ListItem.Title>
+                  </ListItem.Content>
+                </ListItem.Swipeable>
+              );
+            })}
+        </ScrollView>
+      </View>
+      <View style={[theme.letsMeetButton, theme.buttonContainer]}>
+        <TouchableOpacity
+          onPress={(e) => {
+            handleConfigureMeet();
+          }}
+          style={[theme.button, theme.buttonOutline]}
+        >
+          <Text style={theme.buttonText}>Let's Meet!</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

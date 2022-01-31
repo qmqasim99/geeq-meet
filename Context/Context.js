@@ -49,6 +49,9 @@ export const UserProvider = ({ children }) => {
       });
     });
   };
+  useEffect(() => {
+    console.log("cg", currentGroup);
+  }, [currentGroup]);
 
   useEffect(() => {
     if (auth.currentUser) {

@@ -44,8 +44,8 @@ export const FindGeographicMidpoint = (users) => {
 export const createPlaceSearchUrl = (
   latitude,
   longitude,
-  radius = 1000,
-  type = "cafe"
+  type = "cafe",
+  radius = 1000
 ) => {
   const baseUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?`;
   const location = `location=${latitude},${longitude}&radius=${radius}`;
