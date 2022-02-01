@@ -9,11 +9,14 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import GlobalCSS from "../GlobalCSS";
 import { ScrollView } from "react-native-web";
+import { ThemeContext } from "../Context/Context";
+import InviteTest from "../Components/InviteTest";
 
 export default function CreateGroup({ navigation }) {
+  const theme = useContext(ThemeContext);
   const collRef = collection(db, "groups");
   const [user, setUser] = useState({});
   const uid = auth.currentUser.uid;
@@ -62,33 +65,36 @@ export default function CreateGroup({ navigation }) {
     };
 
     const docRef = doc(db, "users", uid);
-    updateDoc(docRef, { groups: arrayUnion(newGroup) });
+    updateDoc(docRef, { groups: arrayUnion(newGroup) }).then(
+      navigation.navigate("Group", { group_id: newGroupCreated.id })
+    );
 
     console.log("form sumitted");
   };
 
   return (
     <>
-      <View style={GlobalCSS.container}>
-        <Text>Create a new group</Text>
+      <View style={theme.homeContainer}>
+        <Text style={theme.header}>Create a new group</Text>
 
-        <View style={{ padding: 10 }}>
+        <View style={theme.container}>
           <TextInput
-            style={{ height: 40 }}
+            style={theme.header2}
             placeholder="Group name!"
             onChangeText={(newText) => setGroupName(newText)}
             defaultValue={groupName}
           />
           <TextInput
-            style={{ height: 40 }}
+            style={theme.header2}
             placeholder="Avatar url"
             onChangeText={(newText) => setGroupAvatar(newText)}
             defaultValue={groupAvatar}
           />
 
-          <Button title="Submit" onPress={handleSubmit} />
+          <Button style={theme.button} title="Submit" onPress={handleSubmit} />
         </View>
       </View>
+
       {/* <Link
         to={{
           screen: 'ViewGroups',
