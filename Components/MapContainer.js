@@ -18,39 +18,6 @@ import Nav from "./Nav";
 // import { useLoading } from "../hooks/CustomHooks";
 
 export default function MapContainer({ props }) {
-  //example props
-  // userArray = [
-  //   {
-  //     name: "alphie",
-  //     lat: 53.43553,
-  //     lng: -2.24406,
-  //     color: "#A6D1A1",
-  //     img_url: "https://picsum.photos/200",
-  //   },
-  //   {
-  //     name: "betty",
-  //     lat: 53.45407,
-  //     lng: -2.19917,
-  //     color: "#F2BE2D",
-  //     img_url: "https://picsum.photos/200",
-  //   },
-  //   {
-  //     name: "cra",
-  //     lat: 53.47598,
-  //     lng: -2.28077,
-  //     color: "#009FE3",
-  //     img_url: "https://picsum.photos/200",
-  //   },
-  //   {
-  //     name: "dibby",
-  //     lat: 53.43591,
-  //     lng: -2.22983,
-  //     color: "#2B4A9A",
-  //     img_url: "https://picsum.photos/200",
-  //   },
-  // ];
-  // placeType = "restaurant";
-
   //   const { loadComponent, isLoading, setIsLoading } = useLoading();
   const { currentGroup } = useContext(UserContext);
   const theme = useContext(ThemeContext);
@@ -66,10 +33,18 @@ export default function MapContainer({ props }) {
 
   useEffect(() => {
     // userArray = currentGroup.meet.users;
-    setPlaceType(currentGroup.meet.placeType);
-    setUserArray(currentGroup.meet.users);
+    setPlaceType(currentGroup.meets.placeType);
+    setUserArray(currentGroup.meets.users);
+    // console.log(currentGroup.meets);
+    if (currentGroup.meets.destination) {
+      console.log("destinationalready set", currentGroup.meets.destination);
+      setDestination(currentGroup.meets.destination);
+      setDestinationSelected(true);
+    } else {
+      console.log(" no destination");
+    }
 
-    const gmMid = FindGeographicMidpoint(currentGroup.meet.users);
+    const gmMid = FindGeographicMidpoint(currentGroup.meets.users);
     // console.log(currentGroup.meet.users);
     setGmMid(gmMid);
     getPlacesFromApi(gmMid);
@@ -83,7 +58,7 @@ export default function MapContainer({ props }) {
     const url = createPlaceSearchUrl(
       gmMid.lat,
       gmMid.lng,
-      currentGroup.meet.placeType
+      currentGroup.meets.placeType
     );
     fetch(url).then((res) =>
       res

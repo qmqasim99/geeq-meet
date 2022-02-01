@@ -9,6 +9,7 @@ import MapRoute from "../Components/MapRoute";
 import CustomMarker from "../Components/CustomMarker";
 import MapMenu from "../Components/MapMenu";
 import Nav from "../Components/Nav";
+import { UserContext, ThemeContext } from "../Context/Context";
 
 const MapScreen = ({
   userArray,
@@ -21,7 +22,13 @@ const MapScreen = ({
   const [pressType, setPressType] = useState(false);
 
   useEffect(() => {
-    console.log(userArray);
+    // console.log(userArray);
+    //if active meeting use preconfigured settings else do normal stuff
+    // if (currentGroup.meets.active) {
+    //   console.log("active meet");
+    // } else {
+    //   console.log("creating new meet");
+    // }
   }, [zoomDelta, destinationSelected]);
 
   const handleMapLoad = (e) => {

@@ -37,10 +37,13 @@ import Nav from "../Components/Nav";
 
 const SingleGroupPage = ({ route, navigation }) => {
   const theme = useContext(ThemeContext);
-  const { user, groups, setCurrentGroup } = useContext(UserContext);
+  const { user, groups, setCurrentGroup, currentGroup } =
+    useContext(UserContext);
 
   const { group_id } = route.params;
   const [group, setGroup] = useState({});
+  const [meetActive, setMeetActive] = useState(false);
+  const [loadCurGroup, setLoadCurGroup] = useState(false);
   const [newFriend, setNewFriend] = useState("");
   const [searchedFriends, setSearchedFriends] = useState([]);
   const usersRef = collection(db, "users");
@@ -54,7 +57,9 @@ const SingleGroupPage = ({ route, navigation }) => {
   const getSingleDoc = async () => {
     const gdocs = await getDoc(docRef);
     setGroup({ id: gdocs.id, ...gdocs.data() });
-    setCurrentGroup({ id: gdocs.id, ...gdocs.data() });
+    await setCurrentGroup({ id: gdocs.id, ...gdocs.data() });
+    setMeetActive(gdocs.data().meets.active);
+    setLoadCurGroup(true);
   };
 
   // searches for friends by name
@@ -83,11 +88,9 @@ const SingleGroupPage = ({ route, navigation }) => {
       udocs.docs.map((doc) => {
         let invited = false;
         const currentInvites = doc.data().invites;
-        console.log(" invitessss", doc.data());
         if (currentInvites) {
           currentInvites.map((invite) => {
             invite.group_id === group.id ? (invited = true) : (invited = false);
-            console.log("already invited ", invited);
           });
         }
         users.push({ uid: doc.id, invited, ...doc.data() });
@@ -125,8 +128,6 @@ const SingleGroupPage = ({ route, navigation }) => {
       updateDoc(usersDocRef, {
         invites: arrayUnion(newInviteForUsersCollection),
       });
-
-      console.log("Friend invited with uid", newInvite);
     } catch (err) {
       console.log(err.message);
     }
@@ -167,19 +168,24 @@ const SingleGroupPage = ({ route, navigation }) => {
 
   return (
     <View style={[theme.scrollContainer, { flex: 7 }]}>
-      <View style={theme.activeMeetAlert}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Map");
-          }}
-          to={{
-            screen: "Map",
-          }}
-        >
-          <Text style={theme.alertText}>MEETING ACTIVE</Text>
-        </TouchableOpacity>
-      </View>
-
+      {loadCurGroup ? (
+        meetActive && (
+          <View style={theme.activeMeetAlert}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("MapContainer");
+              }}
+              to={{
+                screen: "MapContainer",
+              }}
+            >
+              <Text style={theme.alertText}>MEETING ACTIVE</Text>
+            </TouchableOpacity>
+          </View>
+        )
+      ) : (
+        <></>
+      )}
       {/* //this view contains group name and image */}
       <View style={{ flexGrow: 1, alignItems: "center" }}>
         <Text style={theme.header}>{group.group_name}</Text>

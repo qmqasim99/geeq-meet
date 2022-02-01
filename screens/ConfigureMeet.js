@@ -29,6 +29,7 @@ export default function ConfigureMeet() {
   useEffect(() => {
     setUsersToMeet(currentGroup.users);
   }, [currentGroup]);
+
   useEffect(() => {}, [usersToMeet]);
 
   const handleExcludeUser = (user) => {
@@ -40,7 +41,6 @@ export default function ConfigureMeet() {
 
   const handleConfigureMeet = async (item) => {
     console.log("adding meet");
-    // console.log(currentGroup);
 
     for await (const user of usersToMeet) {
       // usersToMeet.map(async (user) => {
@@ -49,10 +49,9 @@ export default function ConfigureMeet() {
       const userEntry = userData.data();
       user.lat = Number(userEntry.coords.lat);
       user.lng = Number(userEntry.coords.lng);
-      console.log("This is the user", user);
+      user.colour = userEntry.colour;
     }
 
-    console.log("users to meet:", usersToMeet);
     //create meet obj
     const meetObj = {
       // id: Date.now(),
@@ -74,7 +73,7 @@ export default function ConfigureMeet() {
     //store meet Obj in group Context
     console.log("updating context");
 
-    groupDeepCopy.meet = meetObj;
+    groupDeepCopy.meets = meetObj;
     setCurrentGroup(groupDeepCopy); // add group to array!!
     //nav to map
     navigation.navigate("MapContainer");

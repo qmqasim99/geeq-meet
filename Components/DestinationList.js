@@ -50,12 +50,11 @@ export default function DestinationList({
         lng: des.geometry.location.lng,
       },
     });
-    console.log("database updated");
     //do the same for all users
 
     //update destination in context
     const groupDeepCopy = JSON.parse(JSON.stringify(currentGroup));
-    groupDeepCopy.meet.destination = {
+    groupDeepCopy.meets.destination = {
       place_id: des.place_id,
       place_name: des.name,
       vicinity: des.vicinity,
