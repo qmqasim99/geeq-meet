@@ -1,7 +1,7 @@
-import { useNavigation } from '@react-navigation/core';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import { Link } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/core";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import { Link } from "@react-navigation/native";
 import {
   collection,
   doc,
@@ -17,32 +17,32 @@ import {
   document,
   serverTimestamp,
   Timestamp,
-} from 'firebase/firestore';
-import { auth, db } from '../firebase';
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
 
-import { useState, useEffect } from 'react';
-import GlobalCSS from '../GlobalCSS';
-import { ScrollView } from 'react-native-web';
-import ViewGroups from './ViewGroups';
+import { useState, useEffect } from "react";
+import GlobalCSS from "../GlobalCSS";
+import { ScrollView } from "react-native-web";
+import ViewGroups from "./ViewGroups";
 
 export default function CreateGroup({ navigation }) {
   //const navigation = useNavigation();
-  const collRef = collection(db, 'groups');
+  const collRef = collection(db, "groups");
   const [user, setUser] = useState({});
   const uid = auth.currentUser.uid; //ef83N7qN5beB5oJtm9CgCnW7Ydv1
-  console.log('auth ', uid);
+  console.log("auth ", uid);
 
-  const docRef = doc(db, 'users', uid);
+  const docRef = doc(db, "users", uid);
 
-  const [groupName, setGroupName] = useState('');
-  const [groupAvatar, setGroupAvatar] = useState(''); // https://freesvg.org/img/group.png
+  const [groupName, setGroupName] = useState("");
+  const [groupAvatar, setGroupAvatar] = useState(""); // https://freesvg.org/img/group.png
 
   // get a single user
   const getUser = async () => {
     const udocs = await getDoc(docRef);
     setUser({ uid: udocs.id, ...udocs.data() });
 
-    console.log(' getSingleDoc ', udocs.id, udocs.data());
+    console.log(" getSingleDoc ", udocs.id, udocs.data());
   };
 
   useEffect(() => {
@@ -51,8 +51,8 @@ export default function CreateGroup({ navigation }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (groupName.trim() === '') {
-      alert('Please enter new group name');
+    if (groupName.trim() === "") {
+      alert("Please enter new group name");
       return;
     }
 
@@ -64,20 +64,22 @@ export default function CreateGroup({ navigation }) {
       avatar: groupAvatar,
       created_at: timestamp,
       users: [{ name: user.name, uid }],
+      meets: [],
     });
 
     // add this group to users doc
-    console.log('new group id: ', newGroupCreated.id);
+    console.log("new group id: ", newGroupCreated.id);
     const newGroup = {
       group_name: groupName,
       group_id: newGroupCreated.id,
       created_at: timestamp,
+      meets: [],
     };
 
-    const docRef = doc(db, 'users', uid);
+    const docRef = doc(db, "users", uid);
     updateDoc(docRef, { groups: arrayUnion(newGroup) });
 
-    console.log('form sumitted');
+    console.log("form sumitted");
   };
 
   return (
@@ -104,7 +106,7 @@ export default function CreateGroup({ navigation }) {
       </View>
       <Link
         to={{
-          screen: 'ViewGroups',
+          screen: "ViewGroups",
         }}
       >
         View all groups
@@ -112,8 +114,8 @@ export default function CreateGroup({ navigation }) {
 
       <Link
         to={{
-          screen: 'Group',
-          params: { group_id: '4cXw12VSrQoKHmKsL1Di' },
+          screen: "Group",
+          params: { group_id: "4cXw12VSrQoKHmKsL1Di" },
         }}
       >
         Go to a group

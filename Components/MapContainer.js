@@ -17,7 +17,7 @@ import DestinationList from "../Components/DestinationList";
 import Nav from "./Nav";
 // import { useLoading } from "../hooks/CustomHooks";
 
-export default function MapContainer({ userArray }) {
+export default function MapContainer({}) {
   //example props
   userArray = [
     {
@@ -61,6 +61,8 @@ export default function MapContainer({ userArray }) {
   const [listLoaded, setListLoaded] = useState(false);
   const [zoomDelta, setZoomDelta] = useState({ lat: 0.0, lng: 0.0 });
   const [destinationSelected, setDestinationSelected] = useState(null);
+  // const [thisMeet, setThisMeet] = useState({});
+  const [userArray, setUserArray] = useState({});
 
   useEffect(() => {
     // userArray = currentGroup.meet.users;

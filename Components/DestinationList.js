@@ -2,7 +2,9 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { ListItem, Icon } from "react-native-elements";
 import { calcMapZoomDelta, findDistanceInM } from "../Utils/utils";
-import { ThemeContext } from "../Context/Context";
+import { ThemeContext, UserContext } from "../Context/Context";
+import { doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 export default function DestinationList({
   destinationArray,
@@ -14,6 +16,7 @@ export default function DestinationList({
 }) {
   const [listLoaded, setListLoaded] = useState(false);
   const theme = useContext(ThemeContext);
+  const { currentGroup, setCurrentGroup } = useContext(UserContext);
   useEffect(() => {
     destinationArray.forEach((des) => {
       const distFromCentre = findDistanceInM(
@@ -27,7 +30,7 @@ export default function DestinationList({
     });
   }, [destinationArray]);
 
-  const handleSelect = (des) => {
+  const handleSelect = async (des) => {
     setDestination({
       place_id: des.place_id,
       place_name: des.name,
@@ -35,6 +38,31 @@ export default function DestinationList({
       lat: des.geometry.location.lat,
       lng: des.geometry.location.lng,
     });
+
+    //update destination in database
+    const docRef = doc(db, "groups", currentGroup.id);
+    await updateDoc(docRef, {
+      "meets.destination": {
+        place_id: des.place_id,
+        place_name: des.name,
+        vicinity: des.vicinity,
+        lat: des.geometry.location.lat,
+        lng: des.geometry.location.lng,
+      },
+    });
+    console.log("database updated");
+    //do the same for all users
+
+    //update destination in context
+    const groupDeepCopy = JSON.parse(JSON.stringify(currentGroup));
+    groupDeepCopy.meet.destination = {
+      place_id: des.place_id,
+      place_name: des.name,
+      vicinity: des.vicinity,
+      lat: des.geometry.location.lat,
+      lng: des.geometry.location.lng,
+    };
+    setCurrentGroup(groupDeepCopy);
 
     setDestinationSelected(true);
   };
