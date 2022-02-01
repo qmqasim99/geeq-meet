@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext, ThemeContext } from "../Context/Context";
 import {
   collection,
@@ -39,6 +39,8 @@ const ViewMyGroups = () => {
   const { user, groups, setCurrentGroup } = useContext(UserContext);
   const theme = useContext(ThemeContext);
 
+  const [tempGroups, setTempGroups] = useState();
+
   const ExitGroup = async (group_id, group_name, created_at) => {
     const uid = auth.currentUser.uid;
     console.log(group_name, created_at);
@@ -49,8 +51,9 @@ const ViewMyGroups = () => {
       created_at: created_at,
     };
     const userRef = doc(db, "users", uid);
-
     console.log(user.name);
+
+    // setTempGroups(tempGroups.filter((group) => group.group_id !== group_id )
 
     const removeUserFromGroups = {
       name: user.name,
@@ -63,12 +66,16 @@ const ViewMyGroups = () => {
       users: arrayRemove(removeUserFromGroups),
     });
 
-    // await updateDoc(userRef, {
-    //   groups: arrayRemove(removeGroup),
-    // });
+    await updateDoc(userRef, {
+      groups: arrayRemove(removeGroup),
+    });
   };
+  console.log("line 72");
 
-  useEffect(() => {}, [user, groups]);
+  useEffect(() => {
+    console.log("groups", user.groups);
+    setTempGroups(user.groups);
+  }, [user, tempGroups]);
 
   const renderGroupList = ({ item }) => {
     return (
@@ -93,12 +100,13 @@ const ViewMyGroups = () => {
       </TouchableOpacity>
     );
   };
+  console.log("line99");
 
   return (
     <>
       <View>
         <FlatList
-          data={user.groups}
+          data={tempGroups}
           renderItem={renderGroupList}
           keyExtractor={(item) => item.group_id}
           style={theme.fListArea}
