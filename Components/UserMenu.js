@@ -13,7 +13,7 @@ export default function UserMenu({}) {
   const hideMenu = () => setVisible(false);
 
   const handleAccountNav = () => {
-    navigation.navigate("UserAccount");
+    navigation.navigate("UserAccount", { user_id: auth.currentUser.uid });
   };
 
   const handleSignOut = () => {

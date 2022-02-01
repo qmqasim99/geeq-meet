@@ -103,7 +103,7 @@ const SingleGroupPage = ({ route, navigation }) => {
   const handleSubmitInvite = async (inviteeName, inviteeUid) => {
     try {
       const newInvite = {
-        invited_by: "qname",
+        invited_by: auth.currentUser.displayName,
         invited_by_uid: auth.currentUser.uid,
         invitee: inviteeName,
         invitee_uid: inviteeUid,
@@ -114,7 +114,7 @@ const SingleGroupPage = ({ route, navigation }) => {
       updateDoc(docRef, { invites: arrayUnion(newInvite) });
       // add a new invite in users colleciton
       const newInviteForUsersCollection = {
-        invited_by: "qname",
+        invited_by: auth.currentUser.displayName,
         invited_by_uid: auth.currentUser.uid,
         group_name: group.group_name,
         group_id: group.id,
@@ -134,9 +134,15 @@ const SingleGroupPage = ({ route, navigation }) => {
 
   const renderName = ({ item }) => {
     return (
-      <View style={theme.fListCard}>
-        <Text style={theme.fListText}>{item.name}</Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("UserAccount", { user_id: item.uid });
+        }}
+      >
+        <View style={theme.fListCard}>
+          <Text style={theme.fListText}>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 

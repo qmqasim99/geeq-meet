@@ -2,36 +2,28 @@ import { useEffect, useState } from "react";
 import { Text, TextInput, View, Image, StyleSheet, Button } from "react-native";
 import { auth, db } from "../firebase";
 import { updateEmail, updateProfile } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
+import { fetchUser } from "../Utils/APIutils";
 
-const UserAccount = ({ uid }) => {
-  const [authUid, setAuthUid] = useState(auth.currentUser.uid);
+const UserAccount = ({ route }) => {
+  const { user_id } = route.params;
   const [user, setUser] = useState({});
   const [isEditable, setIsEditable] = useState(false);
-  //need to make logic so it only editable if you are on your own page
-  //pass in uid for user and if uid matches then edit fields appear & submit button enabled
-
-  const fetchUser = async () => {
-    const userRef = doc(db, "users", uid);
-    const userInfo = await getDoc(userRef);
-    return userInfo.data();
-  };
 
   useEffect(() => {
-    const data = fetchUser();
+    const data = fetchUser(user_id);
     data
       .then((res) => {
         setUser({
           email: res.email,
           name: res.name,
-          userName: res.userName,
           avatar: res.avatar,
           transport: res.transport,
         });
       })
       .catch((err) => alert(err));
 
-    if (authUid === uid) {
+    if (auth.currentUser.uid === user_id) {
       setIsEditable(true);
     }
   }, []);
@@ -44,9 +36,9 @@ const UserAccount = ({ uid }) => {
       photoURL: user.avatar,
     });
 
-    const dbUpdate = updateDoc(doc(db, "users", uid), {
+    const dbUpdate = updateDoc(doc(db, "users", auth.currentUser.uid), {
       email: user.email,
-      userName: user.userName,
+      name: user.name,
       avatar: user.avatar,
       transport: user.transport,
     });
@@ -72,9 +64,9 @@ const UserAccount = ({ uid }) => {
               });
             }}
           />
-          <Text style={styles.heading}>User Name</Text>
+          <Text style={styles.heading}>Name</Text>
           <TextInput
-            value={user.userName}
+            value={user.name}
             placeholder={"Update Me!"}
             style={styles.input}
             onChangeText={(text) => {
@@ -100,7 +92,6 @@ const UserAccount = ({ uid }) => {
             style={styles.input}
           />
           <Text style={styles.heading}>Default Transport</Text>
-          {/* This will be a dropdown eventually */}
           <TextInput
             placeholder={"Update Me!"}
             value={user.transport}
@@ -111,12 +102,12 @@ const UserAccount = ({ uid }) => {
             }}
             style={styles.input}
           />
-          <Button title="Submit" onPress={handleSubmit} />{" "}
+          <Button title="Submit" onPress={handleSubmit} />
         </>
       ) : (
         <>
           <Text style={styles.heading}>User Name</Text>
-          <Text style={styles.heading}>{user.userName}</Text>
+          <Text style={styles.heading}>{user.name}</Text>
           <Image source={{ uri: user.avatar }} style={styles.avatar} />
           <Text style={styles.heading}>Default Transport</Text>
           <Text style={styles.heading}>{user.transport}</Text>

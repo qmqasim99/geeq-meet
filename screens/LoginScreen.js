@@ -48,8 +48,11 @@ const LoginScreen = () => {
     return unsubscribe;
   }, []);
 
-  const randColourNum = () => Math.floor(Math.random() * 255);
-
+  const randColourHex = () => {
+    let num = Math.floor(Math.random() * 255);
+    let hex = parseInt(num).toString(16);
+    return hex.length === 1 ? `0${hex}` : hex;
+  };
   const handleSignUp = () => {
     if (!firstName || !lastName) {
       alert("All fields must be complete for user registration.");
@@ -70,7 +73,7 @@ const LoginScreen = () => {
             name: `${firstName} ${lastName}`,
             transport: "car",
             coords,
-            colour: `rgba(${randColourNum()},${randColourNum()},${randColourNum()})`,
+            colour: `#${randColourHex()}${randColourHex()}${randColourHex()}`,
           });
         })
         .catch((error) => alert(error.message));
