@@ -1,6 +1,27 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext, ThemeContext } from "../Context/Context";
 import {
+  collection,
+  doc,
+  addDoc,
+  getDocs,
+  getDoc,
+  setDoc,
+  deleteField,
+  query,
+  where,
+  collectionGroup,
+  document,
+  serverTimestamp,
+  updateDoc,
+  arrayUnion,
+  orderBy,
+  startAt,
+  endAt,
+  arrayRemove,
+  Timestamp,
+} from "firebase/firestore";
+import {
   View,
   Text,
   Image,
@@ -11,11 +32,41 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { auth, db } from "../firebase";
 
 const ViewMyGroups = () => {
   const navigation = useNavigation();
   const { user, groups, setCurrentGroup } = useContext(UserContext);
   const theme = useContext(ThemeContext);
+
+  const ExitGroup = async (group_id, group_name, created_at) => {
+    const uid = auth.currentUser.uid;
+    console.log(group_name, created_at);
+    console.log(group_id, "line66");
+    const removeGroup = {
+      group_name: group_name,
+      group_id: group_id,
+      created_at: created_at,
+    };
+    const userRef = doc(db, "users", uid);
+
+    console.log(user.name);
+
+    const removeUserFromGroups = {
+      name: user.name,
+      uid: uid,
+    };
+
+    const groupRef = doc(db, "groups", group_id);
+
+    await updateDoc(groupRef, {
+      users: arrayRemove(removeUserFromGroups),
+    });
+
+    // await updateDoc(userRef, {
+    //   groups: arrayRemove(removeGroup),
+    // });
+  };
 
   useEffect(() => {}, [user, groups]);
 
@@ -31,6 +82,12 @@ const ViewMyGroups = () => {
           <Text style={theme.fListText} key={item.group_id}>
             {item.group_name}
           </Text>
+          <Button
+            title={"Exit Group"}
+            onPress={() =>
+              ExitGroup(item.group_id, item.group_name, item.created_at)
+            }
+          ></Button>
           {/* <Text style={theme.fListText2}>({item.users.length} members)</Text> */}
         </View>
       </TouchableOpacity>
@@ -38,14 +95,16 @@ const ViewMyGroups = () => {
   };
 
   return (
-    <View>
-      <FlatList
-        data={user.groups}
-        renderItem={renderGroupList}
-        keyExtractor={(item) => item.group_id}
-        style={theme.fListArea}
-      />
-    </View>
+    <>
+      <View>
+        <FlatList
+          data={user.groups}
+          renderItem={renderGroupList}
+          keyExtractor={(item) => item.group_id}
+          style={theme.fListArea}
+        />
+      </View>
+    </>
   );
 };
 

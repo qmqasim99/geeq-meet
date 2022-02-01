@@ -21,6 +21,7 @@ import { useState, useEffect } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-web";
 import GlobalCSS from "../GlobalCSS";
 import { Link } from "@react-navigation/native";
+import ExitGroup from "./ExitGroup";
 
 export default function ViewGroups({ navigation }) {
   //const navigation = useNavigation();
@@ -84,28 +85,32 @@ export default function ViewGroups({ navigation }) {
         <View style={(GlobalCSS.container, GlobalCSS.viewBorder)}>
           {groups.map((group) => {
             return (
-              <TouchableOpacity
-                key={group.id}
-                style={GlobalCSS.groupViewBorder}
-                onPress={() => {
-                  navigation.navigate("Group", { group_id: group.id });
-                }}
-              >
-                {/* <Link
-                to={{
-                  screen: 'Group',
-                  params: { group_id: '4cXw12VSrQoKHmKsL1Di' },
-                }}
-              > */}
+              <>
+                <TouchableOpacity
+                  key={group.id}
+                  style={GlobalCSS.groupViewBorder}
+                  onPress={() => {
+                    navigation.navigate("Group", { group_id: group.id });
+                  }}
+                >
+                  {/* <Link
+    to={{
+      screen: 'Group',
+      params: { group_id: '4cXw12VSrQoKHmKsL1Di' },
+    }}
+  > */}
 
-                <Text key={group.id}>Group name: {group.group_name}</Text>
-                <Text key={group.users.length}>
-                  This group has {group.users.length} users.
-                  {/* {group.users.map((user) => {
-                  return <Text key={user.uid}>{user.name}</Text>;
-                })} */}
-                </Text>
-              </TouchableOpacity>
+                  <Text key={group.id}>Group name: {group.group_name}</Text>
+                  <Text key={group.users.length}>
+                    This group has {group.users.length} users.
+                    {/* {group.users.map((user) => {
+    return <Text key={user.uid}>{user.name}</Text>;
+  })} */}
+                  </Text>
+                </TouchableOpacity>
+
+                {/* <ExitGroup group_id={group.id} /> */}
+              </>
             );
           })}
         </View>
