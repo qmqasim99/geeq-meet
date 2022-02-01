@@ -8,11 +8,9 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import CreateGroup from "../Components/CreateGroup";
 import { auth } from "../firebase";
 // import NavBar from "../Components/NavBar";
 import Nav from "../Components/Nav";
-import ViewGroups from "../Components/ViewGroups";
 import InviteTest from "../Components/InviteTest";
 import { ThemeContext, UserContext } from "../Context/Context";
 import UserMenu from "../Components/UserMenu";
@@ -39,19 +37,20 @@ const HomeScreen = () => {
       <UserMenu style={{ position: "absolute" }} />
       <Text style={theme.header}>Welcome {auth.currentUser?.email}</Text>
 
-      <ScrollView>
+      <View>
         <Text style={theme.header2}>Invites</Text>
         <InviteTest />
         <Text style={theme.header2}>My Groups</Text>
         <ViewMyGroups />
-        {/* <CreateGroup /> */}
-        {/* <TouchableOpacity>
-          <Text>Create new group</Text>
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("CreateGroup");
+          }}
+        >
+          <Text style={theme.buttonText}>Create new group</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Create new group</Text>
-        </TouchableOpacity> */}
-      </ScrollView>
+      </View>
       <Nav />
     </View>
   );

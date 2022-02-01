@@ -36,6 +36,7 @@ import contextTest1 from "./Components/contextTest1";
 import contextTest2 from "./Components/contextTest2";
 import { testTheme } from "./Themes/Themes";
 import { NavigationContainer } from "@react-navigation/native";
+import CreateGroup from "./screens/CreateGroup";
 
 const Stack = createNativeStackNavigator();
 // import { LogBox } from "react-native";
@@ -59,6 +60,7 @@ export default function App() {
             <Stack.Screen name="Group" component={SingleGroupPage} />
             <Stack.Screen name="MapContainer" component={MapContainer} />
             <Stack.Screen name="Map" component={MapScreen} />
+            <Stack.Screen name="CreateGroup" component={CreateGroup} />
             <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
           </Stack.Navigator>
         </NavigationContainer>
