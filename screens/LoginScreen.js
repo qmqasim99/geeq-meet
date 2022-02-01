@@ -57,7 +57,6 @@ const LoginScreen = () => {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((userCredentials) => {
-          console.log("here1");
           setIsSignedIn(true);
           const user = userCredentials.user;
           alert(`Registered with: ${user.email}`);
@@ -82,7 +81,6 @@ const LoginScreen = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
-        console.log("here2");
         setIsSignedIn(true);
         const user = userCredentials.user;
         console.log(`Logged in with: ${user.email}`);

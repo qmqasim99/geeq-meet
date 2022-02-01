@@ -177,27 +177,17 @@ const SingleGroupPage = ({ route, navigation }) => {
       <View style={{ flexGrow: 1, alignItems: "center" }}>
         <Text style={theme.header}>{group.group_name}</Text>
         {/* <Text>Group ID: {group.id}</Text> */}
-
-        {group.avatar ? (
-          <Image
-            source={{
-              uri: group.avatar,
-            }}
-            style={{ width: 200, height: 200, justifyContent: "center" }}
-          />
-        ) : (
-          <Image
-            source={{
-              uri: "https://picsum.photos/200",
-            }}
-            style={{
-              width: 200,
-              height: 200,
-              justifyContent: "center",
-              borderRadius: "100%",
-            }}
-          />
-        )}
+        <Image
+          source={{
+            uri: "https://picsum.photos/200",
+          }}
+          style={{
+            width: 200,
+            height: 200,
+            justifyContent: "center",
+            borderRadius: 100,
+          }}
+        />
       </View>
       {/* //this view contains search people functionality */}
 

@@ -25,10 +25,8 @@ export const UserProvider = ({ children }) => {
 
   const getUser = async () => {
     setUid(auth.currentUser.uid);
-    console.log("UID:>>>>>>>>>>", auth.currentUser.uid);
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
-    console.log("DATA>>>>>>>>>>", docSnap.data());
     setUser(docSnap.data());
   };
 
@@ -49,14 +47,17 @@ export const UserProvider = ({ children }) => {
       });
     });
   };
+  useEffect(() => {
+    console.log("cg", currentGroup);
+  }, [currentGroup]);
 
   useEffect(() => {
     if (auth.currentUser) {
       console.log("I'm getting the bits");
       getUser();
       getGroups();
-      console.log("incontext", user);
-      console.log("incontext", groups);
+      // console.log("incontext", user);
+      // console.log("incontext", groups);
     } else {
       console.log("not logged in");
     }
