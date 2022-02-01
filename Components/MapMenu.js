@@ -77,10 +77,10 @@ export default function MapMenu({ setDestinationSelected }) {
         onRequestClose={hideMenu}
       >
         <MenuItem onPress={handleChangeButton}>Change meeting point</MenuItem>
-        <MenuItem disabled onPress={hideMenu}>
+        {/* <MenuItem disabled onPress={hideMenu}>
           Change transport
         </MenuItem>
-        <MenuItem disabled>Live Updates</MenuItem>
+        <MenuItem disabled>Live Updates</MenuItem> */}
         <MenuDivider />
         <MenuItem onPress={handleEndMeeting}>End Meeting</MenuItem>
       </Menu>

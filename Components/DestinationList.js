@@ -80,16 +80,22 @@ export default function DestinationList({
                 containerStyle={theme.listItemContainer}
               >
                 <ListItem.Content>
-                  <ListItem.Title style={theme.header4}>
+                  <ListItem.Title style={theme.ratingText}>
                     {des.name}
                   </ListItem.Title>
-                  <View style={styles.subtitleView}>
-                    <Text style={styles.ratingText}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text style={theme.ratingText2}>
                       {des.rating}/5 (reviewed {des.user_ratings_total} times)
                     </Text>
-                    <Text>
+                    <Text style={[theme.ratingText2, { textAlign: "right" }]}>
                       {" "}
-                      {Math.round(des.distFromCent)}m from central point
+                      {Math.round(des.distFromCent * 100) / 100}m from central
+                      point
                     </Text>
                   </View>
                 </ListItem.Content>
