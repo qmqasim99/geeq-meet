@@ -7,6 +7,7 @@ import {
   getDoc,
   where,
   getDocs,
+  onSnapshot,
 } from "firebase/firestore";
 import { defaultTheme } from "../Themes/Themes";
 
@@ -17,47 +18,58 @@ export const UserProvider = ({ children }) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState({});
   const [currentGroup, setCurrentGroup] = useState({});
-  const [uid, setUid] = useState("");
   const [groups, setGroups] = useState([]);
   // ef83N7qN5beB5oJtm9CgCnW7Ydv1
 
   //extract these to separate API calls, use try catch with async await
 
   const getUser = async () => {
-    setUid(auth.currentUser.uid);
+    // console.log("UID:>>>>>>>>>>", auth.currentUser.uid);
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
+    // console.log("DATA>>>>>>>>>>", docSnap.data());
     setUser(docSnap.data());
   };
 
-  const getGroups = async () => {
-    const q = query(
-      collection(db, "groups"),
-      where(
-        "users",
-        "array-contains",
-        `{name:${user.name},uid:${auth.currentUser.uid}}`
-        //this bit isnt working. maybe its user.name
-      )
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      setGroups((prevGroups) => {
-        return [...prevGroups, doc.data()];
-      });
-    });
-  };
-  useEffect(() => {
-    console.log("cg", currentGroup);
-  }, [currentGroup]);
+  // DEPRECATED IN FAVOUR OF LISTENERS
+  // const q = query(
+  //   collection(db, "groups"),
+  //   where("users", "array-contains", `{uid:${auth.currentUser.uid}}`)
+  // );
+  // const getGroups = async () => {
+  //   const querySnapshot = await getDocs(q);
+  //   querySnapshot.forEach((doc) => {
+  //     setGroups((prevGroups) => {
+  //       return [...prevGroups, doc.data()];
+  //     });
+  //   });
+  // };
 
   useEffect(() => {
     if (auth.currentUser) {
       console.log("I'm getting the bits");
       getUser();
-      getGroups();
-      // console.log("incontext", user);
-      // console.log("incontext", groups);
+
+      // ! Use following line for collection
+      // const unsubscribe = onSnapshot(collection(db, "groups"), (fdocs) => {
+      // ! use following for query
+
+      const q = query(
+        collection(db, "groups"),
+        where("users", "array-contains", `{uid:${auth.currentUser.uid}}`)
+      );
+      const groupListener = onSnapshot(q, (fdocs) => {
+        let groups = [];
+        fdocs.docs.map((doc) => {
+          groups.push({ id: doc.id, ...doc.data() });
+        });
+        console.log("in gettingDocs", groups);
+        setGroups(groups);
+      });
+
+      return () => {
+        groupListener();
+      };
     } else {
       console.log("not logged in");
     }

@@ -28,7 +28,9 @@ const ViewMyGroups = () => {
         }}
       >
         <View style={theme.fListCard}>
-          <Text style={theme.fListText}> {item.group_name}</Text>
+          <Text style={theme.fListText} key={item.group_id}>
+            {item.group_name}
+          </Text>
           {/* <Text style={theme.fListText2}>({item.users.length} members)</Text> */}
         </View>
       </TouchableOpacity>
