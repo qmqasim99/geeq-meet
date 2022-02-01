@@ -1,25 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useState, useEffect, useCallback } from "react";
 
 import { GiftedChat } from "react-native-gifted-chat";
 import {
   collection,
-  doc,
   addDoc,
-  getDocs,
-  getDoc,
-  setDoc,
   query,
-  where,
-  collectionGroup,
-  document,
-  serverTimestamp,
-  updateDoc,
-  arrayUnion,
   orderBy,
-  startAt,
-  endAt,
   onSnapshot,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
