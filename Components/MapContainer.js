@@ -17,38 +17,38 @@ import DestinationList from "../Components/DestinationList";
 import Nav from "./Nav";
 // import { useLoading } from "../hooks/CustomHooks";
 
-export default function MapContainer({ userArray }) {
+export default function MapContainer({ props }) {
   //example props
-  userArray = [
-    {
-      name: "alphie",
-      lat: 53.43553,
-      lng: -2.24406,
-      color: "#A6D1A1",
-      img_url: "https://picsum.photos/200",
-    },
-    {
-      name: "betty",
-      lat: 53.45407,
-      lng: -2.19917,
-      color: "#F2BE2D",
-      img_url: "https://picsum.photos/200",
-    },
-    {
-      name: "cra",
-      lat: 53.47598,
-      lng: -2.28077,
-      color: "#009FE3",
-      img_url: "https://picsum.photos/200",
-    },
-    {
-      name: "dibby",
-      lat: 53.43591,
-      lng: -2.22983,
-      color: "#2B4A9A",
-      img_url: "https://picsum.photos/200",
-    },
-  ];
+  // userArray = [
+  //   {
+  //     name: "alphie",
+  //     lat: 53.43553,
+  //     lng: -2.24406,
+  //     color: "#A6D1A1",
+  //     img_url: "https://picsum.photos/200",
+  //   },
+  //   {
+  //     name: "betty",
+  //     lat: 53.45407,
+  //     lng: -2.19917,
+  //     color: "#F2BE2D",
+  //     img_url: "https://picsum.photos/200",
+  //   },
+  //   {
+  //     name: "cra",
+  //     lat: 53.47598,
+  //     lng: -2.28077,
+  //     color: "#009FE3",
+  //     img_url: "https://picsum.photos/200",
+  //   },
+  //   {
+  //     name: "dibby",
+  //     lat: 53.43591,
+  //     lng: -2.22983,
+  //     color: "#2B4A9A",
+  //     img_url: "https://picsum.photos/200",
+  //   },
+  // ];
   // placeType = "restaurant";
 
   //   const { loadComponent, isLoading, setIsLoading } = useLoading();
@@ -62,15 +62,15 @@ export default function MapContainer({ userArray }) {
   const [zoomDelta, setZoomDelta] = useState({ lat: 0.0, lng: 0.0 });
   const [destinationSelected, setDestinationSelected] = useState(null);
   // const [thisMeet, setThisMeet] = useState({});
-  // const [userArray, setUserArray] = useState({});
+  const [userArray, setUserArray] = useState({});
 
   useEffect(() => {
     // userArray = currentGroup.meet.users;
     setPlaceType(currentGroup.meet.placeType);
+    setUserArray(currentGroup.meet.users);
 
-    //getuserAr from context
-
-    const gmMid = FindGeographicMidpoint(userArray);
+    const gmMid = FindGeographicMidpoint(currentGroup.meet.users);
+    // console.log(currentGroup.meet.users);
     setGmMid(gmMid);
     getPlacesFromApi(gmMid);
     if (destination) {

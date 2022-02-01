@@ -47,8 +47,8 @@ export default function ConfigureMeet() {
       const userRef = doc(db, "users", user.uid);
       const userData = await getDoc(userRef);
       const userEntry = userData.data();
-      user.lat = userEntry.coords.lat;
-      user.lng = userEntry.coords.lng;
+      user.lat = Number(userEntry.coords.lat);
+      user.lng = Number(userEntry.coords.lng);
       console.log("This is the user", user);
     }
 
