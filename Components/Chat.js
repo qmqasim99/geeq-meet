@@ -28,13 +28,13 @@ const Chat = ({ navigation }) => {
   const { currentGroup } = useContext(UserContext);
 
   useEffect(() => {
-    const docRef = doc(db, "groupChats", "8DSdX5SWEYmvh8Zrxn6b");
+    const docRef = doc(db, "groupChats", currentGroup.group_name);
     // console.log("q", docRef);
     // const q = query(docRef, orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(docRef, (doc) => {
       console.log(">>>>>>", doc.data());
       // this should save the messages in order in state
-      // setMessages(doc.data());
+      setMessages(doc.data().messages);
     });
 
     return () => unsubscribe();
@@ -45,8 +45,15 @@ const Chat = ({ navigation }) => {
       GiftedChat.append(previousMessages, messages)
     );
     const { _id, createdAt, text, user } = messages[0];
-    updateDoc(doc(db, "groupChats", currentGroup.id), {
-      _id: { createdAt, text, user },
+    const messageToSend = {};
+    messages.push({ createdAt, text, user });
+    // var tempObj = {createdAt, text, user}
+    //     {[tempObj]}.value = _id;
+
+    const test = {};
+    test[`${_id}`] = { createdAt, text, user };
+    updateDoc(doc(db, "groupChats", currentGroup.group_name), {
+      messages,
     });
     console.log("message has been sent!");
   }, []);

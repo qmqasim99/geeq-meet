@@ -79,13 +79,13 @@ export default function CreateGroup({ navigation }) {
 
         <View style={theme.container}>
           <TextInput
-            style={theme.header2}
+            style={theme.loginInput}
             placeholder="Group name!"
             onChangeText={(newText) => setGroupName(newText)}
             defaultValue={groupName}
           />
           <TextInput
-            style={theme.header2}
+            style={theme.loginInput}
             placeholder="Avatar url"
             onChangeText={(newText) => setGroupAvatar(newText)}
             defaultValue={groupAvatar}
@@ -101,8 +101,8 @@ export default function CreateGroup({ navigation }) {
             />
           ) : (
             <Text style={theme.header3}>
-              No Avatar? No Problem! <br /> Your group will be assigned a random
-              image from the vaults.
+              No Avatar? No Problem! Your group will be assigned a random image
+              from the vaults.
             </Text>
           )}
           <Button style={theme.button} title="Submit" onPress={handleSubmit} />
