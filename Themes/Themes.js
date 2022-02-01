@@ -81,11 +81,27 @@ export const defaultTheme = {
     alignItems: "center",
     flexDirection: "column",
   },
+  listItemContainer: {
+    backgroundColor: palette.midBlue,
+    padding: 5,
+    height: 60,
+    margin: 2,
+    width: "100%",
+  },
   scrollContainer: {
     backgroundColor: palette.darkBlue,
     flexDirection: "column",
     justifyContent: "space_between",
     padding: 5,
+  },
+  picker: {
+    backgroundColor: palette.yellow,
+    color: palette.darkBlue,
+    fontSize: 22,
+    width: "100%",
+    borderRadius: 20,
+
+    // transform: "translateX(-50%)",
   },
   homeContainer: {
     backgroundColor: palette.darkBlue,
@@ -94,9 +110,14 @@ export const defaultTheme = {
     flexDirection: "column",
     padding: 5,
   },
+  letsMeetButton: {
+    border: "red",
+    position: "absolute",
+    bottom: 50,
+    flex: "grow",
+  },
   inputContainer: {
     width: "70%",
-    flex: 4,
     justifyContent: "center",
     alignItems: "center",
   },

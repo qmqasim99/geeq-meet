@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ListItem, Icon } from "react-native-elements";
 import { calcMapZoomDelta, findDistanceInM } from "../Utils/utils";
+import { ThemeContext } from "../Context/Context";
 
 export default function DestinationList({
   destinationArray,
@@ -9,8 +10,10 @@ export default function DestinationList({
   setDestinationSelected,
   setZoomDelta,
   gmMid,
+  placeType,
 }) {
   const [listLoaded, setListLoaded] = useState(false);
+  const theme = useContext(ThemeContext);
   useEffect(() => {
     destinationArray.forEach((des) => {
       const distFromCentre = findDistanceInM(
@@ -22,7 +25,7 @@ export default function DestinationList({
       des.distFromCent = distFromCentre;
       setListLoaded(true);
     });
-  }, []);
+  }, [destinationArray]);
 
   const handleSelect = (des) => {
     setDestination({
@@ -37,32 +40,38 @@ export default function DestinationList({
   };
 
   return (
-    listLoaded && (
-      <ScrollView>
-        {destinationArray.map((des, i) => {
-          return (
-            <ListItem
-              key={i}
-              title={des.name}
-              onPress={(e) => handleSelect(des)}
-            >
-              <ListItem.Content>
-                <ListItem.Title>{des.name}</ListItem.Title>
-                <View style={styles.subtitleView}>
-                  <Text style={styles.ratingText}>
-                    {des.rating}/5 (reviewed {des.user_ratings_total} times)
-                  </Text>
-                  <Text>
-                    {" "}
-                    {Math.round(des.distFromCent)}m from central point
-                  </Text>
-                </View>
-              </ListItem.Content>
-            </ListItem>
-          );
-        })}
-      </ScrollView>
-    )
+    <View style={theme.homeContainer}>
+      <Text style={theme.header}>{placeType}'s between you</Text>
+      {listLoaded && (
+        <ScrollView>
+          {destinationArray.map((des, i) => {
+            return (
+              <ListItem
+                key={i}
+                title={des.name}
+                onPress={(e) => handleSelect(des)}
+                containerStyle={theme.listItemContainer}
+              >
+                <ListItem.Content>
+                  <ListItem.Title style={theme.header4}>
+                    {des.name}
+                  </ListItem.Title>
+                  <View style={styles.subtitleView}>
+                    <Text style={styles.ratingText}>
+                      {des.rating}/5 (reviewed {des.user_ratings_total} times)
+                    </Text>
+                    <Text>
+                      {" "}
+                      {Math.round(des.distFromCent)}m from central point
+                    </Text>
+                  </View>
+                </ListItem.Content>
+              </ListItem>
+            );
+          })}
+        </ScrollView>
+      )}
+    </View>
   );
 }
 
