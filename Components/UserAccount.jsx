@@ -108,6 +108,8 @@ const UserAccount = ({ route }) => {
         <>
           <Text style={styles.heading}>User Name</Text>
           <Text style={styles.heading}>{user.name}</Text>
+          <Text style={styles.heading}>Email</Text>
+          <Text style={styles.heading}>{user.email}</Text>
           <Image source={{ uri: user.avatar }} style={styles.avatar} />
           <Text style={styles.heading}>Default Transport</Text>
           <Text style={styles.heading}>{user.transport}</Text>
