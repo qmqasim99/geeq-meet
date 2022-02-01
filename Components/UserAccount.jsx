@@ -4,7 +4,8 @@ import { auth, db } from "../firebase";
 import { updateEmail, updateProfile } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-const UserAccount = ({ uid }) => {
+const UserAccount = ({ route }) => {
+  const { user_id } = route.params;
   const [authUid, setAuthUid] = useState(auth.currentUser.uid);
   const [user, setUser] = useState({});
   const [isEditable, setIsEditable] = useState(false);
@@ -12,7 +13,7 @@ const UserAccount = ({ uid }) => {
   //pass in uid for user and if uid matches then edit fields appear & submit button enabled
 
   const fetchUser = async () => {
-    const userRef = doc(db, "users", uid);
+    const userRef = doc(db, "users", user_id);
     const userInfo = await getDoc(userRef);
     return userInfo.data();
   };
@@ -31,7 +32,7 @@ const UserAccount = ({ uid }) => {
       })
       .catch((err) => alert(err));
 
-    if (authUid === uid) {
+    if (authUid === user_id) {
       setIsEditable(true);
     }
   }, []);
