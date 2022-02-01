@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { ListItem, Icon, Button } from "react-native-elements";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
 
@@ -40,6 +40,19 @@ export default function ConfigureMeet() {
 
   const handleConfigureMeet = async (item) => {
     console.log("adding meet");
+    // console.log(currentGroup);
+
+    for await (const user of usersToMeet) {
+      // usersToMeet.map(async (user) => {
+      const userRef = doc(db, "users", user.uid);
+      const userData = await getDoc(userRef);
+      const userEntry = userData.data();
+      user.lat = userEntry.coords.lat;
+      user.lng = userEntry.coords.lng;
+      console.log("This is the user", user);
+    }
+
+    console.log("users to meet:", usersToMeet);
     //create meet obj
     const meetObj = {
       // id: Date.now(),

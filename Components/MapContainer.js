@@ -17,7 +17,7 @@ import DestinationList from "../Components/DestinationList";
 import Nav from "./Nav";
 // import { useLoading } from "../hooks/CustomHooks";
 
-export default function MapContainer({}) {
+export default function MapContainer({ userArray }) {
   //example props
   userArray = [
     {
@@ -62,11 +62,13 @@ export default function MapContainer({}) {
   const [zoomDelta, setZoomDelta] = useState({ lat: 0.0, lng: 0.0 });
   const [destinationSelected, setDestinationSelected] = useState(null);
   // const [thisMeet, setThisMeet] = useState({});
-  const [userArray, setUserArray] = useState({});
+  // const [userArray, setUserArray] = useState({});
 
   useEffect(() => {
     // userArray = currentGroup.meet.users;
     setPlaceType(currentGroup.meet.placeType);
+
+    //getuserAr from context
 
     const gmMid = FindGeographicMidpoint(userArray);
     setGmMid(gmMid);

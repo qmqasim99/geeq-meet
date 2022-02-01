@@ -48,7 +48,7 @@ export const UserProvider = ({ children }) => {
     });
   };
   useEffect(() => {
-    console.log("cg", currentGroup);
+    // console.log("cg", currentGroup);
   }, [currentGroup]);
 
   useEffect(() => {

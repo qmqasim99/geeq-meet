@@ -11,7 +11,7 @@ export default function MapMenu({ setDestinationSelected }) {
     setDestinationSelected(false);
     setVisible(false);
   };
-  const handleEndMeeting = () => {
+  const handleEndMeeting = async () => {
     //change daatabase
     //update context
   };
