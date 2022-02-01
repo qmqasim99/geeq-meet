@@ -9,8 +9,6 @@ const Nav = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const route = useRoute();
-
   const handleNavigate = (value) => {
     console.log(route);
 
