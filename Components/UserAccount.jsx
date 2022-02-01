@@ -3,20 +3,12 @@ import { Text, TextInput, View, Image, StyleSheet, Button } from "react-native";
 import { auth, db } from "../firebase";
 import { updateEmail, updateProfile } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { fetchUser } from "../Utils/APIutils";
 
 const UserAccount = ({ route }) => {
   const { user_id } = route.params;
-  const [authUid, setAuthUid] = useState(auth.currentUser.uid);
   const [user, setUser] = useState({});
   const [isEditable, setIsEditable] = useState(false);
-  //need to make logic so it only editable if you are on your own page
-  //pass in uid for user and if uid matches then edit fields appear & submit button enabled
-
-  const fetchUser = async () => {
-    const userRef = doc(db, "users", user_id);
-    const userInfo = await getDoc(userRef);
-    return userInfo.data();
-  };
 
   useEffect(() => {
     const data = fetchUser();
@@ -25,14 +17,13 @@ const UserAccount = ({ route }) => {
         setUser({
           email: res.email,
           name: res.name,
-          userName: res.userName,
           avatar: res.avatar,
           transport: res.transport,
         });
       })
       .catch((err) => alert(err));
 
-    if (authUid === user_id) {
+    if (auth.currentUser.uid === user_id) {
       setIsEditable(true);
     }
   }, []);
@@ -47,7 +38,7 @@ const UserAccount = ({ route }) => {
 
     const dbUpdate = updateDoc(doc(db, "users", uid), {
       email: user.email,
-      userName: user.userName,
+      name: user.name,
       avatar: user.avatar,
       transport: user.transport,
     });
@@ -73,9 +64,9 @@ const UserAccount = ({ route }) => {
               });
             }}
           />
-          <Text style={styles.heading}>User Name</Text>
+          <Text style={styles.heading}>Name</Text>
           <TextInput
-            value={user.userName}
+            value={user.name}
             placeholder={"Update Me!"}
             style={styles.input}
             onChangeText={(text) => {
@@ -112,12 +103,13 @@ const UserAccount = ({ route }) => {
             }}
             style={styles.input}
           />
+          {/* Add Colour picked to update marker colour */}
           <Button title="Submit" onPress={handleSubmit} />{" "}
         </>
       ) : (
         <>
           <Text style={styles.heading}>User Name</Text>
-          <Text style={styles.heading}>{user.userName}</Text>
+          <Text style={styles.heading}>{user.name}</Text>
           <Image source={{ uri: user.avatar }} style={styles.avatar} />
           <Text style={styles.heading}>Default Transport</Text>
           <Text style={styles.heading}>{user.transport}</Text>
