@@ -44,6 +44,7 @@ async function ExitGroup(db) {
   // };
 
   //document reference
+  //unhandleded promise
   const groupRef = db.collection("groups").doc("group_name");
   console.log(group_name);
 
