@@ -191,4 +191,6 @@ export const defaultTheme = {
   label: {
     margin: 8,
   },
+  activeMeetAlert: { alignItems: "center", backgroundColor: palette.red },
+  alertText: { fontWeight: "bold", fontSize: 22, color: palette.darkBlue },
 };

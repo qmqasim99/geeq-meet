@@ -167,11 +167,18 @@ const SingleGroupPage = ({ route, navigation }) => {
 
   return (
     <View style={[theme.scrollContainer, { flex: 7 }]}>
-      {/* <Link
-          to={{ screen: "InviteTest", params: { uid: "K5XmEen38Qx4LcTbY3nS" } }}
+      <View style={theme.activeMeetAlert}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Map");
+          }}
+          to={{
+            screen: "Map",
+          }}
         >
-          Test User Invite
-        </Link> */}
+          <Text style={theme.alertText}>MEETING ACTIVE</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* //this view contains group name and image */}
       <View style={{ flexGrow: 1, alignItems: "center" }}>

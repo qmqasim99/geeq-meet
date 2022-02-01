@@ -11,6 +11,10 @@ export default function MapMenu({ setDestinationSelected }) {
     setDestinationSelected(false);
     setVisible(false);
   };
+  const handleEndMeeting = () => {
+    //change daatabase
+    //update context
+  };
 
   const showMenu = () => setVisible(true);
   /*
@@ -43,9 +47,7 @@ export default function MapMenu({ setDestinationSelected }) {
         </MenuItem>
         <MenuItem disabled>Live Updates</MenuItem>
         <MenuDivider />
-        <MenuItem disabled onPress={hideMenu}>
-          End Meeting
-        </MenuItem>
+        <MenuItem onPress={handleEndMeeting}>End Meeting</MenuItem>
       </Menu>
     </View>
   );
