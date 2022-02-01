@@ -49,7 +49,7 @@ const CustomMarker = ({ user, type, mapPress }) => {
               <Path
                 d="M46 0A45.94 45.94 0 0 0 0 45.94c0 25.38 46 83.79 46 83.79s45.89-58.41 45.89-83.79A45.94 45.94 0 0 0 46 0Zm0 76.88a30.58 30.58 0 1 1 30.52-30.57A30.58 30.58 0 0 1 46 76.88Z"
                 style={{
-                  fill: user.color,
+                  fill: user.colour,
                 }}
                 data-name="Layer 1"
               />
@@ -60,7 +60,7 @@ const CustomMarker = ({ user, type, mapPress }) => {
               textAnchor="middle"
               fontWeight="bold"
               fontSize="80"
-              fill={user.color}
+              fill={user.colour}
             >
               {user.name.substring(0, 1)}
             </Text>

@@ -10,7 +10,7 @@ export default function MapRoute({ user, destination_id }) {
       destination={`place_id:${destination_id}`}
       apikey={GOOGLE_API_KEY}
       strokeWidth={3}
-      strokeColor={user.color}
+      strokeColor={user.colour}
       mode={"TRANSIT"}
       onReady={(result) => {
         // console.log(Object.keys(result)); get route duration here

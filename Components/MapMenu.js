@@ -1,15 +1,54 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 import { Icon } from "react-native-elements";
+import { NavigationContainer } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/core";
+import { auth, db } from "../firebase";
+import { UserContext, ThemeContext } from "../Context/Context";
+
+import {
+  collection,
+  doc,
+  addDoc,
+  getDocs,
+  getDoc,
+  setDoc,
+  query,
+  where,
+  collectionGroup,
+  document,
+  serverTimestamp,
+  updateDoc,
+  arrayUnion,
+  orderBy,
+  startAt,
+  endAt,
+} from "firebase/firestore";
 
 export default function MapMenu({ setDestinationSelected }) {
+  const { currentGroup, setCurrentGroup } = useContext(UserContext);
+  const navigation = useNavigation();
+
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
 
   const handleChangeButton = () => {
     setDestinationSelected(false);
     setVisible(false);
+  };
+  const handleEndMeeting = async () => {
+    //update destination in database
+    const docRef = doc(db, "groups", currentGroup.id);
+    await updateDoc(docRef, {
+      "meets.active": false,
+    });
+
+    //update destination in context
+    const groupDeepCopy = JSON.parse(JSON.stringify(currentGroup));
+    groupDeepCopy.meets.active = false;
+    setCurrentGroup(groupDeepCopy);
+    navigation.navigate("Home");
   };
 
   const showMenu = () => setVisible(true);
@@ -38,14 +77,12 @@ export default function MapMenu({ setDestinationSelected }) {
         onRequestClose={hideMenu}
       >
         <MenuItem onPress={handleChangeButton}>Change meeting point</MenuItem>
-        <MenuItem disabled onPress={hideMenu}>
+        {/* <MenuItem disabled onPress={hideMenu}>
           Change transport
         </MenuItem>
-        <MenuItem disabled>Live Updates</MenuItem>
+        <MenuItem disabled>Live Updates</MenuItem> */}
         <MenuDivider />
-        <MenuItem disabled onPress={hideMenu}>
-          End Meeting
-        </MenuItem>
+        <MenuItem onPress={handleEndMeeting}>End Meeting</MenuItem>
       </Menu>
     </View>
   );

@@ -45,7 +45,7 @@ export const createPlaceSearchUrl = (
   latitude,
   longitude,
   type = "cafe",
-  radius = 1000
+  radius = 10000
 ) => {
   const baseUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?`;
   const location = `location=${latitude},${longitude}&radius=${radius}`;

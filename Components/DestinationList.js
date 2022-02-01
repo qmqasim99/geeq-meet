@@ -2,7 +2,9 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { ListItem, Icon } from "react-native-elements";
 import { calcMapZoomDelta, findDistanceInM } from "../Utils/utils";
-import { ThemeContext } from "../Context/Context";
+import { ThemeContext, UserContext } from "../Context/Context";
+import { doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 export default function DestinationList({
   destinationArray,
@@ -14,6 +16,7 @@ export default function DestinationList({
 }) {
   const [listLoaded, setListLoaded] = useState(false);
   const theme = useContext(ThemeContext);
+  const { currentGroup, setCurrentGroup } = useContext(UserContext);
   useEffect(() => {
     destinationArray.forEach((des) => {
       const distFromCentre = findDistanceInM(
@@ -27,7 +30,7 @@ export default function DestinationList({
     });
   }, [destinationArray]);
 
-  const handleSelect = (des) => {
+  const handleSelect = async (des) => {
     setDestination({
       place_id: des.place_id,
       place_name: des.name,
@@ -35,6 +38,30 @@ export default function DestinationList({
       lat: des.geometry.location.lat,
       lng: des.geometry.location.lng,
     });
+
+    //update destination in database
+    const docRef = doc(db, "groups", currentGroup.id);
+    await updateDoc(docRef, {
+      "meets.destination": {
+        place_id: des.place_id,
+        place_name: des.name,
+        vicinity: des.vicinity,
+        lat: des.geometry.location.lat,
+        lng: des.geometry.location.lng,
+      },
+    });
+    //do the same for all users
+
+    //update destination in context
+    const groupDeepCopy = JSON.parse(JSON.stringify(currentGroup));
+    groupDeepCopy.meets.destination = {
+      place_id: des.place_id,
+      place_name: des.name,
+      vicinity: des.vicinity,
+      lat: des.geometry.location.lat,
+      lng: des.geometry.location.lng,
+    };
+    setCurrentGroup(groupDeepCopy);
 
     setDestinationSelected(true);
   };
@@ -53,16 +80,22 @@ export default function DestinationList({
                 containerStyle={theme.listItemContainer}
               >
                 <ListItem.Content>
-                  <ListItem.Title style={theme.header4}>
+                  <ListItem.Title style={theme.ratingText}>
                     {des.name}
                   </ListItem.Title>
-                  <View style={styles.subtitleView}>
-                    <Text style={styles.ratingText}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text style={theme.ratingText2}>
                       {des.rating}/5 (reviewed {des.user_ratings_total} times)
                     </Text>
-                    <Text>
+                    <Text style={[theme.ratingText2, { textAlign: "right" }]}>
                       {" "}
-                      {Math.round(des.distFromCent)}m from central point
+                      {Math.round(des.distFromCent * 100) / 100}m from central
+                      point
                     </Text>
                   </View>
                 </ListItem.Content>
@@ -76,25 +109,3 @@ export default function DestinationList({
 }
 
 const styles = StyleSheet.create({});
-
-// <Provider>
-//       <View
-//         style={{
-//           paddingTop: 50,
-//           flexDirection: "row",
-//           justifyContent: "center",
-//         }}
-//       >
-//         <Menu
-//           visible={visible}
-//           onDismiss={closeMenu}
-//           anchor={<Button onPress={openMenu}>Show menu</Button>}
-//         >
-//           {" "}
-//           <Menu.Item onPress={() => {}} title="Item 1" />
-//           <Menu.Item onPress={() => {}} title="Item 2" />
-//           <Divider />
-//           <Menu.Item onPress={() => {}} title="Item 3" />
-//         </Menu>
-//       </View>
-//     </Provider>

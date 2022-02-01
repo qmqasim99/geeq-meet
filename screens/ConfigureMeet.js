@@ -8,6 +8,9 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { ListItem, Icon, Button } from "react-native-elements";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+
+import { auth, db } from "../firebase";
 
 import { useNavigation } from "@react-navigation/native";
 import { UserContext, ThemeContext } from "../Context/Context";
@@ -17,6 +20,7 @@ export default function ConfigureMeet() {
   const theme = useContext(ThemeContext);
   const { currentGroup, setCurrentGroup } = useContext(UserContext);
   const [usersToMeet, setUsersToMeet] = useState(currentGroup.users);
+  const [meetSaved, setMeetSaved] = useState(false);
 
   const [selectedValue, setSelectedValue] = useState("Cafe");
   const meetTypeList = ["Cafe", "Restaurant", "Cinema", "Park", "Pub"];
@@ -25,6 +29,7 @@ export default function ConfigureMeet() {
   useEffect(() => {
     setUsersToMeet(currentGroup.users);
   }, [currentGroup]);
+
   useEffect(() => {}, [usersToMeet]);
 
   const handleExcludeUser = (user) => {
@@ -34,19 +39,42 @@ export default function ConfigureMeet() {
     setUsersToMeet(newUsersToMeet);
   };
 
-  const handleConfigureMeet = (e) => {
+  const handleConfigureMeet = async (item) => {
+    console.log("adding meet");
+
+    for await (const user of usersToMeet) {
+      // usersToMeet.map(async (user) => {
+      const userRef = doc(db, "users", user.uid);
+      const userData = await getDoc(userRef);
+      const userEntry = userData.data();
+      user.lat = Number(userEntry.coords.lat);
+      user.lng = Number(userEntry.coords.lng);
+      user.colour = userEntry.colour;
+    }
+
     //create meet obj
     const meetObj = {
+      // id: Date.now(),
       users: usersToMeet,
       placeType: selectedValue,
+      active: true,
     };
 
-    //update group database
+    const groupDeepCopy = JSON.parse(JSON.stringify(currentGroup));
+    // const newGroupObj = groupDeepCopy.meets.push(meetObj); // bring  this back when you are saving a meets array and have single object working
+
+    //update group and user database
+    const docRef = doc(db, "groups", currentGroup.id);
+    await updateDoc(docRef, { meets: meetObj });
+    console.log("database updated");
+
+    //DO FOR USERS
 
     //store meet Obj in group Context
-    const groupDeepCopy = JSON.parse(JSON.stringify(currentGroup));
-    groupDeepCopy.meet = meetObj;
-    setCurrentGroup(groupDeepCopy);
+    console.log("updating context");
+
+    groupDeepCopy.meets = meetObj;
+    setCurrentGroup(groupDeepCopy); // add group to array!!
     //nav to map
     navigation.navigate("MapContainer");
   };
