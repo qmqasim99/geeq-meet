@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Text, TextInput, View, Image, StyleSheet, Button } from "react-native";
 import { auth, db } from "../firebase";
 import { updateEmail, updateProfile } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { fetchUser } from "../Utils/APIutils";
 
 const UserAccount = ({ route }) => {
@@ -11,7 +11,7 @@ const UserAccount = ({ route }) => {
   const [isEditable, setIsEditable] = useState(false);
 
   useEffect(() => {
-    const data = fetchUser();
+    const data = fetchUser(user_id);
     data
       .then((res) => {
         setUser({
@@ -36,7 +36,7 @@ const UserAccount = ({ route }) => {
       photoURL: user.avatar,
     });
 
-    const dbUpdate = updateDoc(doc(db, "users", uid), {
+    const dbUpdate = updateDoc(doc(db, "users", auth.currentUser.uid), {
       email: user.email,
       name: user.name,
       avatar: user.avatar,
@@ -92,7 +92,6 @@ const UserAccount = ({ route }) => {
             style={styles.input}
           />
           <Text style={styles.heading}>Default Transport</Text>
-          {/* This will be a dropdown eventually */}
           <TextInput
             placeholder={"Update Me!"}
             value={user.transport}
@@ -103,8 +102,7 @@ const UserAccount = ({ route }) => {
             }}
             style={styles.input}
           />
-          {/* Add Colour picked to update marker colour */}
-          <Button title="Submit" onPress={handleSubmit} />{" "}
+          <Button title="Submit" onPress={handleSubmit} />
         </>
       ) : (
         <>

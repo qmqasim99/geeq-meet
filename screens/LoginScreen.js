@@ -48,7 +48,6 @@ const LoginScreen = () => {
     return unsubscribe;
   }, []);
 
-  // const randColourNum = () => Math.floor(Math.random() * 255);
   const randColourHex = () => {
     let num = Math.floor(Math.random() * 255);
     let hex = parseInt(num).toString(16);
