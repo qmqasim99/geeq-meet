@@ -23,7 +23,9 @@ const HomeScreen = () => {
   const theme = useContext(ThemeContext);
   const { user } = useContext(UserContext);
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   // const handleSignOut = () => {
   //   auth
@@ -37,7 +39,7 @@ const HomeScreen = () => {
   return (
     <View style={theme.homeContainer}>
       <UserMenu style={{ position: "absolute" }} />
-      <Text style={theme.header}>Welcome {auth.currentUser?.email}</Text>
+      <Text style={theme.header}>Welcome {user.name}</Text>
 
       <ScrollView>
         <Text style={theme.header2}>Invites</Text>
