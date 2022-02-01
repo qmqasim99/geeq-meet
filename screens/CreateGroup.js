@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Button } from "react-native";
+import { Text, View, TextInput, Button, Image } from "react-native";
 import {
   collection,
   doc,
@@ -90,7 +90,21 @@ export default function CreateGroup({ navigation }) {
             onChangeText={(newText) => setGroupAvatar(newText)}
             defaultValue={groupAvatar}
           />
-
+          {groupAvatar ? (
+            <Image
+              source={{ uri: groupAvatar }}
+              style={{
+                height: 200,
+                width: 200,
+                borderRadius: "100%",
+              }}
+            />
+          ) : (
+            <Text style={theme.header3}>
+              No Avatar? No Problem! <br /> Your group will be assigned a random
+              image from the vaults.
+            </Text>
+          )}
           <Button style={theme.button} title="Submit" onPress={handleSubmit} />
         </View>
       </View>

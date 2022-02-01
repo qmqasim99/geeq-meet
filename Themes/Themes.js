@@ -5,7 +5,7 @@ const palette = {
   green: "#A6D1A1",
   red: "#E6332A",
   black: "#0B0B0B",
-  grey: "#676766",
+  grey: "#b9b9b0",
   yellow: "#F2BE2D",
   transparent: "rgba(0,0,0,0)",
 };
