@@ -21,7 +21,6 @@ import { useState, useEffect } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-web";
 import GlobalCSS from "../GlobalCSS";
 import { Link } from "@react-navigation/native";
-import CreateGroup from "./CreateGroup";
 
 export default function ViewGroups({ navigation }) {
   //const navigation = useNavigation();
@@ -82,7 +81,6 @@ export default function ViewGroups({ navigation }) {
   return (
     <>
       <ScrollView>
-        <CreateGroup />
         <View style={(GlobalCSS.container, GlobalCSS.viewBorder)}>
           {groups.map((group) => {
             return (

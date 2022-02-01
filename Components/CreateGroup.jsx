@@ -8,12 +8,15 @@ import {
   addDoc,
   getDocs,
   getDoc,
+  updateDoc,
+  arrayUnion,
   setDoc,
   query,
   where,
   collectionGroup,
   document,
   serverTimestamp,
+  Timestamp,
 } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
@@ -26,13 +29,13 @@ export default function CreateGroup({ navigation }) {
   //const navigation = useNavigation();
   const collRef = collection(db, 'groups');
   const [user, setUser] = useState({});
-  const uid = 'ef83N7qN5beB5oJtm9CgCnW7Ydv1'; // auth.currentUser.uid;
+  const uid = auth.currentUser.uid; //ef83N7qN5beB5oJtm9CgCnW7Ydv1
   console.log('auth ', uid);
 
   const docRef = doc(db, 'users', uid);
 
   const [groupName, setGroupName] = useState('');
-  const [groupAvatar, setGroupAvatar] = useState('');
+  const [groupAvatar, setGroupAvatar] = useState(''); // https://freesvg.org/img/group.png
 
   // get a single user
   const getUser = async () => {
@@ -46,18 +49,34 @@ export default function CreateGroup({ navigation }) {
     getUser();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (groupName.trim() === '') {
       alert('Please enter new group name');
       return;
     }
-    addDoc(collRef, {
+
+    let timestamp = Timestamp.now();
+
+    // add to groups collection
+    const newGroupCreated = await addDoc(collRef, {
       group_name: groupName,
       avatar: groupAvatar,
-      created_at: serverTimestamp(),
+      created_at: timestamp,
       users: [{ name: user.name, uid }],
     });
+
+    // add this group to users doc
+    console.log('new group id: ', newGroupCreated.id);
+    const newGroup = {
+      group_name: groupName,
+      group_id: newGroupCreated.id,
+      created_at: timestamp,
+    };
+
+    const docRef = doc(db, 'users', uid);
+    updateDoc(docRef, { groups: arrayUnion(newGroup) });
+
     console.log('form sumitted');
   };
 

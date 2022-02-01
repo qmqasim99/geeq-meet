@@ -9,10 +9,12 @@ const Nav = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
+  const route = useRoute();
+
   const handleNavigate = (value) => {
     console.log(route);
 
-    if (value === 1) {
+    if (value === 0) {
       navigation.navigate("Home");
     }
     if (value === 1) {
