@@ -1,41 +1,31 @@
-import { useNavigation } from "@react-navigation/core";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import { Link } from "@react-navigation/native";
+import { Text, View, TextInput, Button, Image } from "react-native";
 import {
   collection,
   doc,
   addDoc,
-  getDocs,
   getDoc,
   updateDoc,
   arrayUnion,
-  setDoc,
-  query,
-  where,
-  collectionGroup,
-  document,
-  serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import GlobalCSS from "../GlobalCSS";
 import { ScrollView } from "react-native-web";
-import ViewGroups from "./ViewGroups";
+import { ThemeContext } from "../Context/Context";
+import InviteTest from "../Components/InviteTest";
 
 export default function CreateGroup({ navigation }) {
-  //const navigation = useNavigation();
+  const theme = useContext(ThemeContext);
   const collRef = collection(db, "groups");
   const [user, setUser] = useState({});
-  const uid = auth.currentUser.uid; //ef83N7qN5beB5oJtm9CgCnW7Ydv1
+  const uid = auth.currentUser.uid;
   console.log("auth ", uid);
 
   const docRef = doc(db, "users", uid);
 
   const [groupName, setGroupName] = useState("");
-  const [groupAvatar, setGroupAvatar] = useState(""); // https://freesvg.org/img/group.png
+  const [groupAvatar, setGroupAvatar] = useState("");
 
   // get a single user
   const getUser = async () => {
@@ -64,7 +54,6 @@ export default function CreateGroup({ navigation }) {
       avatar: groupAvatar,
       created_at: timestamp,
       users: [{ name: user.name, uid }],
-      meets: [],
     });
 
     // add this group to users doc
@@ -73,40 +62,56 @@ export default function CreateGroup({ navigation }) {
       group_name: groupName,
       group_id: newGroupCreated.id,
       created_at: timestamp,
-      meets: [],
     };
 
     const docRef = doc(db, "users", uid);
-    updateDoc(docRef, { groups: arrayUnion(newGroup) });
+    updateDoc(docRef, { groups: arrayUnion(newGroup) }).then(
+      navigation.navigate("Group", { group_id: newGroupCreated.id })
+    );
 
     console.log("form sumitted");
   };
 
   return (
     <>
-      <View style={GlobalCSS.container}>
-        <Text>Create a new group</Text>
+      <View style={theme.homeContainer}>
+        <Text style={theme.header}>Create a new group</Text>
 
-        <View style={{ padding: 10 }}>
+        <View style={theme.container}>
           <TextInput
-            style={{ height: 40 }}
+            style={theme.header2}
             placeholder="Group name!"
             onChangeText={(newText) => setGroupName(newText)}
             defaultValue={groupName}
           />
           <TextInput
-            style={{ height: 40 }}
+            style={theme.header2}
             placeholder="Avatar url"
             onChangeText={(newText) => setGroupAvatar(newText)}
             defaultValue={groupAvatar}
           />
-
-          <Button title="Submit" onPress={handleSubmit} />
+          {groupAvatar ? (
+            <Image
+              source={{ uri: groupAvatar }}
+              style={{
+                height: 200,
+                width: 200,
+                borderRadius: "100%",
+              }}
+            />
+          ) : (
+            <Text style={theme.header3}>
+              No Avatar? No Problem! <br /> Your group will be assigned a random
+              image from the vaults.
+            </Text>
+          )}
+          <Button style={theme.button} title="Submit" onPress={handleSubmit} />
         </View>
       </View>
-      <Link
+
+      {/* <Link
         to={{
-          screen: "ViewGroups",
+          screen: 'ViewGroups',
         }}
       >
         View all groups
@@ -114,12 +119,12 @@ export default function CreateGroup({ navigation }) {
 
       <Link
         to={{
-          screen: "Group",
-          params: { group_id: "4cXw12VSrQoKHmKsL1Di" },
+          screen: 'Group',
+          params: { group_id: '4cXw12VSrQoKHmKsL1Di' },
         }}
       >
         Go to a group
-      </Link>
+      </Link> */}
     </>
   );
 }

@@ -73,7 +73,7 @@ const ViewMyGroups = () => {
   console.log("line 72");
 
   useEffect(() => {
-    console.log("groups", user.groups);
+    console.log("groups", groups);
     setTempGroups(user.groups);
   }, [user, tempGroups]);
 
@@ -106,7 +106,7 @@ const ViewMyGroups = () => {
     <>
       <View>
         <FlatList
-          data={tempGroups}
+          data={user.groups}
           renderItem={renderGroupList}
           keyExtractor={(item) => item.group_id}
           style={theme.fListArea}

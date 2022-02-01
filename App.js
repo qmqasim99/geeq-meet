@@ -25,7 +25,7 @@ import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ConfigureMeet from "./screens/ConfigureMeet";
 import FirebaseTesting from "./Components/FirebaseTesting";
-import Chat_2 from "./Components/Chat_2";
+import Chat from "./Components/Chat";
 
 import SingleGroupPage from "./Components/SingleGroupPage";
 
@@ -36,11 +36,12 @@ import contextTest1 from "./Components/contextTest1";
 import contextTest2 from "./Components/contextTest2";
 import { testTheme } from "./Themes/Themes";
 import { NavigationContainer } from "@react-navigation/native";
+import CreateGroup from "./screens/CreateGroup";
 
 const Stack = createNativeStackNavigator();
-// import { LogBox } from "react-native";
-// LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
-// LogBox.ignoreAllLogs(); //Ignore all log notifications
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 export default function App() {
   return (
@@ -55,10 +56,11 @@ export default function App() {
             />
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="UserAccount" component={UserAccount} />
-            <Stack.Screen name="Chat_2" component={Chat_2} />
+            <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Group" component={SingleGroupPage} />
             <Stack.Screen name="MapContainer" component={MapContainer} />
             <Stack.Screen name="Map" component={MapScreen} />
+            <Stack.Screen name="CreateGroup" component={CreateGroup} />
             <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
           </Stack.Navigator>
         </NavigationContainer>

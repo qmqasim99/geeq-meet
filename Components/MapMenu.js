@@ -62,9 +62,11 @@ export default function MapMenu({ setDestinationSelected }) {
   return (
     <View
       style={{
-        height: "10%",
-        alignItems: "right",
-        justifyContent: "right",
+        // height: "10%",
+        // alignItems: "right",
+        // justifyContent: "right",
+        top: 100,
+        margin: 20,
       }}
     >
       <Menu
