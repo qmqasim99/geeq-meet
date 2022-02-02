@@ -32,8 +32,9 @@ const Chat = ({ navigation }) => {
     // console.log("q", docRef);
     // const q = query(docRef, orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(docRef, (doc) => {
-      console.log(">>>>>>", doc.data());
+      // console.log(">>>>>>", doc.data());
       // this should save the messages in order in state
+      // const deepMessage = JSON.parse(JSON.stringify(doc.data().messages));
       setMessages(doc.data().messages);
     });
 
@@ -45,8 +46,10 @@ const Chat = ({ navigation }) => {
       GiftedChat.append(previousMessages, messages)
     );
     const { _id, createdAt, text, user } = messages[0];
+    // console.log(_id, createdAt, text, user);
     const messageToSend = {};
-    messages.push({ createdAt, text, user });
+    messages.push({ _id, createdAt, text, user });
+    // console.log(messages);
     // var tempObj = {createdAt, text, user}
     //     {[tempObj]}.value = _id;
 

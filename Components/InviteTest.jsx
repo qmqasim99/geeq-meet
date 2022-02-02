@@ -105,7 +105,7 @@ const InviteTest = () => {
 
   const handleSubmitInvite = async (item) => {
     try {
-      console.log("item ", item);
+      // console.log("item ", item);
 
       let timestamp = Timestamp.now();
 
@@ -136,7 +136,7 @@ const InviteTest = () => {
 
       //first we need to get an invite object from groups >invites > {where invitee_uid === this user id}
       const inviteObject = await getInviteObject(item.group_id);
-      console.log("getInviteObject ", inviteObject);
+      // console.log("getInviteObject ", inviteObject);
 
       updateDoc(docGroupRef, { invites: arrayRemove(inviteObject) });
     } catch (err) {
@@ -145,7 +145,7 @@ const InviteTest = () => {
   };
 
   const getInviteObject = async (group_id) => {
-    console.log("in test group ", group_id);
+    // console.log("in test group ", group_id);
     const docGroupRef = doc(db, "groups", group_id);
 
     const udocs = await getDoc(docGroupRef);

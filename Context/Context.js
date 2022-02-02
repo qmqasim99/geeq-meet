@@ -61,11 +61,12 @@ export const UserProvider = ({ children }) => {
       const groupListener = onSnapshot(q, (fdocs) => {
         let groups = [];
         fdocs.docs.map((doc) => {
-          console.log("doccy", doc);
+          // console.log("doccy", doc);
           groups.push({ id: doc.id, ...doc.data() });
         });
-        console.log("in gettingDocs", groups);
+        // console.log("in gettingDocs", groups);
         setGroups(groups);
+        //also set users/groups
       });
 
       return () => {

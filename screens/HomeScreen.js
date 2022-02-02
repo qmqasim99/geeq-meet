@@ -19,11 +19,11 @@ import ViewMyGroups from "../Components/ViewMyGroups";
 const HomeScreen = () => {
   const navigation = useNavigation();
   const theme = useContext(ThemeContext);
-  const { user } = useContext(UserContext);
+  const { user, setUser, groups, setGroups } = useContext(UserContext);
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
+    console.log("homepage render", groups);
+  }, [groups]);
 
   // const handleSignOut = () => {
   //   auth
@@ -40,6 +40,15 @@ const HomeScreen = () => {
       <Text style={theme.header}>Welcome {user.name}</Text>
 
       <View>
+        <Button
+          title="setuserchange"
+          onPress={() => {
+            setUser((user) => {
+              const obj = { ...groups, wig: "big" };
+              return obj;
+            });
+          }}
+        />
         <Text style={theme.header2}>Invites</Text>
         <InviteTest />
         <Text style={theme.header2}>My Groups</Text>

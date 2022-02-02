@@ -17,7 +17,7 @@ export default function FirebaseTesting() {
       fdocs.docs.map((doc) => {
         books.push({ id: doc.id, ...doc.data() });
       });
-      console.log("in gettingDocs", books);
+      // console.log("in gettingDocs", books);
     } catch (err) {
       console.log(err.message);
     }

@@ -43,15 +43,15 @@ const ViewMyGroups = () => {
 
   const ExitGroup = async (group_id, group_name, created_at) => {
     const uid = auth.currentUser.uid;
-    console.log(group_name, created_at);
-    console.log(group_id, "line66");
+    // console.log(group_name, created_at);
+    // console.log(group_id, "line66");
     const removeGroup = {
       group_name: group_name,
       group_id: group_id,
       created_at: created_at,
     };
     const userRef = doc(db, "users", uid);
-    console.log(user.name);
+    // console.log(user.name);
 
     // setTempGroups(tempGroups.filter((group) => group.group_id !== group_id )
 
@@ -70,10 +70,10 @@ const ViewMyGroups = () => {
       groups: arrayRemove(removeGroup),
     });
   };
-  console.log("line 72");
+  // console.log("line 72");
 
   useEffect(() => {
-    console.log("groups", groups);
+    // console.log("groups", groups);
     setTempGroups(user.groups);
   }, [user, tempGroups]);
 
@@ -100,7 +100,7 @@ const ViewMyGroups = () => {
       </TouchableOpacity>
     );
   };
-  console.log("line99");
+  // console.log("line99");
 
   return (
     <>
