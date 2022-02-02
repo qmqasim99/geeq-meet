@@ -19,20 +19,11 @@ import ViewMyGroups from "../Components/ViewMyGroups";
 const HomeScreen = () => {
   const navigation = useNavigation();
   const theme = useContext(ThemeContext);
-  const { user } = useContext(UserContext);
+  const { user, setUser, groups, setGroups } = useContext(UserContext);
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
-
-  // const handleSignOut = () => {
-  //   auth
-  //     .signOut()
-  //     .then(() => {
-  //       navigation.replace("Login");
-  //     })
-  //     .catch((error) => alert(error.message));
-  // };
+    console.log("homepage render", groups);
+  }, [groups]);
 
   return (
     <View style={theme.homeContainer}>

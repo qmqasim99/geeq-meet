@@ -31,6 +31,7 @@ const Chat = ({ navigation }) => {
   const currentGroupId = 'Holiday Fun'; //currentGroup.id
   console.log('current group in chat ', currentGroupId);
   useEffect(() => {
+    
     const docRef = doc(db, 'groupChats', currentGroupId);
     // console.log("q", docRef);
     // const q = query(docRef, orderBy("createdAt", "desc"));
@@ -47,6 +48,7 @@ const Chat = ({ navigation }) => {
 
       //setMessages(chats);
 
+
       // TODO create a for loop to put messages into a new array and sort it createdAt
 
       const tempMessages = doc.data().messages;
@@ -59,6 +61,7 @@ const Chat = ({ navigation }) => {
       setMessages(tempMessages);
       // setMessages(doc.data().messages);
       //console.log('in chat docs after setMessage >>> ', doc.data().messages);
+
     });
 
     return () => unsubscribe();
@@ -84,6 +87,7 @@ const Chat = ({ navigation }) => {
       GiftedChat.append(previousMessages, messages)
     );
     const { _id, createdAt, text, user } = messages[0];
+
     console.log('messages[0] has ', _id, createdAt, text, user);
 
     let timestamp = Timestamp.now();
@@ -115,6 +119,7 @@ const Chat = ({ navigation }) => {
 
     await updateDoc(groupRef, {
       messages: arrayUnion(addChatText),
+
     });
 
     console.log('message has been sent!');
