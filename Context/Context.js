@@ -19,39 +19,17 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [currentGroup, setCurrentGroup] = useState({});
   const [groups, setGroups] = useState([]);
-  // ef83N7qN5beB5oJtm9CgCnW7Ydv1
-
-  //extract these to separate API calls, use try catch with async await
 
   const getUser = async () => {
-    // console.log("UID:>>>>>>>>>>", auth.currentUser.uid);
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
-    // console.log("DATA>>>>>>>>>>", docSnap.data());
     setUser(docSnap.data());
   };
-
-  // DEPRECATED IN FAVOUR OF LISTENERS
-  // const q = query(
-  //   collection(db, "groups"),
-  //   where("users", "array-contains", `{uid:${auth.currentUser.uid}}`)
-  // );
-  // const getGroups = async () => {
-  //   const querySnapshot = await getDocs(q);
-  //   querySnapshot.forEach((doc) => {
-  //     setGroups((prevGroups) => {
-  //       return [...prevGroups, doc.data()];
-  //     });
-  //   });
-  // };
 
   useEffect(() => {
     if (auth.currentUser) {
       console.log("I'm getting the bits");
       getUser();
-      // ! Use following line for collection
-      // const unsubscribe = onSnapshot(collection(db, "groups"), (fdocs) => {
-      // ! use following for query
 
       const q = query(
         collection(db, "groups"),
@@ -64,13 +42,10 @@ export const UserProvider = ({ children }) => {
         console.log("getting groups");
         let groupsFrmDb = [];
         fdocs.docs.map((doc, i) => {
-          // console.log("doccy", doc);
           groupsFrmDb.push({ id: doc.id, ...doc.data() });
           console.log("uid", i, groupsFrmDb);
         });
-        // console.log("in gettingDocs", groups);
         setGroups(groupsFrmDb);
-        //also set users/groups
       });
 
       return () => {

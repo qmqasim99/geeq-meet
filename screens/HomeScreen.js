@@ -25,30 +25,12 @@ const HomeScreen = () => {
     console.log("homepage render", groups);
   }, [groups]);
 
-  // const handleSignOut = () => {
-  //   auth
-  //     .signOut()
-  //     .then(() => {
-  //       navigation.replace("Login");
-  //     })
-  //     .catch((error) => alert(error.message));
-  // };
-
   return (
     <View style={theme.homeContainer}>
       <UserMenu style={{ position: "absolute" }} />
       <Text style={theme.header}>Welcome {user.name}</Text>
 
       <View>
-        <Button
-          title="setuserchange"
-          onPress={() => {
-            setUser((user) => {
-              const obj = { ...groups, wig: "big" };
-              return obj;
-            });
-          }}
-        />
         <Text style={theme.header2}>Invites</Text>
         <InviteTest />
         <Text style={theme.header2}>My Groups</Text>
