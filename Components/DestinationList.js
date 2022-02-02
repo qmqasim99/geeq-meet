@@ -68,7 +68,7 @@ export default function DestinationList({
 
   return (
     <View style={theme.homeContainer}>
-      <Text style={theme.header}>{placeType}'s between you</Text>
+      <Text style={theme.header}>{placeType}s between you</Text>
       {listLoaded && (
         <ScrollView>
           {destinationArray.map((des, i) => {

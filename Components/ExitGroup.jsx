@@ -62,7 +62,7 @@ import { auth, db } from "../firebase";
 
 const ExitGroup = async (group_id) => {
   const groupRef = doc(db, "groups", group_id);
-  console.log(group_id, "line66");
+  // console.log(group_id, "line66");
 
   await updateDoc(groupRef, {
     group_name: deleteField(),

@@ -29,7 +29,7 @@ const Chat_2 = ({ navigation }) => {
           user: doc.data().user,
         }))
       );
-      console.log("unsubscribe");
+      // console.log("unsubscribe");
     });
 
     return () => unsubscribe();
@@ -46,7 +46,7 @@ const Chat_2 = ({ navigation }) => {
       text,
       user,
     });
-    console.log("message has been sent!");
+    // console.log("message has been sent!");
   }, []);
 
   return (
