@@ -195,4 +195,10 @@ export const defaultTheme = {
   alertText: { fontWeight: "bold", fontSize: 22, color: palette.darkBlue },
   ratingText: { fontWeight: "bold", fontSize: 20, color: palette.yellow },
   ratingText2: { fontWeight: "bold", fontSize: 12, color: palette.green },
+  navbarStyle: {
+    position: "absolute",
+    bottom: 30,
+    width: "90%",
+    left: "5%",
+  },
 };

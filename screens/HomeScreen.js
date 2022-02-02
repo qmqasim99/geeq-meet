@@ -44,7 +44,7 @@ const HomeScreen = () => {
           <Text style={theme.buttonText}>Create new group</Text>
         </TouchableOpacity>
       </View>
-      <Nav />
+      <Nav type={"home"} />
     </View>
   );
 };

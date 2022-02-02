@@ -252,7 +252,7 @@ const SingleGroupPage = ({ route, navigation }) => {
         </View>
       )}
       <View>
-        <Nav />
+        <Nav type={"group"} />
       </View>
     </View>
   );

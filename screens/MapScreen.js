@@ -85,7 +85,7 @@ const MapScreen = ({
           </>
         )}
       </MapView>
-      <Nav />
+      <Nav type={"map"} />
     </View>
   );
 };
