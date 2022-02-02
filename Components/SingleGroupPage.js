@@ -1,7 +1,4 @@
-import { useNavigation, useNavigationParam } from "@react-navigation/native";
-import { NavigationContainer } from "@react-navigation/native";
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "@react-navigation/native";
 import { UserContext, ThemeContext } from "../Context/Context";
 
 import {
@@ -9,23 +6,15 @@ import {
   Text,
   Image,
   FlatList,
-  ScrollView,
-  Button,
   TextInput,
   TouchableOpacity,
 } from "react-native";
 import {
   collection,
   doc,
-  addDoc,
   getDocs,
   getDoc,
-  setDoc,
   query,
-  where,
-  collectionGroup,
-  document,
-  serverTimestamp,
   updateDoc,
   arrayUnion,
   orderBy,
@@ -47,11 +36,10 @@ const SingleGroupPage = ({ route, navigation }) => {
   const [newFriend, setNewFriend] = useState("");
   const [searchedFriends, setSearchedFriends] = useState([]);
   const usersRef = collection(db, "users");
-  const docRef = doc(db, "groups", group_id); //'4cXw12VSrQoKHmKsL1Di'
-
+  const docRef = doc(db, "groups", group_id);
   useEffect(() => {
     getSingleDoc();
-  }, []);
+  }, [user, groups]);
 
   // get a single doc
   const getSingleDoc = async () => {
@@ -76,9 +64,6 @@ const SingleGroupPage = ({ route, navigation }) => {
         orderBy("name"),
         startAt(newFriend),
         endAt(newFriend + "\uf8ff")
-        // where('name', '==', newFriend)
-        //,
-        //orderBy('name')
       );
 
       const udocs = await getDocs(q);
@@ -95,7 +80,6 @@ const SingleGroupPage = ({ route, navigation }) => {
         }
         users.push({ uid: doc.id, invited, ...doc.data() });
       });
-      // console.log("in gettingDocs", users);
       setSearchedFriends(users);
     } catch (err) {
       console.log(err.message);
@@ -105,6 +89,8 @@ const SingleGroupPage = ({ route, navigation }) => {
   // searches for friends by name
   const handleSubmitInvite = async (inviteeName, inviteeUid) => {
     try {
+      setNewFriend("");
+      setSearchedFriends([]);
       const newInvite = {
         invited_by: auth.currentUser.displayName,
         invited_by_uid: auth.currentUser.uid,
@@ -153,11 +139,13 @@ const SingleGroupPage = ({ route, navigation }) => {
         <Text style={theme.header4}>{item.name}</Text>
         <TouchableOpacity
           disabled={item.invited}
-          title="Invite"
+          title={item.invited ? "Invite Sent" : "Invite"}
           onPress={() => handleSubmitInvite(item.name, item.uid)}
           style={[theme.button, theme.buttonOutline]}
         >
-          <Text style={theme.buttonText}>Invite</Text>
+          <Text style={theme.buttonText}>
+            {item.invited ? "Invite Sent" : "Invite"}
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -197,9 +185,11 @@ const SingleGroupPage = ({ route, navigation }) => {
         <Text style={theme.header}>{group.group_name}</Text>
         {/* <Text>Group ID: {group.id}</Text> */}
         <Image
-          source={{
-            uri: "https://picsum.photos/200",
-          }}
+          source={
+            currentGroup.avatar
+              ? { uri: currentGroup.avatar }
+              : { uri: "https://picsum.photos/200" }
+          }
           style={{
             width: 200,
             height: 200,

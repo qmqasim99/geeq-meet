@@ -29,7 +29,13 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     if (auth.currentUser) {
       console.log("I'm getting the bits");
-      getUser();
+      // getUser();
+      const userListener = onSnapshot(
+        doc(db, "users", auth.currentUser.uid),
+        (doc) => {
+          setUser(doc.data());
+        }
+      );
 
       const q = query(
         collection(db, "groups"),
@@ -49,6 +55,7 @@ export const UserProvider = ({ children }) => {
       });
 
       return () => {
+        userListener();
         groupListener();
       };
     } else {
