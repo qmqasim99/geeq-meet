@@ -49,23 +49,27 @@ export const UserProvider = ({ children }) => {
     if (auth.currentUser) {
       console.log("I'm getting the bits");
       getUser();
-
       // ! Use following line for collection
       // const unsubscribe = onSnapshot(collection(db, "groups"), (fdocs) => {
       // ! use following for query
 
       const q = query(
         collection(db, "groups"),
-        where("users", "array-contains", `{uid:${auth.currentUser.uid}}`)
+        where("users", "array-contains", {
+          uid: `${auth.currentUser.uid}`,
+          name: `${auth.currentUser.displayName}`,
+        })
       );
       const groupListener = onSnapshot(q, (fdocs) => {
-        let groups = [];
-        fdocs.docs.map((doc) => {
+        console.log("getting groups");
+        let groupsFrmDb = [];
+        fdocs.docs.map((doc, i) => {
           // console.log("doccy", doc);
-          groups.push({ id: doc.id, ...doc.data() });
+          groupsFrmDb.push({ id: doc.id, ...doc.data() });
+          console.log("uid", i, groupsFrmDb);
         });
         // console.log("in gettingDocs", groups);
-        setGroups(groups);
+        setGroups(groupsFrmDb);
         //also set users/groups
       });
 

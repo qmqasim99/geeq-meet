@@ -113,7 +113,6 @@ const InviteTest = () => {
       const newGroup = {
         group_name: item.group_name,
         group_id: item.group_id,
-        created_at: timestamp,
       };
 
       const docRef = doc(db, "users", user_id);
@@ -126,7 +125,6 @@ const InviteTest = () => {
       const newGroupUser = {
         name: user.name,
         uid: user.uid,
-        created_at: timestamp,
       };
 
       const docGroupRef = doc(db, "groups", item.group_id);
