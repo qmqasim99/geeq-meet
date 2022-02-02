@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { UserContext } from '../Context/Context';
 
 import React from 'react';
-import { SegmentedControlIOSComponent, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
 
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
@@ -28,26 +28,14 @@ import { auth, db } from '../firebase';
 const Chat = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
   const { currentGroup } = useContext(UserContext);
-  const currentGroupId = 'Holiday Fun'; //currentGroup.id
+  const currentGroupId = currentGroup.id; //'Holiday Fun';
   console.log('current group in chat ', currentGroupId);
   useEffect(() => {
-    
     const docRef = doc(db, 'groupChats', currentGroupId);
-    // console.log("q", docRef);
-    // const q = query(docRef, orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(docRef, (doc) => {
       // console.log('>>>>>>', doc.data());
       // this should save the messages in order in state
       console.log('in chat docs ');
-
-      // let chats = [];
-
-      // doc.docs.map((temDoc) => {
-      //   chats.push({ ...temDoc.data() });
-      // });
-
-      //setMessages(chats);
-
 
       // TODO create a for loop to put messages into a new array and sort it createdAt
 
@@ -59,27 +47,10 @@ const Chat = ({ navigation }) => {
         return b.createdAt - a.createdAt;
       });
       setMessages(tempMessages);
-      // setMessages(doc.data().messages);
-      //console.log('in chat docs after setMessage >>> ', doc.data().messages);
-
     });
 
     return () => unsubscribe();
   }, []);
-
-  // const onSend = useCallback((messages = []) => {
-  //   console.log('message ', messages);
-  //   setMessages((previousMessages) =>
-  //     GiftedChat.append(previousMessages, messages)
-  //   );
-  //   const { _id, createdAt, text, user } = messages[0];
-  //   console.log('message 2', messages);
-  //   updateDoc(doc(db, 'groupChats', currentGroupId), {
-  //     _id: { createdAt, text, user },
-  //   });
-  //   console.log('in update doc', updateDoc);
-  //   console.log('message has been sent!');
-  // }, []);
 
   const onSend = useCallback(async (messages = []) => {
     console.log('message ', messages);
@@ -119,7 +90,6 @@ const Chat = ({ navigation }) => {
 
     await updateDoc(groupRef, {
       messages: arrayUnion(addChatText),
-
     });
 
     console.log('message has been sent!');
