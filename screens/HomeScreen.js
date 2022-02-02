@@ -10,11 +10,11 @@ import {
 } from "react-native";
 import { auth } from "../firebase";
 // import NavBar from "../Components/NavBar";
-import Nav from "../Components/Nav";
 import InviteTest from "../Components/InviteTest";
 import { ThemeContext, UserContext } from "../Context/Context";
-import UserMenu from "../Components/UserMenu";
+import UserMenu2 from "../Components/UserMenu2";
 import ViewMyGroups from "../Components/ViewMyGroups";
+import Nav from "../Components/Nav";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -26,26 +26,20 @@ const HomeScreen = () => {
   }, [groups]);
 
   return (
-    <View style={theme.homeContainer}>
-      <UserMenu style={{ position: "absolute" }} />
-      <Text style={theme.header}>Welcome {user.name}</Text>
+    <>
+      <UserMenu2 style={{ position: "absolute" }} />
+      <View style={theme.homeContainer}>
+        <Text style={theme.header}>Welcome {user.name}</Text>
 
-      <View>
-        <Text style={theme.header2}>Invites</Text>
-        <InviteTest />
-        <Text style={theme.header2}>My Groups</Text>
-        <ViewMyGroups />
-
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("CreateGroup");
-          }}
-        >
-          <Text style={theme.buttonText}>Create new group</Text>
-        </TouchableOpacity>
+        <View>
+          <Text style={theme.header2}>Invites</Text>
+          <InviteTest />
+          <Text style={theme.header2}>My Groups</Text>
+          <ViewMyGroups />
+        </View>
+        <Nav type={"home"} />
       </View>
-      <Nav type={"home"} />
-    </View>
+    </>
   );
 };
 

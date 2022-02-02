@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { ButtonGroup, ThemeProvider } from "react-native-elements";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { auth } from "../firebase";
@@ -32,21 +32,22 @@ const Nav = ({ type }) => {
   }, []);
 
   const handleNavigate = (value) => {
-    console.log(route);
+    console.log(value);
 
-    if (theseButtons[value] === "New Group") {
+    if (value === "New Group") {
+      console.log("hey");
       navigation.navigate("CreateGroup");
     }
-    if (theseButtons[value] === "My Profile") {
+    if (value === "My Profile") {
       navigation.navigate("UserAccount", { user_id: auth.currentUser.uid });
     }
-    if (theseButtons[value] === "Chat") {
+    if (value === "Chat") {
       navigation.navigate("Chat");
     }
-    if (theseButtons[value] === "Group") {
+    if (value === "Group") {
       navigation.navigate("Group", { group_id: currentGroup.id });
     }
-    if (theseButtons[value] === "Meet") {
+    if (value === "Meet") {
       if (currentGroup.meets && currentGroup.meets.active) {
         navigation.navigate("MapContainer");
       } else {
@@ -56,26 +57,25 @@ const Nav = ({ type }) => {
   };
 
   return (
-    <>
-      <ButtonGroup
-        buttons={theseButtons}
-        selectedIndex={selectedIndex}
-        onPress={(value) => {
-          handleNavigate(value);
+    <View style={theme.navContainer}>
+      <TouchableOpacity
+        onPress={() => {
+          handleNavigate(theseButtons[0]);
         }}
-        containerStyle={theme.navbarStyle}
-      />
-    </>
+        style={[theme.button]}
+      >
+        <Text style={theme.buttonText}>{theseButtons[0]}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          handleNavigate(theseButtons[1]);
+        }}
+        style={[theme.button]}
+      >
+        <Text style={theme.buttonText}>{theseButtons[1]}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  subHeader: {
-    backgroundColor: "#2089dc",
-    color: "white",
-    textAlign: "center",
-    paddingVertical: 5,
-    marginBottom: 10,
-  },
-});
 export default Nav;

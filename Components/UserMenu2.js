@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState, useContext } from "react";
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
-import { Icon } from "react-native-elements";
+import { Icon, SpeedDial } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { ThemeContext } from "../Context/Context";
 import { auth } from "../firebase";
 
-export default function UserMenu({}) {
+export default function UserMenu2({}) {
   const theme = useContext(ThemeContext);
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -26,25 +26,26 @@ export default function UserMenu({}) {
   };
   const showMenu = () => setVisible(true);
 
+  const [open, setOpen] = React.useState(false);
   return (
-    <Menu
-      visible={visible}
-      anchor={
-        <Text onPress={showMenu}>
-          <Icon
-            reverse
-            name="log-out-outline"
-            type="ionicon"
-            color={theme.icon.color}
-          />
-        </Text>
-      }
-      onRequestClose={hideMenu}
+    <SpeedDial
+      isOpen={open}
+      icon={{ name: "edit", color: "#fff" }}
+      openIcon={{ name: "close", color: "#fff" }}
+      onOpen={() => setOpen(!open)}
+      onClose={() => setOpen(!open)}
     >
-      {/* <MenuItem onPress={handleAccountNav}>Home</MenuItem> */}
-      {/* <MenuDivider /> */}
-      <MenuItem onPress={handleSignOut}>Sign out</MenuItem>
-    </Menu>
+      <SpeedDial.Action
+        icon={{ name: "add", color: "#fff" }}
+        title="Add"
+        onPress={() => console.log("Add Something")}
+      />
+      <SpeedDial.Action
+        icon={{ name: "delete", color: "#fff" }}
+        title="Delete"
+        onPress={() => console.log("Delete Something")}
+      />
+    </SpeedDial>
   );
 }
 

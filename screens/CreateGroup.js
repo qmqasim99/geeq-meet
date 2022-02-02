@@ -1,4 +1,11 @@
-import { Text, View, TextInput, Button, Image } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  Button,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import {
   collection,
   doc,
@@ -73,58 +80,73 @@ export default function CreateGroup({ navigation }) {
   };
 
   return (
-    <>
-      <View style={theme.homeContainer}>
-        <Text style={theme.header}>Create a new group</Text>
-
-        <View style={theme.container}>
-          <TextInput
-            style={theme.loginInput}
-            placeholder="Group name!"
-            onChangeText={(newText) => setGroupName(newText)}
-            defaultValue={groupName}
+    <View
+      style={[
+        theme.homeContainer,
+        {
+          flexDirection: "column",
+          alignItems: "center",
+          padding: 10,
+          justifyContent: "space_between",
+        },
+      ]}
+    >
+      <Text style={[theme.header, { flex: 1, margin: 20 }]}>
+        Create a new group
+      </Text>
+      <TextInput
+        style={[theme.loginInput, { flex: 1, margin: 20 }]}
+        placeholder="Group name!"
+        onChangeText={(newText) => setGroupName(newText)}
+        defaultValue={groupName}
+      />
+      <TextInput
+        style={[theme.loginInput, { flex: 1, margin: 20 }]}
+        placeholder="Avatar url"
+        onChangeText={(newText) => setGroupAvatar(newText)}
+        defaultValue={groupAvatar}
+      />
+      {groupAvatar ? (
+        <Image
+          source={{ uri: groupAvatar }}
+          style={{
+            height: 200,
+            width: 200,
+            borderRadius: "100%",
+            flex: 4,
+            margin: 20,
+          }}
+        />
+      ) : (
+        <View style={{ flex: 12 }}>
+          <Text style={theme.header3}>
+            No Avatar? No Problem! Your group will be assigned a random image
+            from the vaults.
+          </Text>
+          <View
+            style={{
+              alignItems: "center",
+              width: 200,
+              height: 200,
+              borderRadius: 100,
+              backgroundColor: "#F2BE2D",
+              left: 60,
+              margin: 20,
+            }}
           />
-          <TextInput
-            style={theme.loginInput}
-            placeholder="Avatar url"
-            onChangeText={(newText) => setGroupAvatar(newText)}
-            defaultValue={groupAvatar}
-          />
-          {groupAvatar ? (
-            <Image
-              source={{ uri: groupAvatar }}
-              style={{
-                height: 200,
-                width: 200,
-                borderRadius: "100%",
-              }}
-            />
-          ) : (
-            <Text style={theme.header3}>
-              No Avatar? No Problem! Your group will be assigned a random image
-              from the vaults.
-            </Text>
-          )}
-          <Button style={theme.button} title="Submit" onPress={handleSubmit} />
         </View>
+      )}
+
+      <View style={theme.buttonContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            handleSubmit();
+          }}
+          style={[theme.button, theme.buttonOutline]}
+        >
+          <Text style={theme.buttonText}>Submit</Text>
+        </TouchableOpacity>
       </View>
-
-      {/* <Link
-        to={{
-          screen: 'ViewGroups',
-        }}
-      >
-        View all groups
-      </Link>
-
-      <Link
-        to={{
-          screen: 'Group',
-          params: { group_id: '4cXw12VSrQoKHmKsL1Di' },
-        }}
-      >
-        Go to a group
-      </Link> */}
-    </>
+    </View>
   );
 }

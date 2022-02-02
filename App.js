@@ -54,14 +54,46 @@ export default function App() {
               name="Login"
               component={LoginScreen}
             />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="UserAccount" component={UserAccount} />
-            <Stack.Screen name="Chat" component={Chat} />
-            <Stack.Screen name="Group" component={SingleGroupPage} />
-            <Stack.Screen name="MapContainer" component={MapContainer} />
-            <Stack.Screen name="Map" component={MapScreen} />
-            <Stack.Screen name="CreateGroup" component={CreateGroup} />
-            <Stack.Screen name="ConfigureMeet" component={ConfigureMeet} />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ title: "" }}
+            />
+            <Stack.Screen
+              name="UserAccount"
+              component={UserAccount}
+              options={{ title: "" }}
+            />
+            <Stack.Screen
+              name="Chat"
+              component={Chat}
+              options={{ title: "" }}
+            />
+            <Stack.Screen
+              name="Group"
+              component={SingleGroupPage}
+              options={{ title: "" }}
+            />
+            <Stack.Screen
+              name="MapContainer"
+              component={MapContainer}
+              options={{ title: "" }}
+            />
+            <Stack.Screen
+              name="Map"
+              component={MapScreen}
+              options={{ title: "" }}
+            />
+            <Stack.Screen
+              name="CreateGroup"
+              component={CreateGroup}
+              options={{ title: "" }}
+            />
+            <Stack.Screen
+              name="ConfigureMeet"
+              component={ConfigureMeet}
+              options={{ title: "" }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>

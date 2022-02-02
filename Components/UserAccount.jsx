@@ -1,11 +1,21 @@
-import { useEffect, useState } from "react";
-import { Text, TextInput, View, Image, StyleSheet, Button } from "react-native";
+import { useEffect, useState, useContext } from "react";
+import {
+  Text,
+  TextInput,
+  View,
+  Image,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { auth, db } from "../firebase";
 import { updateEmail, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { fetchUser } from "../Utils/APIutils";
+import { ThemeContext } from "../Context/Context";
 
 const UserAccount = ({ route }) => {
+  const theme = useContext(ThemeContext);
   const { user_id } = route.params;
   const [user, setUser] = useState({});
   const [isEditable, setIsEditable] = useState(false);
@@ -51,33 +61,41 @@ const UserAccount = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[theme.homeContainer, { alignItems: "center" }]}>
+      <Text style={theme.header}>My Details</Text>
       {isEditable ? (
         <>
-          <Text style={styles.heading}>Email</Text>
+          <Text style={theme.header2}>Email</Text>
           <TextInput
             value={user.email}
-            style={styles.input}
+            style={theme.loginInput}
             onChangeText={(text) => {
               setUser((prevUser) => {
                 return { ...prevUser, email: text };
               });
             }}
           />
-          <Text style={styles.heading}>Name</Text>
+          <Text style={theme.header2}>Name</Text>
           <TextInput
             value={user.name}
             placeholder={"Update Me!"}
-            style={styles.input}
+            style={theme.loginInput}
             onChangeText={(text) => {
               setUser((prevUser) => {
                 return { ...prevUser, userName: text };
               });
             }}
           />
-          <Text style={styles.heading}>Avatar</Text>
+          <Text style={theme.header2}>Avatar</Text>
           {user.avatar ? (
-            <Image source={{ uri: user.avatar }} style={styles.avatar} />
+            <Image
+              source={{ uri: user.avatar }}
+              style={{
+                height: 100,
+                width: 100,
+                margin: 20,
+              }}
+            />
           ) : (
             <Text>No Avatar Currently</Text>
           )}
@@ -89,9 +107,9 @@ const UserAccount = ({ route }) => {
                 return { ...prevUser, avatar: text };
               });
             }}
-            style={styles.input}
+            style={theme.loginInput}
           />
-          <Text style={styles.heading}>Default Transport</Text>
+          <Text style={theme.header2}>Default Transport</Text>
           <TextInput
             placeholder={"Update Me!"}
             value={user.transport}
@@ -100,9 +118,18 @@ const UserAccount = ({ route }) => {
                 return { ...prevUser, transport: text };
               });
             }}
-            style={styles.input}
+            style={theme.loginInput}
           />
-          <Button title="Submit" onPress={handleSubmit} />
+          <View style={theme.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                handleSubmit();
+              }}
+              style={[theme.button, theme.buttonOutline]}
+            >
+              <Text style={theme.buttonText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
         </>
       ) : (
         <>

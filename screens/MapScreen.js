@@ -38,7 +38,7 @@ const MapScreen = ({
   return (
     <View style={styles.container}>
       <MapView
-        style={{ height: "90%", width: "100%" }}
+        style={{ height: "100%", width: "100%" }}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
         onMapReady={(event) => {

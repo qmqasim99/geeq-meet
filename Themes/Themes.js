@@ -54,6 +54,7 @@ export const defaultTheme = {
     backgroundColor: palette.midBlue,
     margin: 1,
     borderRadius: 5,
+    margin: 5,
   },
   fListCard: {
     padding: 5,
@@ -105,10 +106,11 @@ export const defaultTheme = {
   },
   homeContainer: {
     backgroundColor: palette.darkBlue,
-    flex: 1,
-    justifyContent: "center",
+    height: "100%",
     flexDirection: "column",
-    padding: 5,
+    justifyContent: "space_between",
+
+    // padding: 5,
   },
   letsMeetButton: {
     border: "red",
@@ -196,9 +198,28 @@ export const defaultTheme = {
   ratingText: { fontWeight: "bold", fontSize: 20, color: palette.yellow },
   ratingText2: { fontWeight: "bold", fontSize: 12, color: palette.green },
   navbarStyle: {
+    // position: "absolute",
+    // bottom: 30,
+    width: "90%",
+    // right: 5,
+    marginTop: 0,
+  },
+  navContainer: {
+    backgroundColor: palette.midBlue,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     position: "absolute",
     bottom: 30,
-    width: "90%",
-    left: "5%",
+    width: "100%",
+    height: 60,
+    // left: 5,
+  },
+  navButton: {
+    // backgroundColor: palette.transparent,
+    // width: "50%",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
   },
 };
