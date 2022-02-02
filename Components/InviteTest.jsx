@@ -152,35 +152,33 @@ const InviteTest = () => {
   const renderInviteList = ({ item }) => {
     return (
       <View style={[theme.fListArea, theme.inviteCard]}>
-        <View>
+        <View style={{ flex: 4 }}>
           <Text style={theme.header4}>Join {item.group_name}?</Text>
           <Text style={theme.header5}>Invited by: {item.invited_by}</Text>
         </View>
-        <TouchableOpacity onPress={() => testman(item)}>
-          <Icon
-            reverse
-            name="checkmark-outline"
-            type="ionicon"
-            color={theme.icon.acceptColor}
-            size="30"
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleAcceptInvite(item)}>
+
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => handleAcceptInvite(item)}
+        >
           <Icon
             reverse
             name="checkmark-circle-outline"
             type="ionicon"
             color={theme.icon.acceptColor}
-            size="30"
+            size="25"
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleDeclineInvite(item)}>
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => handleDeclineInvite(item)}
+        >
           <Icon
             reverse
             name="close-circle-outline"
             type="ionicon"
             color={theme.icon.declineColor}
-            size="30"
+            size="25"
           />
         </TouchableOpacity>
       </View>

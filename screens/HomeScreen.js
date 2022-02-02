@@ -27,7 +27,6 @@ const HomeScreen = () => {
 
   return (
     <>
-      <UserMenu2 style={{ position: "absolute" }} />
       <View style={theme.homeContainer}>
         <Text style={theme.header}>Welcome {user.name}</Text>
 
@@ -38,6 +37,7 @@ const HomeScreen = () => {
           <ViewMyGroups />
         </View>
         <Nav type={"home"} />
+        <UserMenu2 />
       </View>
     </>
   );

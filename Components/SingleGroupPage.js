@@ -4,6 +4,7 @@ import { UserContext, ThemeContext } from "../Context/Context";
 import {
   View,
   Text,
+  ScrollView,
   Image,
   FlatList,
   TextInput,
@@ -161,7 +162,7 @@ const SingleGroupPage = ({ route, navigation }) => {
   };
 
   return (
-    <View style={[theme.scrollContainer, { flex: 7 }]}>
+    <ScrollView contentContainerStyle={[theme.scrollContainer, { flex: 7 }]}>
       {loadCurGroup ? (
         meetActive && (
           <View style={theme.activeMeetAlert}>
@@ -182,21 +183,36 @@ const SingleGroupPage = ({ route, navigation }) => {
       )}
       {/* //this view contains group name and image */}
       <View style={{ flexGrow: 1, alignItems: "center" }}>
-        <Text style={theme.header}>{group.group_name}</Text>
+        <Text style={[theme.header, { marginBottom: 10 }]}>
+          {group.group_name}
+        </Text>
         {/* <Text>Group ID: {group.id}</Text> */}
-        <Image
-          source={
-            currentGroup.avatar
-              ? { uri: currentGroup.avatar }
-              : { uri: "https://picsum.photos/200" }
-          }
-          style={{
-            width: 200,
-            height: 200,
-            justifyContent: "center",
-            borderRadius: 100,
-          }}
-        />
+        <View>
+          <Image
+            source={require("../assets/round.png")}
+            style={{
+              position: "absolute",
+              height: 300,
+              width: 300,
+              top: -50,
+              left: -50,
+            }}
+          />
+
+          <Image
+            source={
+              currentGroup.avatar
+                ? { uri: currentGroup.avatar }
+                : { uri: "https://picsum.photos/200" }
+            }
+            style={{
+              width: 200,
+              height: 200,
+              justifyContent: "center",
+              borderRadius: 100,
+            }}
+          />
+        </View>
       </View>
       {/* //this view contains search people functionality */}
 
@@ -254,7 +270,7 @@ const SingleGroupPage = ({ route, navigation }) => {
       <View>
         <Nav type={"group"} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

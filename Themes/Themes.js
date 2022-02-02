@@ -1,3 +1,10 @@
+// import {
+//   useFonts,
+//   Roboto_400Regular,
+//   Bangers_400Regular,
+//   OpenSans_400Regular,
+// } from "@expo-google-fonts/dev";
+
 const palette = {
   darkBlue: "#323B57",
   midBlue: "#2B4A9A",
@@ -70,14 +77,21 @@ export const defaultTheme = {
   logo: {
     marginTop: 100,
     flex: 2,
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 250,
     resizeMode: "contain",
   },
 
   container: {
     backgroundColor: palette.darkBlue,
-    flex: 1,
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  logContainer: {
+    backgroundColor: palette.transparent,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",

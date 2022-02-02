@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState, useContext } from "react";
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
-import { Icon, SpeedDial } from "react-native-elements";
+import { Icon, SpeedDial, FAB } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { ThemeContext } from "../Context/Context";
 import { auth } from "../firebase";
@@ -28,24 +28,16 @@ export default function UserMenu2({}) {
 
   const [open, setOpen] = React.useState(false);
   return (
-    <SpeedDial
-      isOpen={open}
-      icon={{ name: "edit", color: "#fff" }}
-      openIcon={{ name: "close", color: "#fff" }}
-      onOpen={() => setOpen(!open)}
-      onClose={() => setOpen(!open)}
-    >
-      <SpeedDial.Action
-        icon={{ name: "add", color: "#fff" }}
-        title="Add"
-        onPress={() => console.log("Add Something")}
-      />
-      <SpeedDial.Action
-        icon={{ name: "delete", color: "#fff" }}
-        title="Delete"
-        onPress={() => console.log("Delete Something")}
-      />
-    </SpeedDial>
+    <FAB
+      visible={true}
+      icon={{ name: "log-out-outline", type: "ionicon", color: "#A6D1A1" }}
+      color="#2B4A9A"
+      style={{ position: "absolute", top: 10, right: 10 }}
+      size="small"
+      onPress={() => {
+        handleSignOut();
+      }}
+    />
   );
 }
 
