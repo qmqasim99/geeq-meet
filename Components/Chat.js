@@ -10,7 +10,7 @@ import React from 'react';
 import { SegmentedControlIOSComponent, StyleSheet } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
 
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import {
   collection,
   addDoc,
@@ -20,6 +20,7 @@ import {
   updateDoc,
   doc,
   arrayUnion,
+  Timestamp,
 } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
@@ -46,8 +47,18 @@ const Chat = ({ navigation }) => {
 
       //setMessages(chats);
 
-      setMessages(doc.data().messages);
-      console.log('in chat docs after setMessage >>> ', doc.data().messages);
+      // TODO create a for loop to put messages into a new array and sort it createdAt
+
+      const tempMessages = doc.data().messages;
+      // sort by value
+      tempMessages.sort((a, b) => {
+        console.log('a.createAt - b.createAt', a.createdAt, b.createdAt);
+        // return a.createdAt - b.createdAt;
+        return b.createdAt - a.createdAt;
+      });
+      setMessages(tempMessages);
+      // setMessages(doc.data().messages);
+      //console.log('in chat docs after setMessage >>> ', doc.data().messages);
     });
 
     return () => unsubscribe();
@@ -75,9 +86,14 @@ const Chat = ({ navigation }) => {
     const { _id, createdAt, text, user } = messages[0];
     console.log('messages[0] has ', _id, createdAt, text, user);
 
+    let timestamp = Timestamp.now();
+
     const addChatText = {
       _id: _id,
-      createdAt: createdAt,
+      // createdAt: timestamp,
+      createdAt: Date.parse(createdAt), //createdAt,
+
+      //createdAt: new Date(createdAt),
       text: text,
       user: user,
     };
@@ -106,6 +122,26 @@ const Chat = ({ navigation }) => {
 
   return (
     <GiftedChat
+      renderBubble={(props) => {
+        // let username = props.currentMessage.user.name;
+        // let color = this.getColor(username);
+
+        return (
+          <Bubble
+            {...props}
+            textStyle={{
+              right: {
+                color: 'white',
+              },
+            }}
+            wrapperStyle={{
+              left: {
+                backgroundColor: 'lightgreen',
+              },
+            }}
+          />
+        );
+      }}
       messages={messages}
       onSend={(messages) => onSend(messages)}
       user={{
