@@ -1,15 +1,9 @@
-import {
-  Text,
-  View,
-  TextInput,
-  Button,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, TextInput, Image, TouchableOpacity } from "react-native";
 import {
   collection,
   doc,
   addDoc,
+  setDoc,
   getDoc,
   updateDoc,
   arrayUnion,
@@ -62,6 +56,20 @@ export default function CreateGroup({ navigation }) {
       created_at: timestamp,
       users: [{ name: user.name, uid }],
     });
+
+    // add this group to groupChat
+    console.log("new group id: ", newGroupCreated.id);
+    // add to groups collection
+
+    // const chatRef = collection(db, 'groupChats');
+    const newGroupChatCreated = await setDoc(
+      doc(db, "groupChats", newGroupCreated.id),
+      {
+        group_name: groupName,
+        created_at: timestamp,
+        messages: [],
+      }
+    );
 
     // add this group to users doc
     console.log("new group id: ", newGroupCreated.id);

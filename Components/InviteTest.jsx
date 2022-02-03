@@ -1,6 +1,6 @@
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { useState, useEffect, useContext } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useState, useEffect, useContext } from 'react';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import {
   collection,
   doc,
@@ -14,21 +14,21 @@ import {
   endAt,
   arrayRemove,
   Timestamp,
-} from "firebase/firestore";
-import { auth, db } from "../firebase";
-import { ThemeContext, UserContext } from "../Context/Context";
-import { Icon } from "react-native-elements";
+} from 'firebase/firestore';
+import { auth, db } from '../firebase';
+import { ThemeContext, UserContext } from '../Context/Context';
+import { Icon } from 'react-native-elements';
 
 const InviteTest = () => {
   const theme = useContext(ThemeContext);
   const { groups, user } = useContext(UserContext);
 
   // const [user, setUser] = useState({});
-  const usersRef = collection(db, "users");
+  const usersRef = collection(db, 'users');
   const navigation = useNavigation();
 
   const user_id = auth.currentUser.uid;
-  const docRef = doc(db, "users", user_id);
+  const docRef = doc(db, 'users', user_id);
 
   // get a single user
   // const getSingleDoc = async () => {
@@ -87,23 +87,24 @@ const InviteTest = () => {
         group_id: item.group_id,
       };
 
-      const docRef = doc(db, "users", user_id);
+      const docRef = doc(db, 'users', user_id);
       updateDoc(docRef, { groups: arrayUnion(newGroup) });
       updateDoc(docRef, { invites: arrayRemove(item) });
 
       // add a new user in groups collecition
       const newGroupUser = {
         name: user.name,
-        uid: user_id,
+        uid: auth.currentUser.uid,
       };
-
-      const docGroupRef = doc(db, "groups", item.group_id);
+      console.log('before aray union  ..', newGroupUser);
+      const docGroupRef = doc(db, 'groups', item.group_id);
       updateDoc(docGroupRef, { users: arrayUnion(newGroupUser) });
-
+      console.log('after aray union  ..');
       // remove from invites
 
       //first we need to get an invite object from groups >invites > {where invitee_uid === this user id}
       const inviteObject = await getInviteObject(item.group_id);
+      console.log('inviteObject ..', inviteObject);
       updateDoc(docGroupRef, { invites: arrayRemove(inviteObject) });
     } catch (err) {
       console.log(err.message);
@@ -117,7 +118,7 @@ const InviteTest = () => {
         group_id: item.group_id,
       };
 
-      const docRef = doc(db, "users", user_id);
+      const docRef = doc(db, 'users', user_id);
       updateDoc(docRef, { invites: arrayRemove(item) });
 
       // add a new user in groups colleciton
@@ -126,7 +127,7 @@ const InviteTest = () => {
         uid: user.uid,
       };
 
-      const docGroupRef = doc(db, "groups", item.group_id);
+      const docGroupRef = doc(db, 'groups', item.group_id);
 
       // remove from invites
 
@@ -139,7 +140,7 @@ const InviteTest = () => {
   };
 
   const getInviteObject = async (group_id) => {
-    const docGroupRef = doc(db, "groups", group_id);
+    const docGroupRef = doc(db, 'groups', group_id);
     const udocs = await getDoc(docGroupRef);
     const group = { id: udocs.id, ...udocs.data() };
     const getInviteObject = group.invites.filter(
@@ -190,7 +191,7 @@ const InviteTest = () => {
     return (
       <TouchableOpacity
         onPress={(ev) => {
-          navigation.navigate("Group", { group_id: item.group_id });
+          navigation.navigate('Group', { group_id: item.group_id });
         }}
       >
         <View style={theme.fListCard}>
@@ -212,7 +213,7 @@ const InviteTest = () => {
         />
       </View>
       <View
-        styles={{ flexDirection: "row", justifyContent: "space-between" }}
+        styles={{ flexDirection: 'row', justifyContent: 'space-between' }}
       ></View>
     </View>
   );
