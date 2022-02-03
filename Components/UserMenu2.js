@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState, useContext } from "react";
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
-import { Icon } from "react-native-elements";
+import { Icon, SpeedDial, FAB } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { ThemeContext } from "../Context/Context";
 import { auth } from "../firebase";
 
-export default function UserMenu({}) {
+export default function UserMenu2({}) {
   const theme = useContext(ThemeContext);
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -26,25 +26,18 @@ export default function UserMenu({}) {
   };
   const showMenu = () => setVisible(true);
 
+  const [open, setOpen] = React.useState(false);
   return (
-    <Menu
-      visible={visible}
-      anchor={
-        <Text onPress={showMenu}>
-          <Icon
-            reverse
-            name="log-out-outline"
-            type="ionicon"
-            color={theme.icon.color}
-          />
-        </Text>
-      }
-      onRequestClose={hideMenu}
-    >
-      {/* <MenuItem onPress={handleAccountNav}>Home</MenuItem> */}
-      {/* <MenuDivider /> */}
-      <MenuItem onPress={handleSignOut}>Sign out</MenuItem>
-    </Menu>
+    <FAB
+      visible={true}
+      icon={{ name: "log-out-outline", type: "ionicon", color: "#A6D1A1" }}
+      color="#2B4A9A"
+      style={{ position: "absolute", top: 10, right: 10 }}
+      size="small"
+      onPress={() => {
+        handleSignOut();
+      }}
+    />
   );
 }
 

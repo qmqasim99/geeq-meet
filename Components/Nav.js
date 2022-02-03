@@ -1,52 +1,81 @@
-import React, { useState } from "react";
-import { ButtonGroup } from "react-native-elements";
-import { Text, StyleSheet } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { ButtonGroup, ThemeProvider } from "react-native-elements";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
+import { auth } from "../firebase";
+import { UserContext, ThemeContext } from "../Context/Context";
 
-const Nav = () => {
+const Nav = ({ type }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigation = useNavigation();
   const route = useRoute();
+  const [theseButtons, setTheseButtons] = useState([]);
+  const { currentGroup } = useContext(UserContext);
+  const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    switch (type) {
+      case "home":
+        setTheseButtons(["New Group", "My Profile"]);
+        break;
+      case "group":
+        setTheseButtons(["Chat", "Meet"]);
+        break;
+      case "map":
+        setTheseButtons(["Chat", "Group"]);
+        break;
+
+      default:
+        break;
+    }
+  }, []);
 
   const handleNavigate = (value) => {
-    console.log(route);
+    console.log(value);
 
-    if (value === 0) {
-      navigation.navigate("Home");
+    if (value === "New Group") {
+      console.log("hey");
+      navigation.navigate("CreateGroup");
     }
-    if (value === 1) {
+    if (value === "My Profile") {
+      navigation.navigate("UserAccount", { user_id: auth.currentUser.uid });
+    }
+    if (value === "Chat") {
       navigation.navigate("Chat");
     }
-    if (value === 2) {
-      navigation.navigate("ConfigureMeet");
+    if (value === "Group") {
+      navigation.navigate("Group", { group_id: currentGroup.id });
     }
-    if (value === 3) {
-      navigation.navigate("UserAccount");
+    if (value === "Meet") {
+      if (currentGroup.meets && currentGroup.meets.active) {
+        navigation.navigate("MapContainer");
+      } else {
+        navigation.navigate("ConfigureMeet");
+      }
     }
   };
 
   return (
-    <>
-      <ButtonGroup
-        buttons={["Home", "Chat", "Meet", "UserAccount"]}
-        selectedIndex={selectedIndex}
-        onPress={(value) => {
-          handleNavigate(value);
+    <View style={theme.navContainer}>
+      <TouchableOpacity
+        onPress={() => {
+          handleNavigate(theseButtons[0]);
         }}
-        containerStyle={{ marginBottom: 20 }}
-      />
-    </>
+        style={[theme.button]}
+      >
+        <Text style={theme.buttonText}>{theseButtons[0]}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          handleNavigate(theseButtons[1]);
+        }}
+        style={[theme.button]}
+      >
+        <Text style={theme.buttonText}>{theseButtons[1]}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  subHeader: {
-    backgroundColor: "#2089dc",
-    color: "white",
-    textAlign: "center",
-    paddingVertical: 5,
-    marginBottom: 10,
-  },
-});
 export default Nav;

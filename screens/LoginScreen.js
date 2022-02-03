@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
   Image,
-  r,
+  ImageBackground,
 } from "react-native";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -184,33 +184,42 @@ const LoginScreen = () => {
 
   return (
     <>
-      <KeyboardAvoidingView style={theme.container} behavior="padding">
-        <Image source={require("../assets/gmlogo.png")} style={theme.logo} />
-        {loginPressed ? (
-          LoginFields
-        ) : registerPressed ? (
-          RegisterFields
-        ) : (
-          <View style={theme.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                setLoginPressed(true);
-              }}
-              style={[theme.button, theme.buttonOutline]}
-            >
-              <Text style={theme.buttonText}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setRegisterPressed(true);
-              }}
-              style={[theme.button, theme.buttonOutline]}
-            >
-              <Text style={theme.buttonText}>Register</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </KeyboardAvoidingView>
+      <ImageBackground
+        source={require("../assets/bdrop2.png")}
+        resizeMode="cover"
+        style={{ height: "100%", justifyContent: "center" }}
+      >
+        <KeyboardAvoidingView
+          style={[theme.container, { height: "60%" }]}
+          behavior="padding"
+        >
+          <Image source={require("../assets/gmlogo.png")} style={theme.logo} />
+          {loginPressed ? (
+            LoginFields
+          ) : registerPressed ? (
+            RegisterFields
+          ) : (
+            <View style={theme.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  setLoginPressed(true);
+                }}
+                style={[theme.button, theme.buttonOutline]}
+              >
+                <Text style={theme.buttonText}>Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setRegisterPressed(true);
+                }}
+                style={[theme.button, theme.buttonOutline]}
+              >
+                <Text style={theme.buttonText}>Register</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </KeyboardAvoidingView>
+      </ImageBackground>
     </>
   );
 };

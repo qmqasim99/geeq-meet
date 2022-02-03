@@ -1,3 +1,10 @@
+// import {
+//   useFonts,
+//   Roboto_400Regular,
+//   Bangers_400Regular,
+//   OpenSans_400Regular,
+// } from "@expo-google-fonts/dev";
+
 const palette = {
   darkBlue: "#323B57",
   midBlue: "#2B4A9A",
@@ -54,6 +61,7 @@ export const defaultTheme = {
     backgroundColor: palette.midBlue,
     margin: 1,
     borderRadius: 5,
+    margin: 5,
   },
   fListCard: {
     padding: 5,
@@ -69,14 +77,21 @@ export const defaultTheme = {
   logo: {
     marginTop: 100,
     flex: 2,
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 250,
     resizeMode: "contain",
   },
 
   container: {
     backgroundColor: palette.darkBlue,
-    flex: 1,
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  logContainer: {
+    backgroundColor: palette.transparent,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
@@ -105,10 +120,11 @@ export const defaultTheme = {
   },
   homeContainer: {
     backgroundColor: palette.darkBlue,
-    flex: 1,
-    justifyContent: "center",
+    height: "100%",
     flexDirection: "column",
-    padding: 5,
+    justifyContent: "space_between",
+
+    // padding: 5,
   },
   letsMeetButton: {
     border: "red",
@@ -195,4 +211,29 @@ export const defaultTheme = {
   alertText: { fontWeight: "bold", fontSize: 22, color: palette.darkBlue },
   ratingText: { fontWeight: "bold", fontSize: 20, color: palette.yellow },
   ratingText2: { fontWeight: "bold", fontSize: 12, color: palette.green },
+  navbarStyle: {
+    // position: "absolute",
+    // bottom: 30,
+    width: "90%",
+    // right: 5,
+    marginTop: 0,
+  },
+  navContainer: {
+    backgroundColor: palette.midBlue,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 30,
+    width: "100%",
+    height: 60,
+    // left: 5,
+  },
+  navButton: {
+    // backgroundColor: palette.transparent,
+    // width: "50%",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
 };
