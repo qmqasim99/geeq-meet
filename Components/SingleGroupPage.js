@@ -162,115 +162,117 @@ const SingleGroupPage = ({ route, navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={[theme.scrollContainer, { flex: 7 }]}>
-      {loadCurGroup ? (
-        meetActive && (
-          <View style={theme.activeMeetAlert}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("MapContainer");
+    <>
+      <ScrollView contentContainerStyle={[theme.scrollContainer, { flex: 7 }]}>
+        {loadCurGroup ? (
+          meetActive && (
+            <View style={theme.activeMeetAlert}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("MapContainer");
+                }}
+                to={{
+                  screen: "MapContainer",
+                }}
+              >
+                <Text style={theme.alertText}>MEETING ACTIVE</Text>
+              </TouchableOpacity>
+            </View>
+          )
+        ) : (
+          <></>
+        )}
+        {/* //this view contains group name and image */}
+        <View style={{ flexGrow: 1, alignItems: "center" }}>
+          <Text style={[theme.header, { marginBottom: 10 }]}>
+            {group.group_name}
+          </Text>
+          {/* <Text>Group ID: {group.id}</Text> */}
+          <View>
+            <Image
+              source={require("../assets/round.png")}
+              style={{
+                position: "absolute",
+                height: 300,
+                width: 300,
+                top: -50,
+                left: -50,
               }}
-              to={{
-                screen: "MapContainer",
+            />
+
+            <Image
+              source={
+                currentGroup.avatar
+                  ? { uri: currentGroup.avatar }
+                  : { uri: "https://picsum.photos/200" }
+              }
+              style={{
+                width: 200,
+                height: 200,
+                justifyContent: "center",
+                borderRadius: 100,
               }}
-            >
-              <Text style={theme.alertText}>MEETING ACTIVE</Text>
-            </TouchableOpacity>
+            />
           </View>
-        )
-      ) : (
-        <></>
-      )}
-      {/* //this view contains group name and image */}
-      <View style={{ flexGrow: 1, alignItems: "center" }}>
-        <Text style={[theme.header, { marginBottom: 10 }]}>
-          {group.group_name}
-        </Text>
-        {/* <Text>Group ID: {group.id}</Text> */}
-        <View>
-          <Image
-            source={require("../assets/round.png")}
-            style={{
-              position: "absolute",
-              height: 300,
-              width: 300,
-              top: -50,
-              left: -50,
-            }}
-          />
-
-          <Image
-            source={
-              currentGroup.avatar
-                ? { uri: currentGroup.avatar }
-                : { uri: "https://picsum.photos/200" }
-            }
-            style={{
-              width: 200,
-              height: 200,
-              justifyContent: "center",
-              borderRadius: 100,
-            }}
-          />
         </View>
-      </View>
-      {/* //this view contains search people functionality */}
+        {/* //this view contains search people functionality */}
 
-      <View style={[{ flexGrow: 1 }, theme.horizontalButtonContainer]}>
-        <TextInput
-          style={[theme.loginInput, { width: "40%", flex: 3 }]}
-          placeholder="Add new friend!"
-          onChangeText={(newText) => setNewFriend(newText)}
-          defaultValue={newFriend}
-        />
-
-        <TouchableOpacity
-          style={[theme.button, theme.buttonOutline, { flex: 1 }]}
-          onPress={handleSubmitFriend}
-        >
-          <Text style={theme.buttonText}>Search</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* //this view contains searched friends */}
-      {searchedFriends && (
-        <View style={[theme.fListArea, { flexGrow: 2 }]}>
-          <Text style={theme.header2}>Users found:</Text>
-          <FlatList
-            data={searchedFriends}
-            renderItem={renderFriendName}
-            keyExtractor={(item) => item.uid}
+        <View style={[{ flexGrow: 1 }, theme.horizontalButtonContainer]}>
+          <TextInput
+            style={[theme.loginInput, { width: "40%", flex: 3 }]}
+            placeholder="Add new friend!"
+            onChangeText={(newText) => setNewFriend(newText)}
+            defaultValue={newFriend}
           />
-        </View>
-      )}
-      {/* //this view contains group invites */}
 
-      {group.invites && (
-        <View style={theme.fListArea}>
-          <Text style={theme.header2}>Friends invited:</Text>
-          <FlatList
-            data={group.invites}
-            renderItem={renderInviteList}
-            keyExtractor={(item) => item.invitee_uid}
-          />
+          <TouchableOpacity
+            style={[theme.button, theme.buttonOutline, { flex: 1 }]}
+            onPress={handleSubmitFriend}
+          >
+            <Text style={theme.buttonText}>Search</Text>
+          </TouchableOpacity>
         </View>
-      )}
-      {/* //this view contains group members */}
 
-      {group.users && (
-        <View style={(theme.fListArea, { flexGrow: 2 })}>
-          <Text style={theme.header2}>Current friends:</Text>
-          <FlatList
-            data={group.users}
-            renderItem={renderName}
-            keyExtractor={(item) => item.uid}
-          />
-        </View>
-      )}
+        {/* //this view contains searched friends */}
+        {searchedFriends && (
+          <View style={[theme.fListArea, { flexGrow: 2 }]}>
+            <Text style={theme.header2}>Users found:</Text>
+            <FlatList
+              data={searchedFriends}
+              renderItem={renderFriendName}
+              keyExtractor={(item) => item.uid}
+            />
+          </View>
+        )}
+        {/* //this view contains group invites */}
+
+        {group.invites && (
+          <View style={theme.fListArea}>
+            <Text style={theme.header2}>Friends invited:</Text>
+            <FlatList
+              data={group.invites}
+              renderItem={renderInviteList}
+              keyExtractor={(item) => item.invitee_uid}
+            />
+          </View>
+        )}
+        {/* //this view contains group members */}
+
+        {group.users && (
+          <View style={(theme.fListArea, { flexGrow: 2 })}>
+            <Text style={theme.header2}>Current friends:</Text>
+            <FlatList
+              data={group.users}
+              renderItem={renderName}
+              keyExtractor={(item) => item.uid}
+            />
+          </View>
+        )}
+      </ScrollView>
       <View>
         <Nav type={"group"} />
       </View>
-    </ScrollView>
+    </>
   );
 };
 
