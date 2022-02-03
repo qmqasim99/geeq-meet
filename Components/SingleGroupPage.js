@@ -128,6 +128,19 @@ const SingleGroupPage = ({ route, navigation }) => {
         }}
       >
         <View style={theme.fListCard}>
+          <Image
+            source={
+              item.avatar
+                ? { uri: item.avatar }
+                : { uri: "https://picsum.photos/200" }
+            }
+            style={{
+              width: 50,
+              height: 50,
+              justifyContent: "center",
+              borderRadius: 100,
+            }}
+          />
           <Text style={theme.fListText}>{item.name}</Text>
         </View>
       </TouchableOpacity>
@@ -190,7 +203,7 @@ const SingleGroupPage = ({ route, navigation }) => {
           {/* <Text>Group ID: {group.id}</Text> */}
           <View>
             <Image
-              source={require("../assets/round.png")}
+              source={require("../assets/roundweak.png")}
               style={{
                 position: "absolute",
                 height: 300,

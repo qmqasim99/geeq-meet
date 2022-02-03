@@ -1,7 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext, ThemeContext } from "../Context/Context";
 import { doc, updateDoc, arrayRemove } from "firebase/firestore";
-import { View, Text, FlatList, Button, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  FlatList,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { auth, db } from "../firebase";
 
@@ -10,11 +17,7 @@ const ViewMyGroups = () => {
   const { user, groups, setCurrentGroup } = useContext(UserContext);
   const theme = useContext(ThemeContext);
 
-  const [tempGroups, setTempGroups] = useState();
-
-  useEffect(() => {
-    setTempGroups(user.groups);
-  }, [user, tempGroups]);
+  useEffect(() => {}, [user, groups]);
 
   const renderGroupList = ({ item }) => {
     return (
@@ -24,6 +27,19 @@ const ViewMyGroups = () => {
         }}
       >
         <View style={theme.fListCard}>
+          <Image
+            source={
+              item.avatar
+                ? { uri: item.avatar }
+                : { uri: "https://picsum.photos/200" }
+            }
+            style={{
+              width: 50,
+              height: 50,
+              justifyContent: "center",
+              borderRadius: 100,
+            }}
+          />
           <Text style={theme.fListText} key={item.id}>
             {item.group_name}
           </Text>
@@ -67,6 +83,7 @@ const ViewMyGroups = () => {
           renderItem={renderGroupList}
           keyExtractor={(item) => item.id}
           style={theme.fListArea}
+          contentContainerStyle={{ justifyContent: "center" }}
         />
       </View>
     </>

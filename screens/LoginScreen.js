@@ -185,7 +185,7 @@ const LoginScreen = () => {
   return (
     <>
       <ImageBackground
-        source={require("../assets/bdrop2.png")}
+        source={require("../assets/bdropweak.png")}
         resizeMode="cover"
         style={{ height: "100%", justifyContent: "center" }}
       >
