@@ -1,0 +1,32 @@
+
+Here is a demo of the app.
+
+first we need to log in, or create a user, if we dont have an account. 
+
+this takes us to the home page
+
+geet meet is all about meeting up with your friends so we have implemented basic networking functionality.
+
+LOG IN
+YOU CAN ACCEPT INVITES AND GO INTO GROUPS
+BACK
+CREATE GROUP 
+INVITE FRIEND
+CHAT
+BACK
+PIZZA GROUP
+meet
+CHOOSE PLACE GO TO MAP
+GROUP MEET ACTIVE
+END MEETING
+
+
+you can create groups.
+
+
+
+invite your friends
+
+and chat with them.
+
+When when you need to meet up 
