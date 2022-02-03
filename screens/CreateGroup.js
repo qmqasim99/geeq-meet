@@ -147,8 +147,8 @@ export default function CreateGroup({ navigation }) {
 
       <View style={theme.buttonContainer}>
         <TouchableOpacity
-          onPress={() => {
-            handleSubmit();
+          onPress={(e) => {
+            handleSubmit(e);
           }}
           style={[theme.button, theme.buttonOutline]}
         >

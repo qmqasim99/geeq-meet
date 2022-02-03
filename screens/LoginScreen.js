@@ -20,7 +20,7 @@ const LoginScreen = () => {
   const theme = useContext(ThemeContext);
   const { setIsSignedIn } = useContext(UserContext);
 
-  const [email, setEmail] = useState("1@example.com");
+  const [email, setEmail] = useState("Jeniscool@example.com");
   const [password, setPassword] = useState("password");
   const [userName, setUserName] = useState("");
   const [firstName, setFirstName] = useState("");

@@ -2,7 +2,6 @@ import { GOOGLE_API_KEY } from "@env";
 
 export const FindGeographicMidpoint = (users) => {
   //finds the centroid of given coordinates
-
   const coordArray = users.map((user) => {
     return {
       lat: user.lat,
@@ -30,7 +29,6 @@ export const FindGeographicMidpoint = (users) => {
   const weightedZ = coordArray.reduce(reducerZ, 0) / totWeight;
 
   //convert to latitude and long
-
   const midLonRad = Math.atan2(weightedY, weightedX);
   const hyp = Math.sqrt(weightedX * weightedX + weightedY * weightedY);
   const midLatRad = Math.atan2(weightedZ, hyp);
