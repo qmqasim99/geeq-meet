@@ -21,7 +21,7 @@ export default function CreateGroup({ navigation }) {
   const collRef = collection(db, "groups");
   const [user, setUser] = useState({});
   const uid = auth.currentUser.uid;
-  console.log("auth ", uid);
+  //console.log("auth ", uid);
 
   const docRef = doc(db, "users", uid);
 
@@ -58,7 +58,7 @@ export default function CreateGroup({ navigation }) {
     });
 
     // add this group to groupChat
-    console.log("new group id: ", newGroupCreated.id);
+    //console.log("new group id: ", newGroupCreated.id);
     // add to groups collection
 
     // const chatRef = collection(db, 'groupChats');
@@ -72,7 +72,7 @@ export default function CreateGroup({ navigation }) {
     );
 
     // add this group to users doc
-    console.log("new group id: ", newGroupCreated.id);
+    //console.log("new group id: ", newGroupCreated.id);
     const newGroup = {
       group_name: groupName,
       group_id: newGroupCreated.id,

@@ -234,7 +234,8 @@ const SingleGroupPage = ({ route, navigation }) => {
         </View>
 
         {/* //this view contains searched friends */}
-        {searchedFriends && (
+
+        {searchedFriends.length > 0 && (
           <View style={[theme.fListArea, { flexGrow: 2 }]}>
             <Text style={theme.header2}>Users found:</Text>
             <FlatList
