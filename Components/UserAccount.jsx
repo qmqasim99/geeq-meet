@@ -62,9 +62,9 @@ const UserAccount = ({ route }) => {
 
   return (
     <View style={[theme.homeContainer, { alignItems: "center" }]}>
-      <Text style={theme.header}>My Details</Text>
       {isEditable ? (
         <>
+          <Text style={theme.header}>My Details</Text>
           <Text style={theme.header2}>Email</Text>
           <TextInput
             value={user.email}
@@ -133,13 +133,48 @@ const UserAccount = ({ route }) => {
         </>
       ) : (
         <>
-          <Text style={styles.heading}>User Name</Text>
-          <Text style={styles.heading}>{user.name}</Text>
-          <Text style={styles.heading}>Email</Text>
-          <Text style={styles.heading}>{user.email}</Text>
-          <Image source={{ uri: user.avatar }} style={styles.avatar} />
-          <Text style={styles.heading}>Default Transport</Text>
-          <Text style={styles.heading}>{user.transport}</Text>
+          <Text style={theme.header}>{user.name}'s Profile</Text>
+
+          <Text style={theme.header2}>User Name</Text>
+          <Text style={theme.header4}>{user.name}</Text>
+          <Text style={theme.header2}>Email</Text>
+          <Text style={theme.header4}>{user.email}</Text>
+          <View style={{ marginTop: 30 }}>
+            <Image
+              source={require("../assets/roundweak.png")}
+              style={{
+                position: "absolute",
+                height: 300,
+                width: 300,
+                top: -50,
+                left: -50,
+              }}
+            />
+
+            <Image
+              source={{ uri: user.avatar }}
+              style={{
+                width: 200,
+                height: 200,
+                justifyContent: "center",
+                borderRadius: 100,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={[theme.header2, { marginTop: 30 }]}>
+              Default Transport :
+            </Text>
+            <Text style={[theme.header4, { marginTop: 30 }]}>
+              {user.transport}
+            </Text>
+          </View>
         </>
       )}
     </View>

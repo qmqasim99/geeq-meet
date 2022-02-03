@@ -35,7 +35,7 @@ export const defaultTheme = {
     padding: 10,
   },
   header2: {
-    fontSize: 25,
+    fontSize: 28,
     color: palette.lightBlue,
     textAlign: "left",
     padding: 15,
@@ -54,9 +54,15 @@ export const defaultTheme = {
     color: palette.green,
     textAlign: "left",
     paddingLeft: 20,
+    padding: 5,
   },
   fListText2: { fontSize: 18, color: palette.grey, textAlign: "right" },
-  fListCard: { fontSize: 15, color: palette.grey, textAlign: "left" },
+  fListCard: {
+    fontSize: 15,
+    color: palette.grey,
+    textAlign: "left",
+    margin: 2,
+  },
   fListArea: {
     backgroundColor: palette.midBlue,
     margin: 1,
@@ -67,6 +73,7 @@ export const defaultTheme = {
     padding: 5,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
 
   icon: {
@@ -120,6 +127,14 @@ export const defaultTheme = {
   },
   homeContainer: {
     backgroundColor: palette.darkBlue,
+    height: "100%",
+    flexDirection: "column",
+    justifyContent: "space_between",
+
+    // padding: 5,
+  },
+  homeContainer2: {
+    backgroundColor: palette.transparent,
     height: "100%",
     flexDirection: "column",
     justifyContent: "space_between",
